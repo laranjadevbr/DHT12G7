@@ -1,0 +1,157 @@
+<%
+    let elementName = (string) => {
+        return typeof string === 'string' ? string : string[1];
+    };
+    let labelName = (string) => {
+        return typeof string === 'string' ? string : string[0];
+    };
+    let labelCreator = (array) => {
+        let result = '';
+        result += validate(array['name']) ? '<label for=\"' + cleaner(labelName(array['name'])) + '\">' : '';
+        result += validate(array['name']) ? '<p>' + capitalize(elementName(array['name'])) + '</p>' : '';
+        result += validate(array['name']) ? '</label>' : '';
+        return result;
+    };
+    let getDATE = (string) => {
+        let d = new Date(string).getDate().toString().padStart(2, '0'),
+        m = (new Date(string).getMonth() + 1).toString().padStart(2, '0'),
+        y = new Date(string).getFullYear();
+        return y + '-' + m + '-' + d;
+    }
+    let selectCreator = (array) => {
+        let html = labelCreator(array);
+        html += '<select class=\"form-control\"';
+        html += validate(array['disabled']) ? ' disabled' : '';
+        html += ' id=\"' + cleaner(labelName(array['name'])) + '\"';
+        html += ' name=\"' + cleaner(labelName(array['name'])) + '\"';
+        html += '>';
+            if (typeof index !== 'undefined') {
+                if (validate(index[array['name']])) {
+                    html += '<option value=\"' + index[labelName(array['name'])] + '\" selected>';
+                        html += index[labelName(array['name'])];
+                } else {
+                    html += '<option value=\"\" selected>';
+                }
+                html += '</option>';
+            } else {
+                html += '<option value=\"\" selected>' + '</option>';
+            }
+            for (let i = 0; i < array['option']['length']; i++) {
+                let disabled = !validate(array['option'][i][1]) ? ' disabled' : '';
+                html += '<option value=\"' + array['option'][i][0] + '\"' + disabled + '>';
+                    html += capitalize(array['option'][i][0]);
+                html += '</option>';
+            }
+        html += '</select>';
+        html += '<div id=\"error\"><p></p></div>';
+        html += '<div class=\"clear mb-' + mb + '\"></div>';
+        return html;
+    };
+    let inputCreator = (array) => {
+        let html = '';        
+        if (array['type'] === 'checkbox') {
+            let contentClass = '';
+            currentClass += ' bg-white';
+            currentClass += ' p-' + p;
+            currentClass += ' rounded';
+            currentClass += ' shadow-sm';
+            currentClass += ' text-dark';
+            html += labelCreator(array);
+            html += '<div class=\"' + String(contentClass).trim() + '\">';
+            for (let x = 0; x < array['option']['length']; x++) {
+                html += '<div class=\"float\">';
+                    html += '<input class=\"form-check-input\"';
+                    html += validate(array['disabled']) ? ' disabled' : '';
+                    html += ' id=\"' + cleaner(array['option'][x][0]) + '\"';
+                    html += validate(array['maxlength']) ? ' maxlength=\"' + array['maxlength'] + '\"' : '';
+                    html += ' name=\"' + cleaner(array['option'][x][0]) + '\"';
+                    html += validate(array['required']) ? ' required' : '';
+                    html += ' type=\"' + cleaner(array['type']) + '\"';
+                    html += typeof index !== 'undefined'
+                    ? index[labelName(array['name'])] !== null ? ' value=\"' + index[labelName(array['name'])] + '\"' : ''
+                    : '';
+                    html += '>';
+                    html += '<label class=\"'+ btnClass.trim() +'\" for=\"' + cleaner(labelCreator(array['option'][x][0])) + '\">';
+                        html += '<p>' + capitalize(array['option'][x][0]).trim() + '</p>';
+                    html += '</label>';
+                html += '</div>';
+            }
+            html += '</div>';
+        } else if (array['type'] === 'date') {
+            html += labelCreator(array);
+            html += '<input class=\"form-control\"';
+            html += validate(array['disabled']) ? ' disabled' : '';
+            html += ' id=\"' + cleaner(labelName(array['name'])) + '\"';
+            html += validate(array['maxlength']) ? ' maxlength=\"' + array['maxlength'] + '\"' : '';
+            html += ' name=\"' + cleaner(labelName(array['name'])) + '\"';
+            html += validate(array['placeholder']) ? ' placeholder=\"' + capitalize(elementName(array['name'])) + '\"' : '';
+            html += validate(array['required']) ? ' required' : '';
+            html += ' type=\"' + cleaner(array['type']) + '\"';
+            html += typeof index !== 'undefined'
+            ? index[labelName(array['name'])] !== null ? ' value=\"' + getDATE(index[labelName(array['name'])]) + '\"' : ''
+            : '';
+            html += '>';
+            html += '<div id=\"error\"><p></p></div>';
+            html += '<div class=\"clear mb-' + mb + '\"></div>';
+        } else {
+            html += labelCreator(array);
+            html += '<input class=\"form-control\"';
+            html += validate(array['disabled']) ? ' disabled' : '';
+            html += ' id=\"' + cleaner(labelName(array['name'])) + '\"';
+            html += validate(array['maxlength']) ? ' maxlength=\"' + array['maxlength'] + '\"' : '';
+            html += ' name=\"' + cleaner(labelName(array['name'])) + '\"';
+            html += validate(array['placeholder']) ? ' placeholder=\"' + capitalize(elementName(array['name'])) + '\"' : '';
+            html += validate(array['required']) ? ' required' : '';
+            html += ' type=\"' + cleaner(array['type']) + '\"';
+            html += typeof index !== 'undefined'
+            ? index[labelName(array['name'])] !== null ? ' value=\"' + index[labelName(array['name'])] + '\"' : ''
+            : '';
+            html += '>';
+            html += '<div id=\"error\"><p></p></div>';
+            html += '<div class=\"clear mb-' + mb + '\"></div>';
+        }
+        return html;
+    }
+    let textareaCreator = (array) => {
+        let html = '';
+        html += labelCreator(array);
+        html += '<textarea class=\"form-control\"';
+            html += validate(array['disabled']) ? ' disabled' : '';
+            html += ' name=\"' + cleaner(labelName(array['name'])) + '\"';
+            html += validate(array['placeholder']) ? ' placeholder=\"' + capitalize(elementName(array['name'])) + '\"' : '';
+            html += validate(array['rows']) ? ' rows=\"' + array['rows'] + '\"' : '';
+        html += '>';
+        html += typeof index !== 'undefined'
+        ? index[labelName(array['name'])] !== null ? index[labelName(array['name'])] : ''
+        : '';
+        html += '</textarea>';
+        html += '<div id=\"error\"><p></p></div>';
+        html += '<div class=\"clear mb-' + mb + '\"></div>';
+        return html;
+    }
+    let html = '';
+    html += '<form';
+        html += validate(form['action']) ? ' action=\"' + String(form['action']) + '\"' : '';
+        html += validate(form['enctype']) ? ' enctype=\"' + String(form['enctype']) + '\"' : '';
+        html += validate(form['method']) ? ' method=\"' + String(form['method']) + '\"' : '';
+    html += '>';
+%>
+<%- html; %>
+    <% for (let i = 0; i < formElement['length']; i++) { %>
+        <% if (validate(formElement[i]['active'])) { %>
+            <%- formElement[i]['type'] === 'start' ? '<div class=\"' + String(formClass).trim() + '\">' : ''; %>
+            <%- formElement[i]['type'] === 'end' ? '</div>' : ''; %>
+            <%- formElement[i]['type'] === 'end-start' ? '</div><div class=\"' + String(formClass).trim() + '\">' : ''; %>
+            <%- formElement[i]['type'].substr(0, 1) === 'h' ? '<' + formElement[i]['type'] + '>' + capitalize(formElement[i]['name']) + '</' + formElement[i]['type'] + '>' : ''; %>
+            <%- formElement[i]['type'] === 'select' ? selectCreator(formElement[i]) : ''; %>
+            <%- formElement[i]['type'] === 'textarea' ? textareaCreator(formElement[i]) : ''; %>
+            <% for (let x = 0; x < inputType['length']; x++) { %>
+                <% if (formElement[i]['type'] === inputType[x]) { %>
+                    <%- inputCreator(formElement[i]);%>
+                <% } %>
+            <% } %>
+        <% } %>
+    <% } %>
+    <%- include('./form-alert'); %>
+    <%- include('./form-btn'); %>
+<%- '</form>'; %>

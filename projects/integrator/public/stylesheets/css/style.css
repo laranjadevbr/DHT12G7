@@ -1,0 +1,171 @@
+:root {
+  --background-color: #f8f9fa;
+}
+
+*, body,
+html, h6, h5, h4, h3, h2, h1, label, p, ul li, .modal-header h6, .modal-header h5, .modal-header h4, .modal-header h3, .modal-header h2, .modal-header h1, ul {
+  margin: 0;
+}
+
+*, body,
+html, h6, h5, h4, h3, h2, h1, label, p, ul li, .modal-header h6, .modal-header h5, .modal-header h4, .modal-header h3, .modal-header h2, .modal-header h1 {
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  background-color: var(--background-color);
+  height: 100%;
+  width: 100%;
+}
+
+h6 {
+  font-size: 24px;
+}
+
+h5 {
+  font-size: 28.8px;
+}
+
+h4 {
+  font-size: 33.6px;
+}
+
+h3 {
+  font-size: 38.4px;
+}
+
+h2 {
+  font-size: 43.2px;
+}
+
+h1 {
+  font-size: 48px;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  padding: 0 0 0 1rem;
+}
+
+ul li {
+  list-style: none;
+}
+
+iframe {
+  border: 0;
+  width: 100%;
+  height: 240px;
+}
+
+footer {
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+input[type="checkbox"] {
+  margin: 11px 1rem 0 0;
+}
+
+button[type="submit"] {
+  margin: 0 0 0 1rem;
+}
+
+.navbar {
+  padding: 0;
+}
+
+.pagination {
+  display: inline-flex;
+}
+
+.in-the-center, .on-the-left, .on-the-right {
+  display: flex;
+  flex-direction: row;
+}
+
+.in-the-center {
+  justify-content: center;
+}
+
+.on-the-left {
+  justify-content: flex-start;
+}
+
+.on-the-right {
+  justify-content: flex-end;
+}
+
+.modal-header h6 {
+  color: red;
+  text-transform: uppercase;
+}
+
+.modal-header h5 {
+  color: red;
+  text-transform: uppercase;
+}
+
+.modal-header h4 {
+  color: red;
+  text-transform: uppercase;
+}
+
+.modal-header h3 {
+  color: red;
+  text-transform: uppercase;
+}
+
+.modal-header h2 {
+  color: red;
+  text-transform: uppercase;
+}
+
+.modal-header h1 {
+  color: red;
+  text-transform: uppercase;
+}
+
+.clear {
+  clear: both;
+}
+
+.float {
+  float: left;
+  margin: 0 1rem 1rem 0;
+}
+
+.grow {
+  animation: grow 0.3s ease-in-out forwards;
+}
+
+@keyframes grow {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.1);
+    z-index: 50;
+  }
+}
+
+.shrink {
+  animation: shrink 0.3s ease-in-out forwards;
+}
+
+@keyframes shrink {
+  from {
+    transform: scale(1.1);
+    z-index: 50;
+  }
+  to {
+    transform: scale(1);
+  }
+}

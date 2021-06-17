@@ -1,0 +1,8 @@
+<% if (typeof key === 'undefined' || typeof searchAction === 'undefined') { } else { %>
+    <form action='<%- searchAction; %>' class="d-flex" id="searchForm" method="GET">
+        <input aria-label="Search" class="form-control" name="key" placeholder="<%- capitalize('Search'); %>" type="search" value="<%- key; %>">
+        <%- '<button type=\"submit\" class=\"' + btnClass.trim() + '\">'; %>
+            <%- capitalize('Search'); %>
+        </button>
+    </form>
+<% } %>

@@ -1,0 +1,51 @@
+const {
+    genders,
+    status,
+} = require('../options');
+const active = true, label = true, placeholder = false, required = false;
+module.exports = (disabled) => {
+    return [
+        {
+            active      : active,
+            disabled    : disabled,
+            label       : label,
+            maxlength   : '',
+            name        : ['birthdate', 'birth date'],
+            note        : '',
+            option      : '',
+            placeholder : placeholder,
+            required    : required,
+            rows        : 0,
+            type        : 'date',
+            value       : '',
+        },
+        {
+            active      : active,
+            disabled    : disabled,
+            label       : label,
+            maxlength   : '',
+            name        : 'gender',
+            note        : '',
+            option      : genders,
+            placeholder : placeholder,
+            required    : required,
+            rows        : 0,
+            type        : 'select',
+            value       : '',
+        },
+        {
+            active      : active,
+            disabled    : disabled,
+            label       : label,
+            maxlength   : '',
+            name        : 'status',
+            note        : '',
+            option      : status,
+            placeholder : placeholder,
+            required    : required,
+            rows        : 0,
+            type        : 'select',
+            value       : '',
+        },
+    ];
+};

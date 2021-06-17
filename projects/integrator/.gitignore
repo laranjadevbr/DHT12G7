@@ -1,0 +1,6 @@
+.env
+*.rar
+/node_modules
+/public/images
+/upload/archives
+/upload/images

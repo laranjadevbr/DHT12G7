@@ -1,0 +1,52 @@
+<% if (typeof fullPage === 'undefined') { } else { %>
+    <div class="mt-3 mb-3">
+        <nav class="in-the-center">
+            <ul class="pagination">
+                <%
+                    let URLPath = '?';
+                    URLPath += typeof key !== 'undefined' ? key !== '' ? 'key=' + key + '&' : '' : '';
+                    URLPath += 'page';
+                    URLPath += '=';
+                %>
+                <% if (typeof prevPage === 'undefined') { } else { %>
+                    <%
+                        let html = '';
+                        html += '<li class=\"page-item\">'
+                        let route = URLPath;
+                        route += Number(prevPage);
+                        html += '<a class=\"page-link\" href=\"' + route + '\">';
+                        html += capitalize('Previous');
+                        html += '</a>';
+                        html += '</li>';
+                    %>
+                    <%- html; %>
+                <% } %>
+                <% for (let i = 1; i <= Number(fullPage); i++) { %>
+                    <%
+                        let html = '';
+                        html += '<li class="page-item">';
+                        let route = URLPath;
+                        route += Number(i);
+                        html += '<a class=\"page-link\" href=\"' + route + '\">';
+                        html += i;
+                        html += '</a>';
+                        html += '</li>';
+                    %>
+                    <%- html; %>
+                <% } %>
+                <% if (typeof nextPage === 'undefined') { } else { %>
+                    <%
+                        html = '';
+                        html += '<li class=\"page-item\">';
+                        let route = URLPath;
+                        route += Number(nextPage);
+                        html += '<a class=\"page-link\" href=\"' + route + '\">';
+                        html += capitalize('Next');
+                        html += '</a>';
+                        html += '</li>';
+                    %>
+                    <%- html; %>
+                <% } %>
+            </ul>
+        </nav>
+<% } %>

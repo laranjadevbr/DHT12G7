@@ -1,0 +1,18 @@
+<%- include('./partials/head'); %>
+<%- include('./partials/functions'); %>
+<%- include('./partials/header'); %>
+<%- include('./partials/navbar'); %>
+<!--  -->
+<% for (let i = 1; i <= 6; i++) { %>
+    <%- '<h' + i + '></h' + i + '>'; %>
+<% } %>
+<% for (let i = 1; i <= 6; i++) { %>
+    <p id="paragraph" class="paragraph">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae aliquid fugiat ut id provident perferendis natus unde commodi dolor exercitationem repudiandae maxime eveniet nobis assumenda, iste possimus cupiditate officiis tempore.
+    </p>
+<% } %>
+<div class="clear"></div>
+<div id="colorPalette"></div>
+<div class="clear"></div>
+<!--  -->
+<%- include('./partials/footer'); %>

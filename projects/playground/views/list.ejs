@@ -1,0 +1,56 @@
+<%- include('./partials/header.ejs') %>
+<%- typeof title == undefined ? '' : '<h1>' + String(title).toUpperCase() + '</h1>'; %>
+<% for (let i = 0; i < values.length; i++) { %>
+    <div class="shadow-sm p-3 mb-3 bg-white rounded">
+        <% if (values[i].fullname == '' && values[i].email == '') { } else { %>
+            <%
+                x = '';
+                x += '<img src=\"images/';
+                x += values[i].archive;
+                x += '\"';
+                x += values[i].fullname == '' ? '' : ' alt=\"' + values[i].fullname + '\"';
+                x += '>';
+            %>
+            <%- values[i].archive == null || values[i].archive == '' ? '' : x; %>
+            <ul>
+                <li>
+                    <%
+                        x = '';
+                        x += '<p>';
+                        x += i + 1 + '.º';
+                        x += '</p>';
+                    %>
+                    <%- x; %>
+                    <%
+                        x = '';
+                        x += '<p>';
+                        x += 'fullname: '.toUpperCase();
+                        x += values[i].fullname.toLowerCase();
+                        x += '</p>';
+                    %>
+                    <%- values[i].fullname == '' ? '' : x; %>
+                    <%
+                        x = '';
+                        x += '<p>';
+                        x += 'email: '.toUpperCase();
+                        x += '<a href=\"mailto:';
+                        x += values[i].email.toLowerCase();
+                        x += '\" target=\"_blank\">';
+                        x += values[i].email.toLowerCase();
+                        x += '</a>';
+                    %>
+                    <%- values[i].email == '' ? '' : x; %>
+                </li>
+            </ul>
+        <% } %>
+        <div class="btnslist">
+            <form action="<%= 'delete/' + i +'?_method=DELETE' %>" method="POST">
+                <input type="submit" value="delete" class="btn btn-primary">
+            </form>
+            <form action="<%= 'edit/' + i %>" method="POST">
+                <input type="submit" value="edit" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+<% } %>
+<%- include('./partials/footer.ejs') %>

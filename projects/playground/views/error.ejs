@@ -1,0 +1,9 @@
+<%- include('./partials/header.ejs') %>
+    <% if (typeof message == undefined) { } else { %>
+        <%- '<h1>' + String(message).toUpperCase() + '</h1>'; %>
+    <% } %>
+    <% if (typeof error == undefined) { } else { %>
+        <%- '<h2>' + String(error.status).toUpperCase() + '</h2>'; %>
+        <%- '<pre>' + String(error.stack).toUpperCase() + '</pre>'; %>
+    <% } %>
+<%- include('./partials/footer.ejs') %>

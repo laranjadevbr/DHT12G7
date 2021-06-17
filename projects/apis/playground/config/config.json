@@ -1,0 +1,26 @@
+{
+    "development" : {
+        "database" : "app",
+        "dialect" : "mysql",
+        "host" : "localhost",
+        "operatorAliases" : false,
+        "password" : "",
+        "username" : "root"
+    },
+    "test": {
+        "database" : "app",
+        "dialect" : "mysql",
+        "host" : "localhost",
+        "operatorAliases" : false,
+        "password" : "",
+        "username" : "root"
+    },
+    "production" : {
+        "database" : "app",
+        "dialect" : "mysql",
+        "host" : "localhost",
+        "operatorAliases" : false,
+        "password" : "",
+        "username" : "root"
+    }
+}

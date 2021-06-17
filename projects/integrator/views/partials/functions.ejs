@@ -1,0 +1,329 @@
+<%
+    mb = 3;
+    p = mb;
+
+    titleNumber = 2;
+    subtitleNumber = 6;
+
+    headerClass = '';
+    headerClass += ' bg-danger';
+    headerClass += ' mb-' + mb;
+    headerClass += ' p-' + p;
+    headerClass += ' rounded';
+    headerClass += ' shadow-sm';
+    headerClass += ' text-light';
+
+    currentClass = '';
+    if (typeof statusCode !== 'undefined') {
+        currentClass += statusCode === 404 ? ' bg-danger' : ' bg-white';
+    } else { currentClass += ' bg-white'; }
+    currentClass += ' mb-' + mb;
+    currentClass += ' p-' + p;
+    currentClass += ' rounded';
+    currentClass += ' shadow-sm';
+    if (typeof statusCode !== 'undefined') {
+        currentClass += statusCode === 404 ? ' text-white' : ' text-dark';
+    } else { currentClass += ' text-dark'; }
+
+    navbarClass = '';
+    navbarClass += ' bg-white';
+    navbarClass += ' mb-' + mb;
+    navbarClass += ' p-' + p;
+    navbarClass += ' rounded';
+    navbarClass += ' shadow-sm';
+    navbarClass += ' text-dark';
+
+    formClass = '';
+    formClass += ' bg-light';
+    formClass += ' mb-' + mb;
+    formClass += ' p-' + p;
+    formClass += ' rounded';
+    formClass += ' shadow-sm';
+    formClass += ' text-dark';
+
+    btnClass = '';
+    outline = true;
+    outline = outline ? 'outline-' : '';
+    btnString = 'btn btn-' + outline;
+    btnClass = btnString;
+    btnClass += 'dark';
+    btnClass += btnClass === btnString ? 'primary' : '';
+
+    // let btnFunction = (style, outline) => {
+    //     btnClass = '';
+    //     outline = outline;
+    //     outline = outline ? 'outline-' : '';
+    //     btnString = 'btn btn-' + outline;
+    //     btnClass = btnString;
+    //     btnClass += style;
+    //     btnClass += btnClass === btnString ? 'primary' : '';
+    //     return btnClass;
+    // }
+
+    btnColorI = 'dark';
+    btnColorII = 'light';
+    btnColorIII = 'danger';
+
+    bgColorI = 'light';
+    bgColorII = 'dark';
+    bgColorIII = 'danger';
+
+    textColorI = 'dark';
+    textColorII = 'light';
+    textColorIII = 'light';
+
+    navbar = [
+        {
+            name : 'json',
+            path : '#',
+            menu : [
+                {
+                    title : 'admin',
+                    content : [
+                        {
+                            name : 'list',
+                            path : '/json-admin/all',
+                        },
+                        {
+                            name : 'new registration',
+                            path : '/json-admin/create',
+                        },
+                    ],
+                },
+                {
+                    title : 'client',
+                    content : [
+                        {
+                            name : 'list',
+                            path : '/json-client/all',
+                        },
+                        {
+                            name : 'new registration',
+                            path : '/json-client/create',
+                        },
+                        {
+                            name : validate(session) ? 'login' : '',
+                            path : validate(session) ? '/json-client/login' : '',
+                        },
+                        {
+                            name : validate(session) ? '' : 'logout',
+                            path : validate(session) ? '' : '/json-client/logout',
+                        },
+                    ],
+                },
+                {
+                    title : 'recipes',
+                    content : [
+                        {
+                            name : 'list',
+                            path : '/json-recipe/all',
+                        },
+                        // {
+                        //     name : 'menu',
+                        //     path : '/json-recipe/menu',
+                        // },
+                        {
+                            name : 'new registration',
+                            path : '/json-recipe/create',
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            name : 'institutional',
+            path : '#',
+            menu : [
+                {
+                    title : 'institutional',
+                    content : [
+                        {
+                            name : 'accordion',
+                            path : '/accordion',
+                        },
+                        {
+                            name : 'maps',
+                            path : '/maps',
+                        },
+                        {
+                            name : 'cards',
+                            path : '/cards',
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            name : 'admins, clients and users',
+            path : '#',
+            menu : [
+                {
+                    title : 'admins',
+                    content : [
+                        {
+                            name : 'list',
+                            path : '/admin/all',
+                        },
+                        {
+                            name : 'new registration',
+                            path : '/admin/create',
+                        },
+                        {
+                            name : 'login',
+                            path : '/admin/login',
+                        },
+                        // {
+                        //     name : 'logout',
+                        //     path : '/admin/logout',
+                        // },
+
+                    ],
+                },
+                {
+                    title : 'clients',
+                    content : [
+                        {
+                            name : 'list',
+                            path : '/client/all',
+                        },
+                        {
+                            name : 'new registration',
+                            path : '/client/create',
+                        },
+                        {
+                            name : 'login',
+                            path : '/client/login',
+                        },
+                        // {
+                        //     name : 'logout',
+                        //     path : '/client/logout',
+                        // },
+                    ],
+                },
+                {
+                    title : 'user',
+                    content : [
+                        {
+                            name : 'list',
+                            path : '/user/all',
+                        },
+                        {
+                            name : 'new registration',
+                            path : '/user/create',
+                        },
+                        {
+                            name : 'login',
+                            path : '/user/login',
+                        },
+                        // {
+                        //     name : 'logout',
+                        //     path : '/user/logout',
+                        // },
+                    ],
+                },
+            ],
+        },
+        {
+            name : 'items',
+            path : '#',
+            menu : [
+                {
+                    title : 'products',
+                    content : [
+                        {
+                            name : 'list',
+                            path : '/product/all',
+                        },
+                        {
+                            name : 'new registration',
+                            path : '/product/create',
+                        },
+                    ],
+                },
+                {
+                    title : 'services',
+                    content : [
+                        {
+                            name : 'list',
+                            path : '/service/all',
+                        },
+                        {
+                            name : 'new registration',
+                            path : '/service/create',
+                        },
+                    ],
+                },
+                {
+                    title : 'events',
+                    content : [
+                        {
+                            name : 'list',
+                            path : '/event/all',
+                        },
+                        {
+                            name : 'new registration',
+                            path : '/event/create',
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            name : 'categories',
+            path : '#',
+            menu : [
+                {
+                    title : 'products',
+                    content : [
+                        {
+                            name : 'list',
+                            path : '/category/all',
+                        },
+                        {
+                            name : 'new registration',
+                            path : '/category/create',
+                        },
+                    ],
+                },
+                {
+                    title : 'services',
+                    content : [
+                        {
+                            name : 'list',
+                            path : '/category/all',
+                        },
+                        {
+                            name : 'new registration',
+                            path : '/category/create',
+                        },
+                    ],
+                },
+                {
+                    title : 'events',
+                    content : [
+                        {
+                            name : 'list',
+                            path : '/category/all',
+                        },
+                        {
+                            name : 'new registration',
+                            path : '/category/create',
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            name : typeof user !== 'undefined' ? 'Olá, (' + user.name + ')!' : '',
+            path : '/index',
+        },
+    ];
+    
+    accordion = [];
+    for (let i = 0; i <= 5; i++) {
+        accordion.push({
+            title : 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.',
+            paragraph : 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. A, vero. Nostrum minus, asperiores laudantium dolor unde ipsa? Iusto reiciendis corporis, eligendi incidunt sit aliquam sint reprehenderit odio amet alias? Possimus.',
+        });
+    };
+%>

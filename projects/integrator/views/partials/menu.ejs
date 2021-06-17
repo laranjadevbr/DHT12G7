@@ -1,0 +1,138 @@
+    <%
+        let btns = [
+            {
+                path : false,
+                target : true,
+                title : 'delete',
+                toggle : true,
+            },
+            {
+                path : true,
+                target : false,
+                title : 'edit',
+                toggle : false,
+            },
+            {
+                path : true,
+                target : false,
+                title : 'one',
+                toggle : false,
+            },
+        ];
+        let bottomMenu = (array, index) => {
+            let html = '';
+            html += '<div class=\"on-the-right\" id=\"bottom-menu\">';
+                for (let x = 0; x < btns['length']; x++) {
+                    let currentPath = '/' + pathPrefix + '/' + btns[x]['title'] + '/' + array[index]['id'];
+                    currentPath = validate(btns[x]['path']) ? currentPath : '#';
+                    html += '<a href=\"' + currentPath.toLowerCase() + '\"';
+                    html += validate(btns[x]['target']) ? ' data-bs-toggle=\"modal\"' : '';
+                    html += validate(btns[x]['toggle']) ? ' data-bs-target=\"#modal-' + array[index]['id'] + '\"' : '';
+                    html += '>';
+                        html += '<button type=\"submit\"';
+                        btnClass = btnClass.substr(btnClass.indexOf(btnString), btnString['length']);
+                        if (validate(array[index]['active']) || typeof array[index]['active'] === 'undefined' || array[index]['active'] === null) {
+                            btnClass += index % 2 === 0 ? btnColorI : btnColorI;
+                        } else { btnClass += btnColorIII; }
+                        html += ' class=\"' + btnClass.trim() + '\"';
+                        html += ' style=\"margin: 0 0 0 1rem;\"';
+                        html += '>';
+                        html += capitalize(btns[x]['title'] === 'one' ? 'view' : btns[x]['title']);
+                        html += '</button>';
+                    html += '</a>';
+                }
+            html += '</div>';
+            return html;
+        };
+        let getDATE = (string) => {
+            let d = new Date(string).getDate().toString().padStart(2, '0'),
+            m = (new Date(string).getMonth() + 1).toString().padStart(2, '0'),
+            y = new Date(string).getFullYear();
+            return d + '/' + m + '/' + y;
+        }
+        let listing = (title, contents) => {
+            let html = '';
+            if (!validate(title) || !validate(contents)) { } else {
+                html += '<h' + subtitleNumber + '>' + capitalize(title) + '</h' + subtitleNumber + '>';
+                if (title === 'cost') { html += '<p>' + currency(Number(contents)) + '</p>';
+                } else if (title === 'access key' || title === 'e-mail') {
+                    html += '<p>';
+                        html += '<a href=\"mailto:' + contents.toLowerCase() + '\" target=\"_blank\">';
+                            html += contents.toLowerCase();
+                        html += '</a>';
+                    html += '</p>';
+                } else if (title === 'birth date' || title === 'created' || title === 'updated') { html += '<p>' + getDATE(contents) + '</p>';
+                } else { html += '<p>' + contents + '</p>'; }
+                html += '<div class=\"mb-' + mb + '\"></div>';
+            }
+            return html;
+        };
+        let modal = (array, modalBody, index) => {
+            let result = '';
+            result += '<div class=\"modal fade\" id=\"modal-' + array[index]['id'] + '\">';
+                result += '<div class=\"modal-dialog\">';
+                    result += '<div class=\"modal-content\">';
+                        result += '<div class=\"modal-header\">';
+                            result += '<h' + subtitleNumber + '>';
+                                result += 'are you sure do you want to delete this file?'.trim().toUpperCase();
+                            result += '</h' + subtitleNumber + '>';
+                        result += '</div>';
+                        result += '<div class=\"modal-body\">' + modalBody + '</div>';
+                        result += '<div class=\"modal-footer\">';
+                            let currentPath = '/' + pathPrefix + '/' + 'delete' + '/' + array[index]['id'] + '?_method=DELETE';
+                            result += '<form action=\"' + currentPath.trim().toLowerCase() + '\" method=\"POST\">';
+                                result += '<button type=\"submit\" class=\"' + btnClass.trim() + '\">';
+                                    result += capitalize('yes!');
+                                result += '</button>';
+                            result += '</form>';
+                            result += '<button type=\"button\" class=\"' + btnClass.trim() + '\" data-bs-dismiss=\"modal\">';
+                                result += capitalize('no.');
+                            result += '</button>';
+                        result += '</div>';
+                    result += '</div>';
+                result += '</div>';
+            result += '</div>';   
+            return result;
+        };
+        let currentStyle = (array, index) => {
+            currentClass = '';
+            currentClass += ' bg-';
+            if (validate(array[index]['active']) || typeof array[index]['active'] === 'undefined' || !array[index]['active']) {
+                currentClass += index % 2 === 0 ? bgColorI : bgColorII;
+            } else { currentClass += bgColorIII; }
+            currentClass += index <= Number(array['length'] - 1) ? ' mb-' + mb : '';
+            currentClass += ' p-' + p;
+            currentClass += ' rounded';
+            currentClass += ' shadow-sm';
+            currentClass += ' text-';
+            if (validate(array[index]['active']) || typeof array[index]['active'] === 'undefined' || !array[index]['active']) {
+                currentClass += index % 2 === 0 ? textColorI : textColorII;
+            } else { currentClass += textColorIII; }
+            return currentClass;
+        };
+    %>
+    <% if (typeof index === 'undefined' || typeof item === 'undefined') { } else { %>
+        <% for (let i = 0; i < index['length']; i++) { %>
+            <%
+                let html = '', modalBody = '';
+                html += '<div class=\"' + currentStyle(index, i) + '\">';
+                    for (let x = 0; x < item['length']; x++) {
+                        let title = typeof item[x] === 'string' ? item[x] : item[x][1];                        
+                        let contents = title === 'category'
+                            ?
+                        index[i]['category']['title']
+                            :
+                        index[i][typeof item[x] === 'string' ? item[x] : item[x][0]];
+                        modalBody += listing(title, contents);
+                        html += listing(title, contents);
+                    }
+                html += '</div>';
+                html += bottomMenu(index, i);
+                html += modal(index, modalBody, i);
+                html += '<div class=\"clear mb-' + mb + '\"></div>';
+            %>
+            <%- html; %>
+        <% } %>
+    <% } %>
+</div>
+<%- include('./pagination'); %>

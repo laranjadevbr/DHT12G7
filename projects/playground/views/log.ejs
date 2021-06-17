@@ -1,0 +1,95 @@
+<%
+    let input = [
+      'button',
+      'checkbox',
+      'color',
+      'date',
+      'datetime-local',
+      'email',
+      'file',
+      'hidden',
+      'image',
+      'month',
+      'number',
+      'password',
+      'radio',
+      'range',
+      'reset',
+      'search',
+      'submit',
+      'tel',
+      'text',
+      'time',
+      'url',
+      'week'
+  ];
+%>
+<%- include('./partials/header.ejs'); %>
+<%- typeof title == undefined ? '' : '<h1>' + String(title).toUpperCase() + '</h1>'; %>
+<% if (typeof errors == 'undefined') { } else { %>
+    <ul>
+      <%- errors.forEach((error) => { '<li>' + '<p>' + error.param + ' = ' + error.msg + '!' + '</p>' + '</li>' }); %>
+    </ul>
+<% } %>
+<form
+  <%- form.action ? ' action=\"' + form.action + '\"' : ''; %>
+  <%- form.method ? ' method=\"' + form.method + '\"' : ''; %>
+  <%- form.enctype ? ' enctype=\"' + form.enctype + '\"' : ''; %>
+>
+  <% for (let i = 0; i < elements.length; i++) { %>
+    <% if (elements[i].active == true && elements[i].log == true) { %>
+      <%
+        let name = elements[i].name.split(' ').join('').split('-').join('').toLowerCase();
+        let placeholder = elements[i].name;
+      %>
+      <% if (elements[i].label == false || elements[i].type == 'submit') { } else { %>
+        <%
+          x = '';
+          x += '<label';
+          x += ' for=\"' + name + '\"';
+          x += ' class=\"form-label\">';
+          x += elements[i].name + ':';
+          x += '</label>';
+        %>
+        <%- x; %>
+      <% } %>
+      <% for (let index = 0; index < input.length; index++) { %>
+        <% if (elements[i].type == input[index]) { %>
+          <%- elements[i].type == 'submit' ? '<div class=\"btnscreate\">' : ''; %>
+          <%
+            x = '';
+            x += '<input';
+            x += ' type=\"' + elements[i].type + '\"';
+            x += elements[i].type == 'checkbox' || elements[i].type == 'submit' ? '' : ' class=\"form-control mb-3\"';
+            x += elements[i].type == 'submit' ? ' class=\"btn btn-primary\"' : '';
+            x += ' name=\"' + name + '\"';
+            if (elements[i].type == 'checkbox' || elements[i].type == 'file') { } else {
+              x += elements[i].label == true ? '' : ' placeholder=\"' + placeholder + '\"';
+            }
+            x += elements[i].required == true ? ' required' : '';
+            if(form.action == '/edited?_method=PUT') {
+              x += elements[i].type == 'submit' ? ' value=\"' + 'Edit' + '\"' : ' value=\"' + values[name] + '\"';
+            } else if(form.action == '/log') {
+              x += elements[i].type == 'submit' ? ' value=\"' + 'Login' + '\"' : '';
+            } else {
+              x += elements[i].type == 'submit' ? ' value=\"' + 'Send' + '\"' : '';
+            }
+            x += '>';
+          %>
+          <%- x; %>
+          <%- elements[i].type == 'submit' ? '</div>' : ''; %>
+        <% } %>
+      <% } %>
+      <% if (elements[i].type.substr(0, 1) == 'h') { %>
+        <%
+          x = '';
+          x += '<' + elements[i].type + '>';
+          x += elements[i].name + ':';
+          x += '</' + elements[i].type + '>';
+        %>
+        <%- x; %>
+      <% } %>
+    <% } else { } %>
+  <% } %>
+</form>
+<%- include('./partials/footer.ejs'); %>

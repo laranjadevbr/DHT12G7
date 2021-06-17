@@ -1,0 +1,28 @@
+<%- include('./partials/head'); %>
+<%- include('./partials/functions'); %>
+<%- include('./partials/header'); %>
+<%- include('./partials/navbar'); %>
+<!--  -->
+<form id="contact-form">
+    <div id="content">
+        <label for="name">Name</label>
+        <input type="text" id="name">
+        <label for="state">State</label>
+        <select id="state" multiple>
+            <option selected disabled></option>
+            <option>SP</option>
+            <option>PE</option>
+            <option>RJ</option>
+        </select>
+        <label for="email">Email</label>
+        <input type="email" id="email">
+        <label for="message">Message</label>
+        <textarea name="message" id="message" rows="3"></textarea>
+        <div id="error-list" hidden></div>
+        <button id="btn" type="submit">
+            Send
+        </button>
+    </div>
+</form>
+<!--  -->
+<%- include('./partials/footer'); %>

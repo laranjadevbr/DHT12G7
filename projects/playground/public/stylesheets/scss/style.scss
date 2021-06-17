@@ -1,0 +1,80 @@
+$border: 1px;
+$margin: 10px;
+$between: $margin * 4;
+*
+{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+%bg
+{
+    background-color: rgba(0, 0, 0, 0.25);
+    height: 100%;
+    width: 100%;
+}
+html
+{
+    @extend %bg;   
+}
+body
+{
+    @extend %bg;
+    padding: 50px 50px 0 50px;
+}
+$b: 5;
+$e: 0;
+$s: 24px;
+@for $i from $b through $e
+{
+    h#{ ($i + 1) }
+    {
+        font-size: 2 * $s - $s / $b * $i;
+        @if ($i + 1) == 1 {
+            color: red;
+        } @else {
+
+        }
+    }
+}
+p
+{
+    margin: 0;
+}
+li
+{
+    list-style: none;
+}
+ol
+{
+    list-style: none;
+}
+ul
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+label
+{
+    display: block;
+}
+
+.btnscreate
+{
+    display: flex;
+    justify-content: flex-end;
+}
+.btnslist
+{
+    display: flex;
+    justify-content: flex-start;
+    margin: 10px 0 0 0;
+    form
+    {
+        input
+        {
+            margin: 0 10px 0 0;
+        }
+    }
+}
