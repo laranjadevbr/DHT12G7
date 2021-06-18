@@ -55,17 +55,6 @@ module.exports = {
             state : Sequelize.STRING(uf),
         };
     },
-    // everyoneAddress : (Sequelize, Entity) => {
-    //     let entity = Entity ? Entity : '';
-    //     return {
-    //         [entity + 'cep'] : Sequelize.STRING(cep),
-    //         [entity + 'address'] : Sequelize.STRING,
-    //         [entity + 'number'] : Sequelize.INTEGER,
-    //         [entity + 'district'] : Sequelize.STRING,
-    //         [entity + 'city'] : Sequelize.STRING,
-    //         [entity + 'state'] : Sequelize.STRING(uf),
-    //     };
-    // },
     everyoneContact : (Sequelize) => {
         return {
             email : Sequelize.STRING,
@@ -182,7 +171,10 @@ module.exports = {
     },
     publicLevel : (Sequelize) => {
         return {
-            level : Sequelize.INTEGER,
+            level : {
+                defaultValue : '0',
+                type : Sequelize.INTEGER,
+            },
         };
     },
 };

@@ -8,9 +8,9 @@ const {
     category,
     client,
     index,
-    json_admin,
-    json_client,
-    json_recipe,
+    jsonAdmin,
+    jsonClient,
+    jsonRecipe,
     lab,
     order,
     product,
@@ -27,9 +27,9 @@ const controls = [
     { control : category, path : 'category', },
     { control : client, path : 'client', },
     { control : index, path : '', },
-    { control : json_admin, path : 'json-admin', },
-    { control : json_client, path : 'json-client', },
-    { control : json_recipe, path : 'json-recipe', },
+    { control : jsonAdmin, path : 'json-admin', },
+    { control : jsonClient, path : 'json-client', },
+    { control : jsonRecipe, path : 'json-recipe', },
     { control : lab, path : 'lab', },
     { control : order, path : 'order', },
     { control : product, path : 'product', },
@@ -39,7 +39,7 @@ const controls = [
 let getRouter = (method, prefix, object) => {
     for (let i = 0; i < object['length']; i++)
         router[object[i]['method']](
-            String(prefix + object[i]['pathTitle'] + object[i]['pathParam']),
+            String(prefix + object[i]['title'] + object[i]['param']),
             method[object[i]['control']],
             );
 };

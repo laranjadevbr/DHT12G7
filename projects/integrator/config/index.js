@@ -1,7 +1,7 @@
 require('dotenv').config();
 module.exports = {
-    database : process.env.DB_DATABASE,
     dialect : process.env.DB_CONNECTION,
+    database : process.env.DB_DATABASE,
     host : process.env.DB_HOST,
     password : process.env.DB_PASSWORD,
     username : process.env.DB_USERNAME,
@@ -9,7 +9,6 @@ module.exports = {
     // DB_DATABASE=integrator
     // DB_HOST=localhost
     // DB_PASSWORD=
-    // DB_PORT=8888
     // DB_USERNAME=root
     operatorAliases : false,
     define : {

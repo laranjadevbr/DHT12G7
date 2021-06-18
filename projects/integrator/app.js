@@ -14,24 +14,9 @@ const {
   capitalize,
   cleaner,
   currency,
-  dismember,
-  getCNPJ,
-  getCPF,
-  getNumber,
-  getPhone,
-  getRandomDate,
-  getRandomInt,
-  navbar,
-  onlyNumbers,
-  pageTitle,
-  plural,
-  readjust,
   roman,
-  saver,
   script,
-  urlPath,
   validate,
-  viewName,
 } = require('./utils');
 
 const app = express();
@@ -67,7 +52,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', router);
 
 const routers = [
-  // ['/', '/index'], 
+  // ['/', '/index'],
 ];
 
 for (let i = 0; i < routers['length']; i++)
@@ -77,12 +62,12 @@ for (let i = 0; i < routers['length']; i++)
 
 app.use((req, res, next) => {
   return res.status(404).render('404', {
+    pageMessage : 'this page is not found!',
+    script : script('404'),
     capitalize,
     cleaner,
     currency,
-    pageMessage : 'this page is not found!',
     roman,
-    script : script('404'),
     validate,
     session : (req, res, next) => {
       return req.session.user;

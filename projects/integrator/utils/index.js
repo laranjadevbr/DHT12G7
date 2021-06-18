@@ -1,10 +1,68 @@
 const fs = require('fs');
 const path = require('path');
-const getRandomInt = (min, max) => {
+const urlJoin = require('url-join');
+
+const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min);
 };
-const isThis = (index, type) => {
-    return typeof index === type ? true : false;
+const isThereTrue = (filePath) => {
+    return fs.existsSync(urlJoin(filePath)) ? true : false;
+};
+const getCurrency = (string) => {
+    return (string).toLocaleString('pt-br', {
+        style : 'currency',
+        currency : 'USD',
+    });
+};
+const getValidate = (variable) => {
+    if (!variable) return false;
+    else if (isThis(variable, 'undefined')) return false;
+    else if (!variable && isThis(variable, 'boolean')) return false;
+    else if (!variable && isThis(variable, 'number')) return false;
+    else if (!variable && isThis(variable, 'string')) return false;
+    else return true;
+};
+const isTheLast = (string, character) => {
+    return string.subststringr(string['length'] - 1, string['length']) === character ? true : false;
+};
+const isThis = (string, type) => {
+    return typeof string === type ? true : false;
+};
+const getDOCNumber = (array) => {
+    let num = '', result = '';
+    for (let x = 0; x < array['length']; x++) {    
+        for (let y = 0; y < array[x]; y++) num += '9';
+        result += ('' + Math.floor(Math.random() * Number(num))).padStart(Number(num['length']), '0');
+        result += x == array['length'] - 2 ? '-' : '';
+        result += x <= array['length'] - 3 ? '.' : '';
+        num = '';
+    }
+    return result;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const getRandomInt = (min, max) => {
+    return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min);
 };
 const isThere = (folder, file, type) => {
     return fs.existsSync(path.join(folder, file + '.' + type)) ? true : false;
@@ -23,23 +81,18 @@ const validate = (variable) => {
     else if (isThis(variable, 'string') && String(variable)['length'] <= 0) return false;
     else return true;
 };
+
+
+
 module.exports = {
-    isThere,
-    script : (fileName) => {
-        let exist = fs.existsSync(path.join('public', 'javascripts', fileName + '.js')) ? true : false;
-        return exist ? '<script type=\"module\" src=\"/javascripts/' + fileName + '.js\"></script>' : '';
+    getScript : (fileName) => {
+        return isThereTrue([
+            'public',
+            'javascripts',
+            fileName + '.js'
+        ]) ? '<script type=\"module\" src=\"/javascripts/' + fileName + '.js\"></script>' : '';
     },
-    getUnified : (array, params) => {
-        const result = [];
-        for (let i = 0; i < params['length']; i++)
-            validate(array[params[i]]) ? result.push(...array[params[i]]) : undefined;
-        return result;
-    },
-    isThis,
-    isLast : (index, character) => {
-        return index.substr(index['length'] - 1, index['length']) === character ? true : false;
-    },
-    currency,
+    isTheLast,
     getSalaryRange : (value, range) => {
         const result = [];
         for (let i = 0; i < range; i++) {
@@ -55,6 +108,152 @@ module.exports = {
         };
         return result;
     },
+    getNavbar : (query, number, array) => {
+        let list = [];
+        for (let i = Number(query * number); i <= Number(query * number + number - 1); i++) list.push(array[i]);
+        let full = Math.round(Number(array['length'] - 1) / number) - 1;
+        let next = Number(query) < Number(full) ? Number(query) + 1 : Number(full);
+        let prev = Number(query) <= 1 ? 1 : Number(query) - 1;
+        return {
+            full,
+            list,
+            next,
+            prev,
+        };
+    },
+    getOnlyNumber : (string) => {
+        return string.replace(/^[0-9]/g, '').trim();
+    },
+    getPageTitle : (prefix, suffix) => {
+        return (isThis(suffix, 'undefined') ? prefix : prefix + suffix).split('/').join(' ').split('-').join(' ').trim();
+    },
+    getPlural : (string) => {
+        if (isTheLast(string, 'y')) string = string.substr(0, string['length'] - 1) + 'ies';
+        else if (isTheLast(string, 's')) string += 'es';
+        else string += 's';
+        return string;
+    },
+    getUnified : (array, params) => {
+        const result = [];
+        for (let i = 0; i < params['length']; i++)
+            validate(array[params[i]]) ? result.push(...array[params[i]]) : undefined;
+        return result;
+    },
+    isThereTrue,
+    isThis,
+    JSONCreator : (name, content, path) => {
+        fs.writeFileSync(urlJoin(path), 'const ' + name + ' = ');
+        fs.appendFileSync(urlJoin(path), JSON.stringify(content));
+        fs.appendFileSync(urlJoin(path), ';');
+        fs.appendFileSync(urlJoin(path), 'module.exports = ' + name + ';');
+    },
+    getRoman : (number) => {
+        let r = '';
+        let division = 0;
+        let rest = number;
+        let arabic = [1000, 500, 100, 50, 10];
+        let romans = ['M', 'D', 'C', 'L', 'X'];
+        let dozen = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'];
+        for (let i = 0; i < arabic['length']; i++) {
+            division = parseInt(rest / arabic[i]);
+            rest = number % arabic[i];
+            if (division > 0) {
+                for (let x = 0; x < division; x++) {
+                    r = r + romans[i];
+                }
+            }
+            if (rest < 10) {
+                r = r + dozen[rest - 1];
+                break;
+            }
+        }
+        return r;
+    },
+    getURLPath : (prefix, suffix) => {
+        return String(isThis(suffix, 'undefined') ? prefix : prefix + suffix).trim().toLowerCase();
+    },
+    getViewName : (prefix, suffix) => {
+        prefix = prefix.split('/').join('-');
+        prefix = prefix.substr(1, prefix['length'] - 1);
+        return prefix += !isThis(suffix, 'undefined') ? '-' + suffix : '';
+    },
+    getCNPJNumber : (array) => {
+        let num = '', result = '';
+        for (let x = 0; x < array['length']; x++) {    
+            for (let y = 0; y < array[x]; y++) num += '9';
+            result += x == 3 ? '0001' : ('' + Math.floor(Math.random() * Number(num))).padStart(Number(num['length']), '0');
+            result += x == array['length'] - 2 ? '-' : '';
+            result += x == array['length'] - 3 ? '/' : '';
+            result += x <= array['length'] - 4 ? '.' : '';
+            num = '';
+        }
+        return result;
+    },
+    getCPFNumber : () => {
+        let getDOCDigit = (num1, num2, num3, num4) => {
+            let num = num1.split('').concat(num2.split(''), num3.split('')), x = 0;    
+            if (num4 !== undefined) num[9] = num4;
+            for (let i = (num4 ? 11 : 10), j = 0; i >= 2; i--, j++) x += parseInt(num[j]) * i;
+            return (y = x % 11) < 2 ? 0 : 11 - (y = x % 11);
+        };
+        const num1 = getDOCNumber([3]), num2 = getDOCNumber([3]), num3 = getDOCNumber([3]), dig = getDOCDigit(num1, num2, num3);
+        return `${ num1 }.${ num2 }.${ num3 }-${ dig }${ getDOCDigit(num1, num2, num3, dig) }`;
+    },
+    getRandomDate : (start, end) => {
+        start = new Date(start).getTime();
+        end = new Date(end).getTime();
+        return start > end ? new Date(getRandomNumber(end, start)).toLocaleDateString() : new Date(getRandomNumber(start, end)).toLocaleDateString();
+    },
+    getModelParams : (model, as) => {
+        const include = isThis(model, 'undefined') || isThis(as, 'undefined') ? { } : {
+            include : {
+                model : model,
+                as : as,
+                required : false,
+            },
+        };
+        return {
+            ...include,
+            order : [
+                ['id', 'ASC'],
+            ],
+        };
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+    getRandomInt,
+    isThere,
+    script : (fileName) => {
+        let exist = fs.existsSync(path.join('public', 'javascripts', fileName + '.js')) ? true : false;
+        return exist ? '<script type=\"module\" src=\"/javascripts/' + fileName + '.js\"></script>' : '';
+    },
+    
+    
+    isLast : (index, character) => {
+        return index.substr(index['length'] - 1, index['length']) === character ? true : false;
+    },
+    currency,
+    
     capitalize : (string) => {
         let result = '', array = string.split(' ');
         for (let i = 0; i < array['length']; i++) {
@@ -277,45 +476,16 @@ module.exports = {
         return result;
     },
     getCPF : () => {
-        let getNumber = (array) => {
-            let num = '', result = '';
-            for (let x = 0; x < array['length']; x++) {    
-                for (let y = 0; y < array[x]; y++) num += '9';
-                result += ('' + Math.floor(Math.random() * Number(num))).padStart(Number(num['length']), '0');
-                result += x == array['length'] - 2 ? '-' : '';
-                result += x <= array['length'] - 3 ? '.' : '';
-                num = '';
-            }
-            return result;
-        };
-        let getDigit = (num1, num2, num3, num4) => {
+        let getDOCDigit = (num1, num2, num3, num4) => {
             let num = num1.split('').concat(num2.split(''), num3.split('')), x = 0;    
             if (num4 !== undefined) num[9] = num4;
             for (let i = (num4 ? 11 : 10), j = 0; i >= 2; i--, j++) x += parseInt(num[j]) * i;
             return (y = x % 11) < 2 ? 0 : 11 - (y = x % 11);
         };
-        const num1 = getNumber([3]), num2 = getNumber([3]), num3 = getNumber([3]), dig = getDigit(num1, num2, num3);
-        return `${ num1 }.${ num2 }.${ num3 }-${ dig }${ getDigit(num1, num2, num3, dig) }`;
+        const num1 = getDOCNumber([3]), num2 = getDOCNumber([3]), num3 = getDOCNumber([3]), dig = getDOCDigit(num1, num2, num3);
+        return `${ num1 }.${ num2 }.${ num3 }-${ dig }${ getDOCDigit(num1, num2, num3, dig) }`;
     },
-    getRandomInt,
-    getRandomDate : (start, end) => {
-        start = new Date(start).getTime();
-        end = new Date(end).getTime();
-        return start > end ? new Date(getRandomInt(end, start)).toLocaleDateString() : new Date(getRandomInt(start, end)).toLocaleDateString();
-    },
-    getModelParams : (model, as) => {
-        const include = isThis(model, 'undefined') || isThis(as, 'undefined') ? { } : {
-            include : {
-                model : model,
-                as : as,
-                required : false,
-            },
-        };
-        return {
-            ...include,
-            order : [
-                ['id', 'ASC'],
-            ],
-        };
-    },
+
+    
+    
 };

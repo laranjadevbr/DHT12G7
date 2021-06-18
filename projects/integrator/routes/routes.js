@@ -2,119 +2,67 @@ const {
     isLast,
     isThis,
 } = require('../utils');
-let getPathTitle = getControl = (index) => {
+let getTitle = getControl = (index) => {
     return isLast(index, '?') ? index.substr(0, index['length'] - 1) : index;
 };
-let getPathParam = (index) => {
+let getParam = (index) => {
     return isLast(index, '?') ? '/:id?' : '';
 };
-let getRouteParams = (route, method) => {
-    let result = [];
+let getRoute = (route, method) => {
+    const result = [];
     for (let i = 0; i < route['length']; i++)
         result.push({
             method : method,
-            pathTitle : isThis(route[i], 'string') ? getPathTitle(route[i]) : getPathTitle(route[i][0]),
-            pathParam : isThis(route[i], 'string') ? getPathParam(route[i]) : getPathParam(route[i][0]),
+            title : isThis(route[i], 'string') ? getTitle(route[i]) : getTitle(route[i][0]),
+            param : isThis(route[i], 'string') ? getParam(route[i]) : getParam(route[i][0]),
             control : isThis(route[i], 'string') ? getControl(route[i]) : getControl(route[i][1]),
         });
     return result;
 };
-let views = [
-    ...getRouteParams([
+const view = [
+    ...getRoute([
         ['', 'index'],
         'all',
         'one?',
     ], 'get'),
 ];
-let changes = [
-    ...getRouteParams([
+const change = [
+    ...getRoute([
         'create',
         'edit?',
     ], 'get'),
-    ...getRouteParams([
+    ...getRoute([
         ['create', 'store'],
     ], 'post'),
-    ...getRouteParams([
+    ...getRoute([
         ['edit?', 'update'],
     ], 'put'),
-    ...getRouteParams([
+    ...getRoute([
         ['delete?', 'destroy'],
     ], 'delete'),
 ];
-let log = [
-    ...getRouteParams([
+const log = [
+    ...getRoute([
+        'authenticate'
+    ], 'post'),
+    ...getRoute([
         'login',
         'logout'
     ], 'get'),
-    ...getRouteParams([
-        'authenticate'
-    ], 'post'),
+];
+const bulk = [
+    ...getRoute([
+        'bulk',
+    ], 'get'),
+];
+const search = [
+    ...getRoute([
+        'search',
+    ], 'get'),
 ];
 module.exports = {
-    admin : [
-        ...changes,
-        ...views,
-        ...log,
-        ...getRouteParams([
-            'bulk',
-            'search',
-        ], 'get'),
-    ],
-    api : [
-        ...views,
-    ],
-    client : [
-        ...changes,
-        ...views,
-        ...log,
-        ...getRouteParams([
-            'bulk',
-            'search',
-        ], 'get'),
-    ],
-    user : [
-        ...changes,
-        ...views,
-        ...log,
-        ...getRouteParams([
-            'bulk',
-            'search',
-        ], 'get'),
-    ],
-    category : [
-        ...changes,
-        ...views,
-        ...getRouteParams([
-            'bulk',
-            'search',
-        ], 'get'),
-    ],
-    order : [
-        ...changes,
-        ...views,
-        ...getRouteParams([
-            'bulk',
-            'search',
-        ], 'get'),
-    ],
-    product : [
-        ...changes,
-        ...views,
-        ...getRouteParams([
-            'bulk',
-            'search',
-        ], 'get'),
-    ],
-    service : [
-        ...changes,
-        ...views,
-        ...getRouteParams([
-            'bulk',
-            'search',
-        ], 'get'),
-    ],
     index : [
-        ...getRouteParams([
+        ...getRoute([
             ['', 'index'],
             'accordion',
             'cards',
@@ -122,26 +70,80 @@ module.exports = {
             'maps',
         ], 'get'),
     ],
-    json_admin : [
-        ...changes,
-        ...views,
-        ...log,
+    api : [
+        ...view,
     ],
-    json_client : [
-        ...changes,
-        ...views,
+    admin : [
+        ...bulk,
+        ...change,
         ...log,
+        ...search,
+        ...view,
     ],
-    json_recipe : [
-        ...changes,
-        ...views,
-        ...getRouteParams([
+    client : [
+        ...bulk,
+        ...change,
+        ...log,
+        ...search,
+        ...view,
+    ],
+    user : [
+        ...bulk,
+        ...change,
+        ...log,
+        ...search,
+        ...view,
+    ],
+    category : [
+        ...bulk,
+        ...change,
+        ...search,
+        ...view,
+    ],
+    event : [
+        ...bulk,
+        ...change,
+        ...search,
+        ...view,
+    ],
+    product : [
+        ...bulk,
+        ...change,
+        ...search,
+        ...view,
+    ],
+    service : [
+        ...bulk,
+        ...change,
+        ...search,
+        ...view,
+    ],
+    order : [
+        ...bulk,
+        ...change,
+        ...search,
+        ...view,
+    ],
+    jsonAdmin : [
+        ...change,
+        ...log,
+        ...view,
+    ],
+    jsonClient : [
+        ...change,
+        ...log,
+        ...view,
+    ],
+    jsonRecipe : [
+        ...change,
+        ...view,
+        ...getRoute([
             'menu',
             'success',
         ], 'get'),
     ],
     lab : [
-        ...getRouteParams([
+        ...getRoute([
             'a',
             'b',
             'c?',

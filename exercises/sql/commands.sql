@@ -1,6 +1,8 @@
 CREATE DATABASE api;
 CREATE DATABASE integrator;
 
+DROP DATABASE phpmyadmin;
+
 USE api;
 USE integrator;
 

@@ -1,6 +1,5 @@
 const {
     currency,
-    getSalaryRange,
     getUnified,  
 } = require('../utils');
 const letter = [
