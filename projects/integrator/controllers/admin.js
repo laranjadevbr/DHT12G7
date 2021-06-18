@@ -28,32 +28,30 @@ const {
     Public,
     Order,
 } = require('../models');
-const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
 const prefix = '/admin/';
 const {
     capitalize,
+    validate,
     cleaner,
     currency,
-    dismember,
-    getCNPJ,
-    getCPF,
-    getNumber,
-    getPhone,
-    getRandomDate,
-    getRandomInt,
-    navbar,
-    onlyNumbers,
-    pageTitle,
-    plural,
-    readjust,
     roman,
-    saver,
-    script,
-    urlPath,
-    validate,
-    viewName,
+
+    getCNPJNumber,
+    getCPFNumber,
+    getDOCNumber,
+    getHash,
     getModelParams,
+    getPageTitle,
+    getPhoneNumber,
+    getRandomDate,
+    getRandomNumber,
+    getRomanNumber,
+    getScript,
+    getURLPath,
+    getViewName,
+    isSame,
+
 } = require('../utils');
 const session = (req, res, next) => {
     return req.session.user;
@@ -84,12 +82,12 @@ const bulkList = [];
 for (let i = 0; i < userList['length']; i++) {
     let email = userList[i]['firstName'].substr(0, 1);
     email += userList[i]['lastName'].substr(0, 1);
-    let password = getRandomInt(100000, 999999);
+    let password = getRandomNumber(100000, 999999);
     email += password;
     email += '@';
     email += emails[Math.floor(Math.random() * emails['length'])];
     email += '.com';
-    password = bcrypt.hashSync(String(password), 10);
+    password = getHash(password);
     bulkList.push({
         title : String(userList[i]['firstName'] + ' ' + userList[i]['lastName']),
         description : description,
@@ -99,13 +97,13 @@ for (let i = 0; i < userList['length']; i++) {
             new Date(new Date().getFullYear() - 100, new Date().getMonth(), new Date().getDate()),
         ),
         status : getIndexes('status'),
-        cpf : getCPF(),
-        rg : getNumber([2, 3, 3, 1]),
-        cep : getNumber([5, 3]),
+        cpf : getCPFNumber(),
+        rg : getDOCNumber([2, 3, 3, 1]),
+        cep : getDOCNumber([5, 3]),
         state : getIndexes('uf'),
         email : String(email).toLowerCase(),
-        phone : getPhone([2, 1, 4, 4]),
-        cnpj : getCNPJ([2, 3, 3, 4, 2]),
+        phone : getPhoneNumber([2, 1, 4, 4]),
+        cnpj : getCNPJNumber([2, 3, 3, 4, 2]),
         profession : getIndexes('profession'),
         curriculum : description,
         salary : getIndexes('salary'),
@@ -116,7 +114,7 @@ for (let i = 0; i < userList['length']; i++) {
 }
 module.exports = {
     index : async (req, res, next) => {
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath(prefix, 'all'));
     },
     all : async (req, res, next) => {
         const amount = 2;
@@ -136,22 +134,23 @@ module.exports = {
         const nextPage = Number(page) < Number(fullPage) ? Number(page) + 1 : Number(fullPage);
         const prevPage = Number(page) <= 1 ? 1 : Number(page) - 1;
         const allNames = 'all';
-        return res.render(viewName(prefix, allNames), {
+        return res.render(getViewName(prefix, allNames), {
             fullPage : fullPage <= 1 ? undefined : fullPage,
             index : index,
             item : item,
             inputType : inputType,
             key,
             nextPage : nextPage,
-            pageTitle : pageTitle(prefix, allNames),
-            pathPrefix : viewName(prefix),
+            pageTitle : getPageTitle(prefix, allNames),
+            pathPrefix : getViewName(prefix),
             prevPage : prevPage,
-            script : script(allNames),
-            searchAction : urlPath(prefix, 'search'),
+            script : getScript(allNames),
+            searchAction : getURLPath(prefix, 'search'),
             capitalize,
             cleaner,
             currency,
             roman,
+            getRomanNumber,
             session,
             validate,
         });
@@ -165,9 +164,9 @@ module.exports = {
                 id : id,
             },
         });
-        return res.render(viewName(prefix, allNames), {
+        return res.render(getViewName(prefix, allNames), {
             form : {
-                action : urlPath(prefix, 'all'),
+                action : getURLPath(prefix, 'all'),
                 enctype : '',
                 method : 'POST'
             },
@@ -175,43 +174,45 @@ module.exports = {
             formElement : view,
             index : index,
             inputType : inputType,
-            pageTitle : pageTitle(prefix, allNames),
-            script : script(allNames),
+            pageTitle : getPageTitle(prefix, allNames),
+            script : getScript(allNames),
             capitalize,
             cleaner,
             currency,
             roman,
+            getRomanNumber,
             session,
             validate,
         });
     },
     create : async (req, res, next) => {
         const allNames = 'create';
-        return res.render(viewName(prefix, allNames), {
+        return res.render(getViewName(prefix, allNames), {
             form : {
-                action : urlPath(prefix, allNames),
+                action : getURLPath(prefix, allNames),
                 enctype : '',
                 method : 'POST',
             },
             btnTitle : allNames,
             formElement : create,
             inputType : inputType,
-            pageTitle : pageTitle(prefix, allNames),
-            script : script(allNames),
+            pageTitle : getPageTitle(prefix, allNames),
+            script : getScript(allNames),
             capitalize,
             cleaner,
             currency,
             roman,
+            getRomanNumber,
             session,
             validate,
         });
     },
     store : async (req, res, next) => {
-        req.body['password'] = bcrypt.hashSync(req.body['password'], 10);
+        req['body']['password'] = getHash(req['body']['password']);
         const index = await Public.create({
             ...req['body'],
         });
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath(prefix, 'all'));
     },
     edit : async (req, res, next) => {
         const allNames = 'edit';
@@ -221,9 +222,9 @@ module.exports = {
                 id : id,
             },
         });
-        return res.render(viewName(prefix, allNames), {
+        return res.render(getViewName(prefix, allNames), {
             form : {
-                action : urlPath(prefix, allNames) + '/' + id + '?_method=PUT',
+                action : getURLPath(prefix, allNames) + '/' + id + '?_method=PUT',
                 enctype : '',
                 method : 'POST',
             },
@@ -231,12 +232,13 @@ module.exports = {
             formElement : edit,
             index : index,
             inputType : inputType,
-            pageTitle : pageTitle(prefix, allNames),
-            script : script(allNames),
+            pageTitle : getPageTitle(prefix, allNames),
+            script : getScript(allNames),
             capitalize,
             cleaner,
             currency,
             roman,
+            getRomanNumber,
             session,
             validate,
         });
@@ -251,7 +253,7 @@ module.exports = {
                 id : id,
             },
         });
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath(prefix, 'all'));
     },
     destroy : async (req, res, next) => {
         const { id } = req['params'];
@@ -260,46 +262,48 @@ module.exports = {
                 id : id,
             }
         });
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath(prefix, 'all'));
     },
     login : async (req, res, next) => {
         const allNames = 'login';
-        return res.render(viewName(prefix, allNames), {
+        return res.render(getViewName(prefix, allNames), {
             form : {
-                action : urlPath(prefix, 'authenticate'),
+                action : getURLPath(prefix, 'authenticate'),
                 enctype : '',
                 method : 'POST',
             },
             btnTitle : allNames,
             formElement : login,
             inputType : inputType,
-            pageTitle : pageTitle(prefix, allNames),
-            script : script(allNames),
+            pageTitle : getPageTitle(prefix, allNames),
+            script : getScript(allNames),
             capitalize,
             cleaner,
             currency,
             roman,
+            getRomanNumber,
             session,
             validate,
         });
     },
     authenticate : async (req, res, next) => {
         let screen = (method, allNames) => {
-            return method.render(viewName(prefix, allNames), {
+            return method.render(getViewName(prefix, allNames), {
                 form : {
-                    action : urlPath(prefix, allNames),
+                    action : getURLPath(prefix, allNames),
                     enctype : '',
                     method : 'POST',
                 },
                 btnTitle : allNames,
                 formElement : login,
                 inputType : inputType,
-                pageTitle : pageTitle(prefix, allNames),
-                script : script(allNames),
+                pageTitle : getPageTitle(prefix, allNames),
+                script : getScript(allNames),
                 capitalize,
                 cleaner,
                 currency,
                 roman,
+                getRomanNumber,
                 session,
                 validate,
             });
@@ -307,7 +311,7 @@ module.exports = {
         const {
             email,
             password,
-        } = req.body;
+        } = req['body'];
         const user = await Public.findOne({
             where : {
                 email : email,
@@ -316,12 +320,13 @@ module.exports = {
         if (!user) {
             screen(res, 'login');
         };
-        if (!bcrypt.compareSync(password, user['password'])) {
+        
+        if (!isSame(password, user['password'])) {
             screen(res, 'login');
         };
         user['password'] = undefined;
         req.session.user = user;
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath(prefix, 'all'));
     },
     logout : async (req, res, next) => {
         req.session.destroy();
@@ -360,22 +365,23 @@ module.exports = {
         const nextPage = Number(page) < Number(fullPage) ? Number(page) + 1 : Number(fullPage);
         const prevPage = Number(page) <= 1 ? 1 : Number(page) - 1;
         const allNames = 'all';
-        return res.render(viewName(prefix, allNames), {
+        return res.render(getViewName(prefix, allNames), {
             fullPage : fullPage <= 1 ? undefined : fullPage,
             index : index,
             item : item,
             inputType : inputType,
             key,
             nextPage : nextPage,
-            pageTitle : pageTitle(prefix, allNames),
-            pathPrefix : viewName(prefix),
+            pageTitle : getPageTitle(prefix, allNames),
+            pathPrefix : getViewName(prefix),
             prevPage : prevPage,
-            script : script(allNames),
-            searchAction : urlPath(prefix, 'search'),
+            script : getScript(allNames),
+            searchAction : getURLPath(prefix, 'search'),
             capitalize,
             cleaner,
             currency,
             roman,
+            getRomanNumber,
             session,
             validate,
         });

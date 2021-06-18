@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const urlJoin = require('url-join');
-
+const bcrypt = require('bcrypt');
 const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min);
 };
@@ -39,15 +39,6 @@ const getDOCNumber = (array) => {
     }
     return result;
 };
-
-
-
-
-
-
-
-
-
 
 
 
@@ -147,7 +138,7 @@ module.exports = {
         fs.appendFileSync(urlJoin(path), ';');
         fs.appendFileSync(urlJoin(path), 'module.exports = ' + name + ';');
     },
-    getRoman : (number) => {
+    getRomanNumber : (number) => {
         let r = '';
         let division = 0;
         let rest = number;
@@ -174,7 +165,7 @@ module.exports = {
     },
     getViewName : (prefix, suffix) => {
         prefix = prefix.split('/').join('-');
-        prefix = prefix.substr(1, prefix['length'] - 1);
+        prefix = prefix.substr(1, prefix['length'] - 2);
         return prefix += !isThis(suffix, 'undefined') ? '-' + suffix : '';
     },
     getCNPJNumber : (array) => {
@@ -219,40 +210,65 @@ module.exports = {
             ],
         };
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-
-    getRandomInt,
-    isThere,
-    script : (fileName) => {
-        let exist = fs.existsSync(path.join('public', 'javascripts', fileName + '.js')) ? true : false;
-        return exist ? '<script type=\"module\" src=\"/javascripts/' + fileName + '.js\"></script>' : '';
+    getPhoneNumber : (array) => {
+        let num = '', result = '(';
+        for (let x = 0; x < array['length']; x++) {    
+            for (let y = 0; y < array[x]; y++) num += '9';
+            result += x == 1 ? '9' : ('' + Math.floor(Math.random() * Number(num))).padStart(Number(num['length']), '0');
+            result += x == array['length'] - 2 ? '-' : '';
+            result += x == array['length'] - 3 ? ' ' : '';
+            result += x <= array['length'] - 4 ? ') ' : '';
+            num = '';
+        }
+        return result;
     },
-    
-    
-    isLast : (index, character) => {
-        return index.substr(index['length'] - 1, index['length']) === character ? true : false;
+    getPart : (string, endPoint) => {
+        const result = [];
+        string = (string).split(endPoint);
+        for (let i = 0; i < string['length']; i++)
+            result.push(string[i]);
+        return result;
     },
-    currency,
+    getRandomNumber,
+    getHash : (password) => {
+        return bcrypt.hashSync(String(password), 10);
+    },
+    isSame : (clientPassword, dataBasePassword) => {
+        return bcrypt.compareSync(clientPassword, dataBasePassword) ? true : false;
+    },
+    getDOCNumber,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+                getRandomInt,
+                isThere,
+                script : (fileName) => {
+                    let exist = fs.existsSync(path.join('public', 'javascripts', fileName + '.js')) ? true : false;
+                    return exist ? '<script type=\"module\" src=\"/javascripts/' + fileName + '.js\"></script>' : '';
+                },
+                isLast : (index, character) => {
+                    return index.substr(index['length'] - 1, index['length']) === character ? true : false;
+                },
+                currency,
     
     capitalize : (string) => {
         let result = '', array = string.split(' ');
@@ -364,128 +380,119 @@ module.exports = {
             result = result.split(array[i][0]).join(array[i][1]);
         return result.trim();
     },
-    dismember : (string, separator) => {
-        const result = [];
-        string = (string).split(separator);
-        for (let i = 0; i < string['length']; i++)
-            result.push(string[i]);
-        return result;
-    },
-    navbar : (query, number, array) => {
-        let list = [];
-        for (let i = Number(query * number); i <= Number(query * number + number - 1); i++) list.push(array[i]);
-        let full = Math.round(Number(array['length'] - 1) / number) - 1;
-        let next = Number(query) < Number(full) ? Number(query) + 1 : Number(full);
-        let prev = Number(query) <= 1 ? 1 : Number(query) - 1;
-        return {
-            full,
-            list,
-            next,
-            prev,
-        };
-    },
-    onlyNumbers : (string) => {
-        return string.replace(/^[0-9]/g, '');
-    },
-    pageTitle : (prefix, suffix) => {
-        let variable = isThis(suffix, 'undefined') ? prefix : prefix + suffix;
-        return variable.split('/').join(' ').split('-').join(' ').substr(1, variable['length'] - 1).trim().toLowerCase();
-    },
-    plural : (string) => {
-        if (string.substr(string['length'] - 1, string['length']) === 'y') string = string.substr(0, string['length'] - 1) + 'ies';
-        else if (string.substr(string['length'] - 1, string['length']) === 's') string = string.substr(0, string['length']) + 'es';
-        else string += 's';
-        return string.trim().toLowerCase();
-    },
-    readjust : (o, n) => {
-        oldprice = o;
-        reajuste = - 1 * 100 + n * 100 / o;
-        newprice = o += o / 100 * reajuste;
-        return { oldprice, reajuste, newprice };
-    },
-    roman : (number) => {
-        let r = '';
-        let division = 0;
-        let rest = number;
-        let arabic = [1000, 500, 100, 50, 10];
-        let romans = ['M', 'D', 'C', 'L', 'X'];
-        let dozen = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'];
-        for (let i = 0; i < arabic['length']; i++) {
-            division = parseInt(rest / arabic[i]);
-            rest = number % arabic[i];
-            if (division > 0) {
-                for (let x = 0; x < division; x++) {
-                    r = r + romans[i];
-                }
-            }
-            if (rest < 10) {
-                r = r + dozen[rest - 1];
-                break;
-            }
-        }
-        return r;
-    },
-    saver : (variable, jsonVariable, jsonFolder, jsonArchive) => {
-        let filePath = path.join('.', jsonFolder, jsonArchive);
-        fs.writeFileSync(filePath, 'const ' + jsonVariable + ' = ');
-        fs.appendFileSync(filePath, JSON.stringify(variable));
-        fs.appendFileSync(filePath, ';');
-        fs.appendFileSync(filePath, 'module.exports = ' + jsonVariable + ';');
-    },
-    urlPath : (prefix, suffix) => {
-        return String(isThis(suffix, 'undefined') ? prefix : prefix + suffix).trim().toLowerCase();
-    },
-    validate,
-    viewName : (prefix, suffix) => {
-        let variable = isThis(suffix, 'undefined') ? prefix : prefix + suffix;
-        return variable.split('/').join('-').substr(1, Number(variable['length'] + (isThis(suffix, 'undefined') ? - 2 : 0))).trim().toLowerCase();
-    },
-    getNumber : (array) => {
-        let num = '', result = '';
-        for (let x = 0; x < array['length']; x++) {    
-            for (let y = 0; y < array[x]; y++) num += '9';
-            result += ('' + Math.floor(Math.random() * Number(num))).padStart(Number(num['length']), '0');
-            result += x == array['length'] - 2 ? '-' : '';
-            result += x <= array['length'] - 3 ? '.' : '';
-            num = '';
-        }
-        return result;
-    },
-    getCNPJ : (array) => {
-        let num = '', result = '';
-        for (let x = 0; x < array['length']; x++) {    
-            for (let y = 0; y < array[x]; y++) num += '9';
-            result += x == 3 ? '0001' : ('' + Math.floor(Math.random() * Number(num))).padStart(Number(num['length']), '0');
-            result += x == array['length'] - 2 ? '-' : '';
-            result += x == array['length'] - 3 ? '/' : '';
-            result += x <= array['length'] - 4 ? '.' : '';
-            num = '';
-        }
-        return result;
-    },
-    getPhone : (array) => {
-        let num = '', result = '(';
-        for (let x = 0; x < array['length']; x++) {    
-            for (let y = 0; y < array[x]; y++) num += '9';
-            result += x == 1 ? '9' : ('' + Math.floor(Math.random() * Number(num))).padStart(Number(num['length']), '0');
-            result += x == array['length'] - 2 ? '-' : '';
-            result += x == array['length'] - 3 ? ' ' : '';
-            result += x <= array['length'] - 4 ? ') ' : '';
-            num = '';
-        }
-        return result;
-    },
-    getCPF : () => {
-        let getDOCDigit = (num1, num2, num3, num4) => {
-            let num = num1.split('').concat(num2.split(''), num3.split('')), x = 0;    
-            if (num4 !== undefined) num[9] = num4;
-            for (let i = (num4 ? 11 : 10), j = 0; i >= 2; i--, j++) x += parseInt(num[j]) * i;
-            return (y = x % 11) < 2 ? 0 : 11 - (y = x % 11);
-        };
-        const num1 = getDOCNumber([3]), num2 = getDOCNumber([3]), num3 = getDOCNumber([3]), dig = getDOCDigit(num1, num2, num3);
-        return `${ num1 }.${ num2 }.${ num3 }-${ dig }${ getDOCDigit(num1, num2, num3, dig) }`;
-    },
-
-    
-    
+                dismember : (string, separator) => {
+                    const result = [];
+                    string = (string).split(separator);
+                    for (let i = 0; i < string['length']; i++)
+                        result.push(string[i]);
+                    return result;
+                },
+                navbar : (query, number, array) => {
+                    let list = [];
+                    for (let i = Number(query * number); i <= Number(query * number + number - 1); i++) list.push(array[i]);
+                    let full = Math.round(Number(array['length'] - 1) / number) - 1;
+                    let next = Number(query) < Number(full) ? Number(query) + 1 : Number(full);
+                    let prev = Number(query) <= 1 ? 1 : Number(query) - 1;
+                    return {
+                        full,
+                        list,
+                        next,
+                        prev,
+                    };
+                },
+                onlyNumbers : (string) => {
+                    return string.replace(/^[0-9]/g, '');
+                },
+                pageTitle : (prefix, suffix) => {
+                    let variable = isThis(suffix, 'undefined') ? prefix : prefix + suffix;
+                    return variable.split('/').join(' ').split('-').join(' ').substr(1, variable['length'] - 1).trim().toLowerCase();
+                },
+                plural : (string) => {
+                    if (string.substr(string['length'] - 1, string['length']) === 'y') string = string.substr(0, string['length'] - 1) + 'ies';
+                    else if (string.substr(string['length'] - 1, string['length']) === 's') string = string.substr(0, string['length']) + 'es';
+                    else string += 's';
+                    return string.trim().toLowerCase();
+                },
+                roman : (number) => {
+                    let r = '';
+                    let division = 0;
+                    let rest = number;
+                    let arabic = [1000, 500, 100, 50, 10];
+                    let romans = ['M', 'D', 'C', 'L', 'X'];
+                    let dozen = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'];
+                    for (let i = 0; i < arabic['length']; i++) {
+                        division = parseInt(rest / arabic[i]);
+                        rest = number % arabic[i];
+                        if (division > 0) {
+                            for (let x = 0; x < division; x++) {
+                                r = r + romans[i];
+                            }
+                        }
+                        if (rest < 10) {
+                            r = r + dozen[rest - 1];
+                            break;
+                        }
+                    }
+                    return r;
+                },
+                saver : (variable, jsonVariable, jsonFolder, jsonArchive) => {
+                    let filePath = path.join('.', jsonFolder, jsonArchive);
+                    fs.writeFileSync(filePath, 'const ' + jsonVariable + ' = ');
+                    fs.appendFileSync(filePath, JSON.stringify(variable));
+                    fs.appendFileSync(filePath, ';');
+                    fs.appendFileSync(filePath, 'module.exports = ' + jsonVariable + ';');
+                },
+                urlPath : (prefix, suffix) => {
+                    return String(isThis(suffix, 'undefined') ? prefix : prefix + suffix).trim().toLowerCase();
+                },
+                validate,
+                viewName : (prefix, suffix) => {
+                    let variable = isThis(suffix, 'undefined') ? prefix : prefix + suffix;
+                    return variable.split('/').join('-').substr(1, Number(variable['length'] + (isThis(suffix, 'undefined') ? - 2 : 0))).trim().toLowerCase();
+                },
+                getNumber : (array) => {
+                    let num = '', result = '';
+                    for (let x = 0; x < array['length']; x++) {    
+                        for (let y = 0; y < array[x]; y++) num += '9';
+                        result += ('' + Math.floor(Math.random() * Number(num))).padStart(Number(num['length']), '0');
+                        result += x == array['length'] - 2 ? '-' : '';
+                        result += x <= array['length'] - 3 ? '.' : '';
+                        num = '';
+                    }
+                    return result;
+                },
+                getCNPJ : (array) => {
+                    let num = '', result = '';
+                    for (let x = 0; x < array['length']; x++) {    
+                        for (let y = 0; y < array[x]; y++) num += '9';
+                        result += x == 3 ? '0001' : ('' + Math.floor(Math.random() * Number(num))).padStart(Number(num['length']), '0');
+                        result += x == array['length'] - 2 ? '-' : '';
+                        result += x == array['length'] - 3 ? '/' : '';
+                        result += x <= array['length'] - 4 ? '.' : '';
+                        num = '';
+                    }
+                    return result;
+                },
+                getPhone : (array) => {
+                    let num = '', result = '(';
+                    for (let x = 0; x < array['length']; x++) {    
+                        for (let y = 0; y < array[x]; y++) num += '9';
+                        result += x == 1 ? '9' : ('' + Math.floor(Math.random() * Number(num))).padStart(Number(num['length']), '0');
+                        result += x == array['length'] - 2 ? '-' : '';
+                        result += x == array['length'] - 3 ? ' ' : '';
+                        result += x <= array['length'] - 4 ? ') ' : '';
+                        num = '';
+                    }
+                    return result;
+                },
+                getCPF : () => {
+                    let getDOCDigit = (num1, num2, num3, num4) => {
+                        let num = num1.split('').concat(num2.split(''), num3.split('')), x = 0;    
+                        if (num4 !== undefined) num[9] = num4;
+                        for (let i = (num4 ? 11 : 10), j = 0; i >= 2; i--, j++) x += parseInt(num[j]) * i;
+                        return (y = x % 11) < 2 ? 0 : 11 - (y = x % 11);
+                    };
+                    const num1 = getDOCNumber([3]), num2 = getDOCNumber([3]), num3 = getDOCNumber([3]), dig = getDOCDigit(num1, num2, num3);
+                    return `${ num1 }.${ num2 }.${ num3 }-${ dig }${ getDOCDigit(num1, num2, num3, dig) }`;
+                },
 };
