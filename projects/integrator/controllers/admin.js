@@ -50,19 +50,17 @@ const {
     getScript,
     getURLPath,
     getViewName,
-    isSame,
-
+    isEqual,
 } = require('../utils');
 const session = (req, res, next) => {
     return req.session.user;
 };
-let getIndexes = (array) => {
+let getIndexes = (require, array) => {
     const result = [];
-    for (let i = 0; i < option[array]['length']; i++)
-        option[array][i][1] ? result.push(option[array][i][0]) : undefined;
-    return capitalize(result[Math.floor(Math.random() * result['length'])]);
+    for (let i = 0; i < require[array]['length']; i++)
+        result.push(require[array][i]);
+    return result[Math.floor(Math.random() * result['length'])]['option'];
 };
-
 let pushIndex = (index) => {
     let array = [];
     for (let i = 0; i < firstName[index]['length']; i++) {
@@ -96,17 +94,17 @@ for (let i = 0; i < userList['length']; i++) {
             new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()),
             new Date(new Date().getFullYear() - 100, new Date().getMonth(), new Date().getDate()),
         ),
-        status : getIndexes('status'),
+        status : getIndexes(option, 'status'),
         cpf : getCPFNumber(),
         rg : getDOCNumber([2, 3, 3, 1]),
         cep : getDOCNumber([5, 3]),
-        state : getIndexes('uf'),
+        state : getIndexes(option, 'uf'),
         email : String(email).toLowerCase(),
         phone : getPhoneNumber([2, 1, 4, 4]),
         cnpj : getCNPJNumber([2, 3, 3, 4, 2]),
-        profession : getIndexes('profession'),
+        profession : getIndexes(option, 'profession'),
         curriculum : description,
-        salary : getIndexes('salary'),
+        salary : getIndexes(option, 'salary'),
         accesskey : String(email).toLowerCase(),
         password : password,
         confirmation : password,
@@ -321,7 +319,7 @@ module.exports = {
             screen(res, 'login');
         };
         
-        if (!isSame(password, user['password'])) {
+        if (!isEqual(password, user['password'])) {
             screen(res, 'login');
         };
         user['password'] = undefined;

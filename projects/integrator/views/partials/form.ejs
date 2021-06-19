@@ -25,23 +25,22 @@
         html += ' id=\"' + cleaner(labelName(array['name'])) + '\"';
         html += ' name=\"' + cleaner(labelName(array['name'])) + '\"';
         html += '>';
-            if (typeof index !== 'undefined') {
-                if (validate(index[array['name']])) {
-                    html += '<option value=\"' + index[labelName(array['name'])] + '\" selected>';
-                        html += index[labelName(array['name'])];
-                } else {
-                    html += '<option value=\"\" selected>';
-                }
-                html += '</option>';
-            } else {
-                html += '<option value=\"\" selected>' + '</option>';
-            }
+
+        if (array['name'] === 'salary' || array['name'] === 'status') {
+            let remake = [];
+            remake.push('');
             for (let i = 0; i < array['option']['length']; i++) {
-                let disabled = !validate(array['option'][i][1]) ? ' disabled' : '';
-                html += '<option value=\"' + array['option'][i][0] + '\"' + disabled + '>';
-                    html += capitalize(array['option'][i][0]);
+                remake.push(array['option'][i]['option']);
+            }
+
+            for (let i = 0; i < remake['length']; i++) {
+                html += '<option value=\"' + remake[i] + '\"' + (remake[i] ? '' : 'disabled') + '>';
+                    html += capitalize(remake[i]);
                 html += '</option>';
             }
+        }
+
+
         html += '</select>';
         html += '<div id=\"error\"><p></p></div>';
         html += '<div class=\"clear mb-' + mb + '\"></div>';

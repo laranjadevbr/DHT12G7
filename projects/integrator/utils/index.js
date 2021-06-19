@@ -8,12 +8,7 @@ const getRandomNumber = (min, max) => {
 const isThereTrue = (filePath) => {
     return fs.existsSync(urlJoin(filePath)) ? true : false;
 };
-const getCurrency = (string) => {
-    return (string).toLocaleString('pt-br', {
-        style : 'currency',
-        currency : 'USD',
-    });
-};
+
 const getValidate = (variable) => {
     if (!variable) return false;
     else if (isThis(variable, 'undefined')) return false;
@@ -38,6 +33,12 @@ const getDOCNumber = (array) => {
         num = '';
     }
     return result;
+};
+const getCurrency = (string) => {
+    return (string).toLocaleString('pt-br', {
+        style : 'currency',
+        currency : 'USD',
+    });
 };
 
 
@@ -76,6 +77,7 @@ const validate = (variable) => {
 
 
 module.exports = {
+    getCurrency,
     getScript : (fileName) => {
         return isThereTrue([
             'public',
@@ -84,21 +86,6 @@ module.exports = {
         ]) ? '<script type=\"module\" src=\"/javascripts/' + fileName + '.js\"></script>' : '';
     },
     isTheLast,
-    getSalaryRange : (value, range) => {
-        const result = [];
-        for (let i = 0; i < range; i++) {
-            let minimum = value * (i + 1);
-            let maximum = value * (i + 2) - 0.01;
-            result.push({
-                id : i + 1,
-                minimum : minimum,
-                maximum : maximum,
-                option : 'from ' + currency(minimum) + ' to ' + currency(maximum),
-                state : true,
-            });
-        };
-        return result;
-    },
     getNavbar : (query, number, array) => {
         let list = [];
         for (let i = Number(query * number); i <= Number(query * number + number - 1); i++) list.push(array[i]);
@@ -123,12 +110,6 @@ module.exports = {
         else if (isTheLast(string, 's')) string += 'es';
         else string += 's';
         return string;
-    },
-    getUnified : (array, params) => {
-        const result = [];
-        for (let i = 0; i < params['length']; i++)
-            validate(array[params[i]]) ? result.push(...array[params[i]]) : undefined;
-        return result;
     },
     isThereTrue,
     isThis,
@@ -193,7 +174,7 @@ module.exports = {
     getRandomDate : (start, end) => {
         start = new Date(start).getTime();
         end = new Date(end).getTime();
-        return start > end ? new Date(getRandomNumber(end, start)).toLocaleDateString() : new Date(getRandomNumber(start, end)).toLocaleDateString();
+        return start > end ? new Date(getRandomNumber(end, start)): new Date(getRandomNumber(start, end));
     },
     getModelParams : (model, as) => {
         const include = isThis(model, 'undefined') || isThis(as, 'undefined') ? { } : {
@@ -233,10 +214,11 @@ module.exports = {
     getHash : (password) => {
         return bcrypt.hashSync(String(password), 10);
     },
-    isSame : (clientPassword, dataBasePassword) => {
+    isEqual : (clientPassword, dataBasePassword) => {
         return bcrypt.compareSync(clientPassword, dataBasePassword) ? true : false;
     },
     getDOCNumber,
+    
 
 
 
