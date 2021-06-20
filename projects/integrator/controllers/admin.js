@@ -27,43 +27,25 @@ const {
     Order,
 } = require('../models');
 const prefix = '/admin/';
-const {
-    capitalize,
-    validate,
-    cleaner,
-
-
+let {
+    forEveryone,
+    // 
     getCNPJNumber,
     getCPFNumber,
-    getCurrency,
     getDOCNumber,
     getHash,
+    getModelPagination,
     getModelParams,
+    getModelSearchParams,
     getPageTitle,
     getPhoneNumber,
     getRandomDate,
     getRandomNumber,
-    getRomanNumber,
     getScript,
     getURLPath,
     getViewName,
     isEqual,
-    getModelPagination,
-    getModelSearchParams,
 } = require('../utils');
-const session = (req, res, next) => {
-    return req.session.user;
-};
-const forEveryone = () => {
-    return {
-        capitalize : capitalize,
-        cleaner : cleaner,
-        currency : getCurrency,
-        roman : getRomanNumber,
-        session : session,
-        validate : validate,
-    };
-}
 let getRandomIndex = (require, array) => {
     const result = [];
     for (let i = 0; i < require[array]['length']; i++)
@@ -133,7 +115,7 @@ module.exports = {
             count,
             rows : index,
         } = await Public.findAndCountAll({
-            ...getModelParams(Order, 'order'),
+            ...getModelParams(Order, 'order', key, 'title'),
             limit : amount,
             offset : (page - 1) * amount,
         });
@@ -142,7 +124,7 @@ module.exports = {
             index : index,
             item : item,
             inputType : inputType,
-            key,
+            key : key,
             pageTitle : getPageTitle(prefix, allNames),
             pathPrefix : getViewName(prefix),
             script : getScript(allNames),
@@ -155,10 +137,7 @@ module.exports = {
         const allNames = 'one';
         const { id } = req.params;
         const index = await Public.findOne({
-            ...getModelParams(Order, 'order'),
-            where : {
-                id : id,
-            },
+            ...getModelParams(Order, 'order', id, 'id'),
         });
         return res.render(getViewName(prefix, allNames), {
             form : {
@@ -202,9 +181,7 @@ module.exports = {
         const allNames = 'edit';
         const { id } = req['params'];
         const index = await Public.findOne({
-            where : {
-                id : id,
-            },
+            ...getModelParams('', '', id, 'id'),
         });
         return res.render(getViewName(prefix, allNames), {
             form : {
@@ -227,18 +204,14 @@ module.exports = {
             ...req['body'],
         },
         {
-            where : {
-                id : id,
-            },
+            ...getModelParams('', '', id, 'id'),
         });
         return res.redirect(getURLPath(prefix, 'all'));
     },
     destroy : async (req, res, next) => {
         const { id } = req['params'];
         const index = await Public.destroy({
-            where : {
-                id : id,
-            }
+            ...getModelParams('', '', id, 'id'),
         });
         return res.redirect(getURLPath(prefix, 'all'));
     },
@@ -279,9 +252,7 @@ module.exports = {
             password,
         } = req['body'];
         const user = await Public.findOne({
-            where : {
-                email : email,
-            },
+            ...getModelParams('', '', email, 'email'),
         });
         if (!user) screen(res, 'login');
         if (!isEqual(password, user['password'])) screen(res, 'login');
@@ -307,9 +278,9 @@ module.exports = {
             count,
             rows : index,
         } = await Public.findAndCountAll({
-            ...getModelParams(Order, 'order'),
             limit : amount,
             offset : (page - 1) * amount,
+            ...getModelParams(Order, 'order', '', ''),
             ...getModelSearchParams([
                 'description',
                 'title',
@@ -320,7 +291,7 @@ module.exports = {
             index : index,
             item : item,
             inputType : inputType,
-            key,
+            key : key,
             pageTitle : getPageTitle(prefix, allNames),
             pathPrefix : getViewName(prefix),
             script : getScript(allNames),

@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {
-    isThere,  
+    isThere,
 } = require('../utils');
 const {
     admin,
@@ -39,19 +39,20 @@ const controls = [
     { control : user, path : 'user', },
 ];
 let getRouter = (method, prefix, object) => {
-    for (let i = 0; i < object['length']; i++)
+    for (let i = 0; i < object['length']; i++) {
         router[object[i]['method']](
             String(prefix + object[i]['title'] + object[i]['param']),
             method[object[i]['control']],
-            );
+        );
+    }
 };
 for (let i = 0; i < controls['length']; i++) {
-    if (isThere('controllers', controls[i]['path'], 'js')) {
+    if (isThere(['controllers', controls[i]['path'] + '.js'])) {
         getRouter(
             require('../controllers/' + controls[i]['path']),
             controls[i]['path'] ? '/' + controls[i]['path'].split('-').join('/') + '/' : '/',
             controls[i]['control']
-            );
+        );
     }
 }
 module.exports = router;

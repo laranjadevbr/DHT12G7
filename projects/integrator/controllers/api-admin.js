@@ -1,4 +1,3 @@
-const { Op } = require('sequelize');
 const {
     Public,
     Order,
@@ -6,30 +5,22 @@ const {
 const prefix = '/api-admin/all/';
 const {
     getModelParams,
+    getModelSearchParams,
 } = require('../utils');
 module.exports = {
     index : async (req, res, next) => {
         return res.redirect(prefix);
     },
     all : async (req, res, next) => {
-        // http://localhost:8888/api-admin/all?key=Fran
-        const indexes = [];
-        const index = [ 'title' ];
+        // http://localhost:8888/api/admin/all?key=francisco
         const { key } = req['query'];
-        for (let i = 0; i < index['length']; i++) {
-            indexes.push({
-                [index[i]] : {
-                    [Op.like] : `%${ key }%`,
-                },
-            });
-        };
         let params = key ? {
-            ...getModelParams(Order, 'order'),
-            where : {
-                [Op.or] : indexes,
-            },
+            ...getModelParams(Order, 'order', key, 'title'),
+            ...getModelSearchParams([
+                'title',
+            ], key),
         } : {
-            ...getModelParams(Order, 'order'),
+            ...getModelParams(Order, 'order', key, 'title'),
         };
         const {
             count,
@@ -51,10 +42,7 @@ module.exports = {
             return res.redirect(prefix);
         } else {
             const index = await Public.findOne({
-                ...getModelParams(Order, 'order'),
-                where : {
-                    id : id,
-                },
+                ...getModelParams(Order, 'order', id, 'id'),
             }).then(result => {
                 return res.status(200).json({
                     result : result,
