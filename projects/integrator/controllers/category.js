@@ -36,7 +36,7 @@ const {
     getPageTitle,
     getScript,
     getViewName,
-    modelPagination,
+    getModelPagination,
 } = require('../utils');
 const session = (req, res, next) => {
     return req.session.user;
@@ -67,9 +67,9 @@ module.exports = {
         });
         const allNames = 'all';
         return res.render(getViewName(prefix, allNames), {
-            fullPage : modelPagination(amount, count, page)['fullPage'],
-            nextPage : modelPagination(amount, count, page)['nextPage'],
-            prevPage : modelPagination(amount, count, page)['prevPage'],
+            fullPage : getModelPagination(amount, count, page)['fullPage'],
+            nextPage : getModelPagination(amount, count, page)['nextPage'],
+            prevPage : getModelPagination(amount, count, page)['prevPage'],
             index : index,
             item : item,
             inputType : inputType,

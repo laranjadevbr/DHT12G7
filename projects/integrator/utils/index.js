@@ -176,21 +176,7 @@ module.exports = {
         end = new Date(end).getTime();
         return start > end ? new Date(getRandomNumber(end, start)): new Date(getRandomNumber(start, end));
     },
-    getModelParams : (model, as) => {
-        const include = isThis(model, 'undefined') || isThis(as, 'undefined') ? { } : {
-            include : {
-                model : model,
-                as : as,
-                required : false,
-            },
-        };
-        return {
-            ...include,
-            order : [
-                ['id', 'ASC'],
-            ],
-        };
-    },
+    
     getPhoneNumber : (array) => {
         let num = '', result = '(';
         for (let x = 0; x < array['length']; x++) {    
@@ -218,7 +204,10 @@ module.exports = {
         return bcrypt.compareSync(clientPassword, dataBasePassword) ? true : false;
     },
     getDOCNumber,
-    modelPagination : (amount, count, page) => {
+
+
+    
+    getModelPagination : (amount, count, page) => {
         const fullPage = Math.round(count / amount);
         const nextPage = Number(page) < Number(fullPage) ? Number(page) + 1 : Number(fullPage);
         const prevPage = Number(page) <= 1 ? 1 : Number(page) - 1;
@@ -226,6 +215,21 @@ module.exports = {
             fullPage : fullPage <= 1 ? undefined : fullPage,
             nextPage : nextPage,
             prevPage : prevPage,
+        };
+    },
+    getModelParams : (model, as) => {
+        const include = isThis(model, 'undefined') || isThis(as, 'undefined') ? { } : {
+            include : {
+                model : model,
+                as : as,
+                required : false,
+            },
+        };
+        return {
+            ...include,
+            order : [
+                ['id', 'ASC'],
+            ],
         };
     },
     

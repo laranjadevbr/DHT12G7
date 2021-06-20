@@ -54,15 +54,19 @@
             let html = '';
             if (!validate(title) || !validate(contents)) { } else {
                 html += '<h' + subtitleNumber + '>' + capitalize(title) + '</h' + subtitleNumber + '>';
-                if (title === 'cost') { html += '<p>' + currency(Number(contents)) + '</p>';
+                if (title === 'cost') {
+                    html += '<p>' + currency(Number(contents)) + '</p>';
                 } else if (title === 'access key' || title === 'e-mail') {
                     html += '<p>';
                         html += '<a href=\"mailto:' + contents.toLowerCase() + '\" target=\"_blank\">';
                             html += contents.toLowerCase();
                         html += '</a>';
                     html += '</p>';
-                } else if (title === 'birth date' || title === 'created' || title === 'updated') { html += '<p>' + getDATE(contents) + '</p>';
-                } else { html += '<p>' + contents + '</p>'; }
+                } else if (title === 'birth date' || title === 'created' || title === 'updated') {
+                    html += '<p>' + getDATE(contents) + '</p>';
+                } else {
+                    html += '<p>' + contents + '</p>';
+                }
                 html += '<div class=\"mb-' + mb + '\"></div>';
             }
             return html;
@@ -98,16 +102,16 @@
             currentClass = '';
             currentClass += ' bg-';
             if (validate(array[index]['active']) || typeof array[index]['active'] === 'undefined' || !array[index]['active']) {
-                currentClass += index % 2 === 0 ? bgColorI : bgColorII;
-            } else { currentClass += bgColorIII; }
-            currentClass += index <= Number(array['length'] - 1) ? ' mb-' + mb : '';
+                currentClass += index % 2 === 0 ? 'light' : 'dark';
+            } else { currentClass += 'danger'; }
+            currentClass += index < array['length'] ? ' mb-' + mb : '';
             currentClass += ' p-' + p;
             currentClass += ' rounded';
             currentClass += ' shadow-sm';
             currentClass += ' text-';
             if (validate(array[index]['active']) || typeof array[index]['active'] === 'undefined' || !array[index]['active']) {
-                currentClass += index % 2 === 0 ? textColorI : textColorII;
-            } else { currentClass += textColorIII; }
+                currentClass += index % 2 === 0 ? 'dark' : 'light';
+            } else { currentClass += 'light'; }
             return currentClass;
         };
     %>

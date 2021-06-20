@@ -49,6 +49,7 @@ const {
     getURLPath,
     getViewName,
     isEqual,
+    getModelPagination,
 } = require('../utils');
 const session = (req, res, next) => {
     return req.session.user;
@@ -126,20 +127,17 @@ module.exports = {
             limit : amount,
             offset : (page - 1) * amount,
         });
-        const fullPage = Math.round(count / amount);
-        const nextPage = Number(page) < Number(fullPage) ? Number(page) + 1 : Number(fullPage);
-        const prevPage = Number(page) <= 1 ? 1 : Number(page) - 1;
         const allNames = 'all';
         return res.render(getViewName(prefix, allNames), {
-            fullPage : fullPage <= 1 ? undefined : fullPage,
+            fullPage : getModelPagination(amount, count, page)['fullPage'],
+            nextPage : getModelPagination(amount, count, page)['nextPage'],
+            prevPage : getModelPagination(amount, count, page)['prevPage'],
             index : index,
             item : item,
             inputType : inputType,
             key,
-            nextPage : nextPage,
             pageTitle : getPageTitle(prefix, allNames),
             pathPrefix : getViewName(prefix),
-            prevPage : prevPage,
             script : getScript(allNames),
             searchAction : getURLPath(prefix, 'search'),
             capitalize,
@@ -338,14 +336,6 @@ module.exports = {
             page = 1,
             key = '',
         } = req['query'];
-        const indexes = [];
-        for (let i = 0; i < items['length']; i++) {
-            indexes.push({
-                [items[i]] : {
-                    [Op.like] : `%${ key }%`,
-                },
-            });
-        };
         const {
             count,
             rows : index,
@@ -354,23 +344,31 @@ module.exports = {
             limit : amount,
             offset : (page - 1) * amount,
             where : {
-                [Op.or] : indexes,
+                [Op.or] : [
+                    {
+                        title : {
+                            [Op.like] : `%${ key }%`,
+                        }
+                    },
+                    {
+                        description : {
+                            [Op.like] : `%${ key }%`,
+                        }
+                    },
+                ],
             },
         });
-        const fullPage = Math.round(count / amount);
-        const nextPage = Number(page) < Number(fullPage) ? Number(page) + 1 : Number(fullPage);
-        const prevPage = Number(page) <= 1 ? 1 : Number(page) - 1;
         const allNames = 'all';
         return res.render(getViewName(prefix, allNames), {
-            fullPage : fullPage <= 1 ? undefined : fullPage,
+            fullPage : getModelPagination(amount, count, page)['fullPage'],
+            nextPage : getModelPagination(amount, count, page)['nextPage'],
+            prevPage : getModelPagination(amount, count, page)['prevPage'],
             index : index,
             item : item,
             inputType : inputType,
             key,
-            nextPage : nextPage,
             pageTitle : getPageTitle(prefix, allNames),
             pathPrefix : getViewName(prefix),
-            prevPage : prevPage,
             script : getScript(allNames),
             searchAction : getURLPath(prefix, 'search'),
             capitalize,
