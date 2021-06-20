@@ -49,10 +49,6 @@ const getCurrency = (string) => {
 
 
 
-
-
-
-
 const getRandomInt = (min, max) => {
     return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min);
 };
@@ -204,9 +200,6 @@ module.exports = {
         return bcrypt.compareSync(clientPassword, dataBasePassword) ? true : false;
     },
     getDOCNumber,
-
-
-    
     getModelPagination : (amount, count, page) => {
         const fullPage = Math.round(count / amount);
         const nextPage = Number(page) < Number(fullPage) ? Number(page) + 1 : Number(fullPage);
@@ -230,6 +223,24 @@ module.exports = {
             order : [
                 ['id', 'ASC'],
             ],
+        };
+    },
+    getModelSearchParams : (array, key) => {
+        let result = [];
+        const { Op } = require('sequelize');
+        for (let i = 0; i < array['length']; i++) {
+            result.push({
+                [array[i]] : {
+                    [Op.like] : `%${ key }%`,
+                },
+            });
+        };
+        return {
+            where : {
+                [Op.or] : [
+                    ...result,
+                ],
+            },
         };
     },
     

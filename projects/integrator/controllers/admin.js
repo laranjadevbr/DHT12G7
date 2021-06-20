@@ -26,7 +26,6 @@ const {
     Public,
     Order,
 } = require('../models');
-const { Op } = require('sequelize');
 const prefix = '/admin/';
 const {
     capitalize,
@@ -50,6 +49,7 @@ const {
     getViewName,
     isEqual,
     getModelPagination,
+    getModelSearchParams,
 } = require('../utils');
 const session = (req, res, next) => {
     return req.session.user;
@@ -343,20 +343,10 @@ module.exports = {
             ...getModelParams(Order, 'order'),
             limit : amount,
             offset : (page - 1) * amount,
-            where : {
-                [Op.or] : [
-                    {
-                        title : {
-                            [Op.like] : `%${ key }%`,
-                        }
-                    },
-                    {
-                        description : {
-                            [Op.like] : `%${ key }%`,
-                        }
-                    },
-                ],
-            },
+            ...getModelSearchParams([
+                'description',
+                'title',
+            ], key),
         });
         const allNames = 'all';
         return res.render(getViewName(prefix, allNames), {
