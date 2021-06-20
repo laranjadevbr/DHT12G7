@@ -12,7 +12,7 @@ const {
     }
 } = require('../database/elements');
 const {
-    genders,
+    generous,
     lorem : {
         description,
     },
@@ -71,8 +71,8 @@ let pushIndex = (index) => {
     };
     return result;
 };
-for (let i = 0; i < genders['length']; i++) {
-    genders[i]['option'] !== '' ? name.push(...pushIndex(genders[i]['option'])) : undefined;
+for (let i = 0; i < generous['length']; i++) {
+    generous[i]['option'] !== '' ? name.push(...pushIndex(generous[i]['option'])) : undefined;
 }
 const bulkList = [];
 for (let i = 0; i < name['length']; i++) {

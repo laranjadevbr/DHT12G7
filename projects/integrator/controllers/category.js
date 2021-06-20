@@ -26,25 +26,17 @@ const {
     capitalize,
     cleaner,
     currency,
-    dismember,
-    getCNPJ,
-    getCPF,
-    getNumber,
-    getPhone,
-    getRandomDate,
-    getRandomInt,
-    navbar,
-    onlyNumbers,
-    pageTitle,
-    plural,
-    readjust,
     roman,
-    saver,
     script,
-    urlPath,
+
+
+    getURLPath,
     validate,
-    viewName,
     getModelParams,
+    getPageTitle,
+    getScript,
+    getViewName,
+    modelPagination,
 } = require('../utils');
 const session = (req, res, next) => {
     return req.session.user;
@@ -73,20 +65,17 @@ module.exports = {
             limit : amount,
             offset : (page - 1) * amount,
         });
-        const fullPage = Math.round(count / amount);
-        const nextPage = Number(page) < Number(fullPage) ? Number(page) + 1 : Number(fullPage);
-        const prevPage = Number(page) <= 1 ? 1 : Number(page) - 1;
         const allNames = 'all';
-        return res.render(viewName(prefix, allNames), {
-            fullPage : fullPage <= 1 ? undefined : fullPage,
+        return res.render(getViewName(prefix, allNames), {
+            fullPage : modelPagination(amount, count, page)['fullPage'],
+            nextPage : modelPagination(amount, count, page)['nextPage'],
+            prevPage : modelPagination(amount, count, page)['prevPage'],
             index : index,
             item : item,
             inputType : inputType,
-            nextPage : nextPage,
-            pageTitle : pageTitle(prefix, allNames),
-            pathPrefix : viewName(prefix),
-            prevPage : prevPage,
-            script : script(allNames),
+            pageTitle : getPageTitle(prefix, allNames),
+            pathPrefix : getViewName(prefix),
+            script : getScript(allNames),
             capitalize,
             cleaner,
             currency,
@@ -104,13 +93,13 @@ module.exports = {
                 id : id,
             },
         });
-        return res.render(viewName(prefix, allNames), {
+        return res.render(getViewName(prefix, allNames), {
             index : index['product'],
             item : item,
             inputType : inputType,
-            pageTitle : pageTitle(prefix, allNames),
-            pathPrefix : viewName('/product/'),
-            script : script(allNames),
+            pageTitle : getPageTitle(prefix, allNames),
+            pathPrefix : getViewName('/product/'),
+            script : getScript(allNames),
             capitalize,
             cleaner,
             currency,
@@ -121,17 +110,17 @@ module.exports = {
     },
     create : async (req, res, next) => {
         const allNames = 'create';
-        return res.render(viewName(prefix, allNames), {
+        return res.render(getViewName(prefix, allNames), {
             form : {
-                action : urlPath(prefix, allNames),
+                action : getURLPath(prefix, allNames),
                 enctype : '',
                 method : 'POST',
             },
             btnTitle : allNames,
             formElement : create,
             inputType : inputType,
-            pageTitle : pageTitle(prefix, allNames),
-            script : script(allNames),
+            pageTitle : getPageTitle(prefix, allNames),
+            script : getScript(allNames),
             capitalize,
             cleaner,
             currency,
@@ -144,7 +133,7 @@ module.exports = {
         const index = await Category.create({
             ...req['body'],
         });
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath(prefix, 'all'));
     },
     edit : async (req, res, next) => {
         const allNames = 'edit';
@@ -154,9 +143,9 @@ module.exports = {
                 id : id,
             },
         });
-        return res.render(viewName(prefix, allNames), {
+        return res.render(getViewName(prefix, allNames), {
             form : {
-                action : urlPath(prefix, allNames) + '/' + id + '?_method=PUT',
+                action : getURLPath(prefix, allNames) + '/' + id + '?_method=PUT',
                 enctype : '',
                 method : 'POST',
             },
@@ -164,8 +153,8 @@ module.exports = {
             formElement : edit,
             index : index,
             inputType : inputType,
-            pageTitle : pageTitle(prefix, allNames),
-            script : script(allNames),
+            pageTitle : getPageTitle(prefix, allNames),
+            script : getScript(allNames),
             capitalize,
             cleaner,
             currency,
@@ -184,7 +173,7 @@ module.exports = {
                 id : id,
             },
         });
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath(prefix, 'all'));
     },
     destroy : async (req, res, next) => {
         const { id } = req['params'];
@@ -193,7 +182,7 @@ module.exports = {
                 id : id,
             }
         });
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath(prefix, 'all'));
     },
     bulk : async (req, res, next) => {
         const index = await Category.bulkCreate(bulkList);

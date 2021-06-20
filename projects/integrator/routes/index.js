@@ -21,9 +21,11 @@ const controls = [
     { control : admin, path : 'admin', },
     { control : api, path : 'api-admin', },
     { control : api, path : 'api-category', },
+
         { control : api, path : 'api-event', },
         { control : api, path : 'api-product', },
         { control : api, path : 'api-service', },
+
     { control : category, path : 'category', },
     { control : client, path : 'client', },
     { control : index, path : '', },
@@ -44,11 +46,12 @@ let getRouter = (method, prefix, object) => {
             );
 };
 for (let i = 0; i < controls['length']; i++) {
-    if (isThere('controllers', controls[i]['path'], 'js'))
+    if (isThere('controllers', controls[i]['path'], 'js')) {
         getRouter(
             require('../controllers/' + controls[i]['path']),
             controls[i]['path'] ? '/' + controls[i]['path'].split('-').join('/') + '/' : '/',
             controls[i]['control']
             );
+    }
 }
 module.exports = router;

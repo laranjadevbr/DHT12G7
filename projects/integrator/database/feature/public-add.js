@@ -1,5 +1,5 @@
 const {
-    genders,
+    generous,
     status,
 } = option = require('../options');
 const active = true, label = true, placeholder = false, required = false;
@@ -24,9 +24,9 @@ module.exports = (disabled) => {
             disabled    : disabled,
             label       : label,
             maxlength   : '',
-            name        : 'gender',
+            name        : 'generous',
             note        : '',
-            option      : genders,
+            option      : generous,
             placeholder : placeholder,
             required    : required,
             rows        : 0,

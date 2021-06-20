@@ -68,7 +68,7 @@ module.exports = {
         'uol',
         'yahoo',
     ]),
-    genders : objectCreator([
+    generous : objectCreator([
         'male',
         'female',
     ]),

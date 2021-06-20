@@ -218,6 +218,16 @@ module.exports = {
         return bcrypt.compareSync(clientPassword, dataBasePassword) ? true : false;
     },
     getDOCNumber,
+    modelPagination : (amount, count, page) => {
+        const fullPage = Math.round(count / amount);
+        const nextPage = Number(page) < Number(fullPage) ? Number(page) + 1 : Number(fullPage);
+        const prevPage = Number(page) <= 1 ? 1 : Number(page) - 1;
+        return {
+            fullPage : fullPage <= 1 ? undefined : fullPage,
+            nextPage : nextPage,
+            prevPage : prevPage,
+        };
+    },
     
 
 
