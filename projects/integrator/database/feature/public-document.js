@@ -5,7 +5,7 @@ const {
         passport,
         rg,
     },
-} = require('../options');
+} = option = require('../options');
 const active = true, label = true, placeholder = false, required = false;
 module.exports = (disabled) => {
     return [

@@ -1,3 +1,6 @@
+const {
+    boolean,
+} = option = require('../options');
 const active = true, label = true, placeholder = false, required = false;
 module.exports = (disabled) => {
     const name = [
@@ -5,9 +8,9 @@ module.exports = (disabled) => {
         'deleted',
         'disable',
     ];
-    const array = [];
+    const result = [];
     for (let i = 0; i < name['length']; i++) {
-        array.push(
+        result.push(
             {
                 active : active,
                 disabled : disabled,
@@ -15,11 +18,7 @@ module.exports = (disabled) => {
                 maxlength : '',
                 name : name[i],
                 note : '',
-                option : [
-                    ['', false],
-                    ['true', true],
-                    ['false', true],
-                ],
+                option : boolean,
                 placeholder : placeholder,
                 required : required,
                 rows : 0,
@@ -28,5 +27,5 @@ module.exports = (disabled) => {
             },
         );
     }
-    return array;
+    return result;
 };

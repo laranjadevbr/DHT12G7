@@ -12,16 +12,14 @@ const {
     }
 } = require('../database/elements');
 const {
-    emails,
     genders,
     lorem : {
-        title,
         description,
     },
     inputType : inputType,
-    names : {
-        firstName,
-        lastName,
+    name : {
+        first,
+        last,
     }
 } = option = require('../database/options');
 const {
@@ -55,56 +53,56 @@ const {
 const session = (req, res, next) => {
     return req.session.user;
 };
-let getIndexes = (require, array) => {
+let getRandomIndex = (require, array) => {
     const result = [];
     for (let i = 0; i < require[array]['length']; i++)
-        result.push(require[array][i]);
-    return result[Math.floor(Math.random() * result['length'])]['option'];
+        require[array][i]['option'] !== '' ? result.push(require[array][i]['option']) : undefined;
+    return result[Math.floor(Math.random() * result['length'])];
 };
+const name = [];
 let pushIndex = (index) => {
-    let array = [];
-    for (let i = 0; i < firstName[index]['length']; i++) {
-        array.push({
-            firstName : firstName[index][i],
-            lastName : lastName[Math.floor(Math.random() * lastName['length'])],
-            gender : index,
+    const result = [];
+    for (let i = 0; i < first[index]['length']; i++) {
+        result.push({
+            first : first[index][i].toLowerCase(),
+            last : last[Math.floor(Math.random() * last['length'])].toLowerCase(),
+            gender : index.toLowerCase(),
         });
     };
-    return array;
+    return result;
 };
-const userList = [];
-for (let i = 0; i < genders['length']; i++)
-    if (genders[i][0] !== '') userList.push(...pushIndex(genders[i][0]));
-
+for (let i = 0; i < genders['length']; i++) {
+    genders[i]['option'] !== '' ? name.push(...pushIndex(genders[i]['option'])) : undefined;
+}
 const bulkList = [];
-for (let i = 0; i < userList['length']; i++) {
-    let email = userList[i]['firstName'].substr(0, 1);
-    email += userList[i]['lastName'].substr(0, 1);
+for (let i = 0; i < name['length']; i++) {
+    let email = name[i]['first'].substr(0, 1);
+    email += name[i]['last'].substr(0, 1);
     let password = getRandomNumber(100000, 999999);
     email += password;
     email += '@';
-    email += emails[Math.floor(Math.random() * emails['length'])];
+    email += getRandomIndex(option, 'emails');
     email += '.com';
     password = getHash(password);
     bulkList.push({
-        title : String(userList[i]['firstName'] + ' ' + userList[i]['lastName']),
+        title : String(name[i]['first'] + ' ' + name[i]['last']),
         description : description,
-        gender : capitalize(userList[i]['gender']),
+        gender : name[i]['gender'],
         birthdate : getRandomDate(
             new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()),
             new Date(new Date().getFullYear() - 100, new Date().getMonth(), new Date().getDate()),
         ),
-        status : getIndexes(option, 'status'),
+        status : getRandomIndex(option, 'status'),
         cpf : getCPFNumber(),
         rg : getDOCNumber([2, 3, 3, 1]),
         cep : getDOCNumber([5, 3]),
-        state : getIndexes(option, 'uf'),
+        state : getRandomIndex(option, 'uf'),
         email : String(email).toLowerCase(),
         phone : getPhoneNumber([2, 1, 4, 4]),
         cnpj : getCNPJNumber([2, 3, 3, 4, 2]),
-        profession : getIndexes(option, 'profession'),
+        profession : getRandomIndex(option, 'profession'),
         curriculum : description,
-        salary : getIndexes(option, 'salary'),
+        salary : getRandomIndex(option, 'salary'),
         accesskey : String(email).toLowerCase(),
         password : password,
         confirmation : password,

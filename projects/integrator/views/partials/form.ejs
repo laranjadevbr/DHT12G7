@@ -25,25 +25,26 @@
         html += ' id=\"' + cleaner(labelName(array['name'])) + '\"';
         html += ' name=\"' + cleaner(labelName(array['name'])) + '\"';
         html += '>';
-
-        if (array['name'] === 'salary' || array['name'] === 'status') {
-            let remake = [];
-            remake.push('');
+        if (typeof index === 'undefined') {
             for (let i = 0; i < array['option']['length']; i++) {
-                remake.push(array['option'][i]['option']);
+                let selected = !array['option'][i]['option'] ? ' selected' : '';
+                html += '<option value=\"' + array['option'][i]['option'] + '\"' + selected + '>';
+                    html += capitalize(array['option'][i]['option']);
+                html += '</option>';
             }
-
-            for (let i = 0; i < remake['length']; i++) {
-                html += '<option value=\"' + remake[i] + '\"' + (remake[i] ? '' : 'disabled') + '>';
-                    html += capitalize(remake[i]);
+        } else if (typeof index !== 'undefined') {
+            html += '<option value=\"' + index[labelName(array['name'])] + '\"' + 'selected' + '>';
+                html += index[labelName(array['name'])];
+            html += '</option>';
+            for (let i = 0; i < array['option']['length']; i++) {
+                html += '<option value=\"' + array['option'][i]['option'] + '\">';
+                    html += capitalize(array['option'][i]['option']);
                 html += '</option>';
             }
         }
-
-
         html += '</select>';
         html += '<div id=\"error\"><p></p></div>';
-        html += '<div class=\"clear mb-' + mb + '\"></div>';
+        html += '<div class=\"clear mb-' + mb + '\"></div>'; 
         return html;
     };
     let inputCreator = (array) => {
