@@ -34,12 +34,7 @@ const getDOCNumber = (array) => {
     }
     return result;
 };
-const getCurrency = (string) => {
-    return (string).toLocaleString('pt-br', {
-        style : 'currency',
-        currency : 'USD',
-    });
-};
+
 
 
 
@@ -73,7 +68,12 @@ const validate = (variable) => {
 
 
 module.exports = {
-    getCurrency,
+    getCurrency : (string) => {
+        return (string).toLocaleString('pt-br', {
+            style : 'currency',
+            currency : 'USD',
+        });
+    },
     getScript : (fileName) => {
         return isThereTrue([
             'public',
@@ -211,15 +211,12 @@ module.exports = {
         };
     },
     getModelParams : (model, as) => {
-        const include = isThis(model, 'undefined') || isThis(as, 'undefined') ? { } : {
+        return {
             include : {
                 model : model,
                 as : as,
                 required : false,
             },
-        };
-        return {
-            ...include,
             order : [
                 ['id', 'ASC'],
             ],

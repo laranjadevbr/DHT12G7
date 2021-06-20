@@ -31,11 +31,11 @@ const {
     capitalize,
     validate,
     cleaner,
-    currency,
-    roman,
+
 
     getCNPJNumber,
     getCPFNumber,
+    getCurrency,
     getDOCNumber,
     getHash,
     getModelParams,
@@ -54,6 +54,16 @@ const {
 const session = (req, res, next) => {
     return req.session.user;
 };
+const forEveryone = () => {
+    return {
+        capitalize : capitalize,
+        cleaner : cleaner,
+        currency : getCurrency,
+        roman : getRomanNumber,
+        session : session,
+        validate : validate,
+    };
+}
 let getRandomIndex = (require, array) => {
     const result = [];
     for (let i = 0; i < require[array]['length']; i++)
@@ -129,9 +139,6 @@ module.exports = {
         });
         const allNames = 'all';
         return res.render(getViewName(prefix, allNames), {
-            fullPage : getModelPagination(amount, count, page)['fullPage'],
-            nextPage : getModelPagination(amount, count, page)['nextPage'],
-            prevPage : getModelPagination(amount, count, page)['prevPage'],
             index : index,
             item : item,
             inputType : inputType,
@@ -140,13 +147,8 @@ module.exports = {
             pathPrefix : getViewName(prefix),
             script : getScript(allNames),
             searchAction : getURLPath(prefix, 'search'),
-            capitalize,
-            cleaner,
-            currency,
-            roman,
-            getRomanNumber,
-            session,
-            validate,
+            ...getModelPagination(amount, count, page),
+            ...forEveryone(),
         });
     },
     one : async (req, res, next) => {
@@ -170,13 +172,7 @@ module.exports = {
             inputType : inputType,
             pageTitle : getPageTitle(prefix, allNames),
             script : getScript(allNames),
-            capitalize,
-            cleaner,
-            currency,
-            roman,
-            getRomanNumber,
-            session,
-            validate,
+            ...forEveryone(),
         });
     },
     create : async (req, res, next) => {
@@ -192,13 +188,7 @@ module.exports = {
             inputType : inputType,
             pageTitle : getPageTitle(prefix, allNames),
             script : getScript(allNames),
-            capitalize,
-            cleaner,
-            currency,
-            roman,
-            getRomanNumber,
-            session,
-            validate,
+            ...forEveryone(),
         });
     },
     store : async (req, res, next) => {
@@ -228,13 +218,7 @@ module.exports = {
             inputType : inputType,
             pageTitle : getPageTitle(prefix, allNames),
             script : getScript(allNames),
-            capitalize,
-            cleaner,
-            currency,
-            roman,
-            getRomanNumber,
-            session,
-            validate,
+            ...forEveryone(),
         });
     },
     update : async (req, res, next) => {
@@ -271,13 +255,7 @@ module.exports = {
             inputType : inputType,
             pageTitle : getPageTitle(prefix, allNames),
             script : getScript(allNames),
-            capitalize,
-            cleaner,
-            currency,
-            roman,
-            getRomanNumber,
-            session,
-            validate,
+            ...forEveryone(),
         });
     },
     authenticate : async (req, res, next) => {
@@ -293,13 +271,7 @@ module.exports = {
                 inputType : inputType,
                 pageTitle : getPageTitle(prefix, allNames),
                 script : getScript(allNames),
-                capitalize,
-                cleaner,
-                currency,
-                roman,
-                getRomanNumber,
-                session,
-                validate,
+                ...forEveryone(),
             });
         };
         const {
@@ -311,13 +283,8 @@ module.exports = {
                 email : email,
             },
         });
-        if (!user) {
-            screen(res, 'login');
-        };
-        
-        if (!isEqual(password, user['password'])) {
-            screen(res, 'login');
-        };
+        if (!user) screen(res, 'login');
+        if (!isEqual(password, user['password'])) screen(res, 'login');
         user['password'] = undefined;
         req.session.user = user;
         return res.redirect(getURLPath(prefix, 'all'));
@@ -350,9 +317,6 @@ module.exports = {
         });
         const allNames = 'all';
         return res.render(getViewName(prefix, allNames), {
-            fullPage : getModelPagination(amount, count, page)['fullPage'],
-            nextPage : getModelPagination(amount, count, page)['nextPage'],
-            prevPage : getModelPagination(amount, count, page)['prevPage'],
             index : index,
             item : item,
             inputType : inputType,
@@ -361,13 +325,8 @@ module.exports = {
             pathPrefix : getViewName(prefix),
             script : getScript(allNames),
             searchAction : getURLPath(prefix, 'search'),
-            capitalize,
-            cleaner,
-            currency,
-            roman,
-            getRomanNumber,
-            session,
-            validate,
+            ...getModelPagination(amount, count, page),
+            ...forEveryone(),
         });
     },
 }
