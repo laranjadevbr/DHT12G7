@@ -23,24 +23,14 @@ const {
 } = require('../models');
 const prefix = '/category/';
 const {
-    capitalize,
-    cleaner,
-    currency,
-    roman,
-    script,
-
-
-    getURLPath,
-    validate,
+    forEveryone,
+    getModelPagination,
     getModelParams,
     getPageTitle,
     getScript,
+    getURLPath,
     getViewName,
-    getModelPagination,
 } = require('../utils');
-const session = (req, res, next) => {
-    return req.session.user;
-};
 const bulkList = [];
 for (let i = 0; i < 10; i++) {
     bulkList.push({
@@ -61,37 +51,25 @@ module.exports = {
             count,
             rows : index,
         } = await Category.findAndCountAll({
-            ...getModelParams(Product, 'product'),
-            limit : amount,
-            offset : (page - 1) * amount,
+            ...getModelParams(Product, 'product', '', 'id', amount, (page - 1) * amount),
         });
         const allNames = 'all';
         return res.render(getViewName(prefix, allNames), {
-            fullPage : getModelPagination(amount, count, page)['fullPage'],
-            nextPage : getModelPagination(amount, count, page)['nextPage'],
-            prevPage : getModelPagination(amount, count, page)['prevPage'],
             index : index,
             item : item,
             inputType : inputType,
             pageTitle : getPageTitle(prefix, allNames),
             pathPrefix : getViewName(prefix),
             script : getScript(allNames),
-            capitalize,
-            cleaner,
-            currency,
-            roman,
-            session,
-            validate,
+            ...getModelPagination(amount, count, page),
+            ...forEveryone(),
         });
     },
     one : async (req, res, next) => {
         const allNames = 'one';
-        const { id } = req.params;
+        const { id } = req['params'];
         const index = await Category.findOne({
-            ...getModelParams(Product, 'product'),
-            where : {
-                id : id,
-            },
+            ...getModelParams(Product, 'product',id, 'id', '', ''),
         });
         return res.render(getViewName(prefix, allNames), {
             index : index['product'],
@@ -100,12 +78,7 @@ module.exports = {
             pageTitle : getPageTitle(prefix, allNames),
             pathPrefix : getViewName('/product/'),
             script : getScript(allNames),
-            capitalize,
-            cleaner,
-            currency,
-            roman,
-            session,
-            validate,
+            ...forEveryone(),
         });
     },
     create : async (req, res, next) => {
@@ -121,12 +94,7 @@ module.exports = {
             inputType : inputType,
             pageTitle : getPageTitle(prefix, allNames),
             script : getScript(allNames),
-            capitalize,
-            cleaner,
-            currency,
-            roman,
-            session,
-            validate,
+            ...forEveryone(),
         });
     },
     store : async (req, res, next) => {
@@ -139,9 +107,7 @@ module.exports = {
         const allNames = 'edit';
         const { id } = req['params'];
         const index = await Category.findOne({
-            where : {
-                id : id,
-            },
+            ...getModelParams('', '', id, 'id', '', ''),
         });
         return res.render(getViewName(prefix, allNames), {
             form : {
@@ -155,12 +121,7 @@ module.exports = {
             inputType : inputType,
             pageTitle : getPageTitle(prefix, allNames),
             script : getScript(allNames),
-            capitalize,
-            cleaner,
-            currency,
-            roman,
-            session,
-            validate,
+            ...forEveryone(),
         });
     },
     update : async (req, res, next) => {
@@ -169,18 +130,14 @@ module.exports = {
             ...req['body'],
         },
         {
-            where : {
-                id : id,
-            },
+            ...getModelParams('', '', id, 'id', '', ''),
         });
         return res.redirect(getURLPath(prefix, 'all'));
     },
     destroy : async (req, res, next) => {
         const { id } = req['params'];
         const index = await Category.destroy({
-            where : {
-                id : id,
-            }
+            ...getModelParams('', '', id, 'id', '', ''),
         });
         return res.redirect(getURLPath(prefix, 'all'));
     },

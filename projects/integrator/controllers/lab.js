@@ -1,37 +1,34 @@
-const { Op } = require("sequelize");
-const {
-    Recipe,
-} = require('../models');
 const config = require('../config');
 const Sequelize = require('sequelize');
+const { Op } = require("sequelize");
+const {
+    Public,
+} = require('../models');
 const {
     forEveryone,
     getScript,
     getURLPath,
 } = require('../utils');
 module.exports = {
-    // OK!
     a : async (req, res, next) => {
         const connection = new Sequelize(config);
-        const result = await connection.query('select * from recipes');
+        const result = await connection.query('select * from publics');
         return res.send(result);
     },
-    // OK!
     b : async (req, res, next) => {
         const connection = new Sequelize(config);
-        const result = await connection.query('select * from recipes', {
+        const result = await connection.query('select * from publics', {
             type : Sequelize.QueryTypes.SELECT,
         });
         return res.send(result);
     },
-    // OK!
     c : async (req, res, next) => {
         const { id } = req['params'];
         if (!id) {
             return res.send('Here you need a numeric parameter!');
         } else {
             const connection = new Sequelize(config);
-            const result = await connection.query('select * from recipes where id = :id', {
+            const result = await connection.query('select * from publics where id = :id', {
                 replacements : {
                     id : id,
                 },
@@ -40,32 +37,28 @@ module.exports = {
             return res.send(result);
         }
     },
-    // OK!
     d : async (req, res, next) => {
         const { id } = req['params'];
         if (!id) {
             return res.send('Here you need a numeric parameter!');
         } else {
-            const index = await Recipe.findAll();
+            const index = await Public.findAll();
             return res.send(index[id]);
         }
     },
-    // OK!
     e : async (req, res, next) => {
-        const index = await Recipe.findAll();
+        const index = await Public.findAll();
         return res.send(index);
     },
-    // OK!
     f : async (req, res, next) => {
         const { id } = req['params'];
-        const index = await Recipe.findOne({
+        const index = await Public.findOne({
             where : {
                 id : id,
             },
         });
         return res.send(index);
     },
-    // OK!
     g : async (req, res, next) => {
         const amount = 2;
         const {
@@ -74,7 +67,7 @@ module.exports = {
         const {
             count ,
             rows : index,
-        } = await Recipe.findAndCountAll({
+        } = await Public.findAndCountAll({
             limit : amount,
             offset : Number((page - 1) * amount),
         });
@@ -82,23 +75,21 @@ module.exports = {
             index : index,
         });
     },
-    // OK!
     h : async (req, res, next) => {
         let index = '';
-        index += 'cou: ' + await Recipe.count()   + ', ';
-        index += 'min: ' + await Recipe.min('id') + ', ';
-        index += 'max: ' + await Recipe.max('id') + ', ';
-        index += 'sum: ' + await Recipe.sum('id') + ', ';
-        index += 'mea: ' + await Recipe.sum('id') / await Recipe.count() + '.'
+        index += 'cou: ' + await Public.count()   + ', ';
+        index += 'min: ' + await Public.min('id') + ', ';
+        index += 'max: ' + await Public.max('id') + ', ';
+        index += 'sum: ' + await Public.sum('id') + ', ';
+        index += 'mea: ' + await Public.sum('id') / await Public.count() + '.'
         return res.send(index);
     },
-    // OK!
     i : async (req, res, next) => {
         const amount = 2;
         const {
             key = '',
         } = req['query'];
-        const index = await Recipe.findAll({
+        const index = await Public.findAll({
             where : {
                 name : {
                     [Op.like] : `%${ key }%`

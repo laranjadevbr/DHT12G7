@@ -1,39 +1,46 @@
 const {
-    capitalize,
-    cleaner,
-    currency,
-    roman,
-    script,
-    validate,
-    viewName,
+    forEveryone,
+    getPageTitle,
+    getScript,
+    getViewName,
 } = require('../utils');
-const session = (req, res, next) => {
-    return req.session.user;
-};
-const viewMaker = (method, allNames) => {
-    return method.render(viewName('/', allNames), {
-        index : require('../database/recipe'),
-        script : script(allNames),
-        capitalize,
-        cleaner,
-        currency,
-        roman,
-        session,
-        validate,
-    });
-};
+const database = require('../database/recipe');
 const action = {
     accordion : (req, res, next) => {
-        viewMaker(res, 'accordion');
+        const allNames = 'accordion';
+        return res.render(getViewName('/', allNames), {
+            index : database,
+            pageTitle : getPageTitle(prefix, allNames),
+            script : getScript(allNames),
+            ...forEveryone(),
+        });
     },
     cards : (req, res, next) => {
-        viewMaker(res, 'cards');
+        const allNames = 'cards';
+        return res.render(getViewName('/', allNames), {
+            index : database,
+            pageTitle : getPageTitle('/', allNames),
+            script : getScript(allNames),
+            ...forEveryone(),
+        });
     },
     index : (req, res, next) => {
-        viewMaker(res, 'index');
+        const allNames = 'index';
+        return res.render(getViewName('/', allNames), {
+            index : database,
+            pageTitle : getPageTitle('/', allNames),
+            script : getScript(allNames),
+            ...forEveryone(),
+        });
     },
     maps : (req, res, next) => {
-        viewMaker(res, 'maps');
+        const allNames = 'maps';
+        return res.render(getViewName('/', allNames), {
+            index : database,
+            pageTitle : getPageTitle('/', allNames),
+            script : getScript(allNames),
+            ...forEveryone(),
+        });
     },
 };
 module.exports = action;

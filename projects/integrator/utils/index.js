@@ -186,28 +186,36 @@ const getModelPagination = (amount, count, page) => {
         prevPage : prevPage,
     };
 };
-const getModelParams = (model, alias, param, column) => {
-    const include = model && alias ? {
+const getModelParams = (model, alias, param, column, limit, offset) => {
+    const objectInclude = model && alias ? {
         include : {
             model : model,
             as : alias,
             required : false,
         },
     } : { };
-    const where = param && column ? {
-        where : {
-            [column] : param,
-        },
+    const objectLimit = limit ? {
+        limit : limit,
     } : { };
-    const order = column ? {
+    const objectOffset = offset ? {
+        offset : offset,
+    } : { };
+    const objectOrder = column ? {
         order : [
             [column, 'ASC'],
         ],
     } : { };
+    const objectWhere = param && column ? {
+        where : {
+            [column] : param,
+        },
+    } : { };
     return {
-        ...order,
-        ...include,
-        ...where,
+    ...objectInclude,
+    ...objectLimit,
+    ...objectOffset,
+    ...objectOrder,
+    ...objectWhere,
     };
 };
 const getModelSearchParams = (array, key) => {

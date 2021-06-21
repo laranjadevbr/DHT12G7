@@ -115,9 +115,7 @@ module.exports = {
             count,
             rows : index,
         } = await Public.findAndCountAll({
-            ...getModelParams(Order, 'order', key, 'title'),
-            limit : amount,
-            offset : (page - 1) * amount,
+            ...getModelParams(Order, 'order', key, 'title', amount, (page - 1) * amount),
         });
         const allNames = 'all';
         return res.render(getViewName(prefix, allNames), {
@@ -137,7 +135,7 @@ module.exports = {
         const allNames = 'one';
         const { id } = req.params;
         const index = await Public.findOne({
-            ...getModelParams(Order, 'order', id, 'id'),
+            ...getModelParams(Order, 'order', id, 'id', '', ''),
         });
         return res.render(getViewName(prefix, allNames), {
             form : {
@@ -204,14 +202,14 @@ module.exports = {
             ...req['body'],
         },
         {
-            ...getModelParams('', '', id, 'id'),
+            ...getModelParams('', '', id, 'id', '', ''),
         });
         return res.redirect(getURLPath(prefix, 'all'));
     },
     destroy : async (req, res, next) => {
         const { id } = req['params'];
         const index = await Public.destroy({
-            ...getModelParams('', '', id, 'id'),
+            ...getModelParams('', '', id, 'id', '', ''),
         });
         return res.redirect(getURLPath(prefix, 'all'));
     },
@@ -252,7 +250,7 @@ module.exports = {
             password,
         } = req['body'];
         const user = await Public.findOne({
-            ...getModelParams('', '', email, 'email'),
+            ...getModelParams('', '', email, 'email', '', ''),
         });
         if (!user) screen(res, 'login');
         if (!isEqual(password, user['password'])) screen(res, 'login');
@@ -278,9 +276,7 @@ module.exports = {
             count,
             rows : index,
         } = await Public.findAndCountAll({
-            limit : amount,
-            offset : (page - 1) * amount,
-            ...getModelParams(Order, 'order', '', ''),
+            ...getModelParams(Order, 'order', '', 'id', amount, (page - 1) * amount),
             ...getModelSearchParams([
                 'description',
                 'title',
