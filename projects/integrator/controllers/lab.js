@@ -25,7 +25,7 @@ module.exports = {
     c : async (req, res, next) => {
         const { id } = req['params'];
         if (!id) {
-            return res.send('Here you need a numeric parameter!');
+            return res.send('You need a numeric parameter!');
         } else {
             const connection = new Sequelize(config);
             const result = await connection.query('select * from publics where id = :id', {
@@ -40,7 +40,7 @@ module.exports = {
     d : async (req, res, next) => {
         const { id } = req['params'];
         if (!id) {
-            return res.send('Here you need a numeric parameter!');
+            return res.send('You need a numeric parameter!');
         } else {
             const index = await Public.findAll();
             return res.send(index[id]);
@@ -57,7 +57,9 @@ module.exports = {
                 id : id,
             },
         });
-        return res.send(index);
+        return res.send({
+            index : index,
+        });
     },
     g : async (req, res, next) => {
         const amount = 2;
@@ -76,27 +78,35 @@ module.exports = {
         });
     },
     h : async (req, res, next) => {
-        let index = '';
-        index += 'cou: ' + await Public.count()   + ', ';
-        index += 'min: ' + await Public.min('id') + ', ';
-        index += 'max: ' + await Public.max('id') + ', ';
-        index += 'sum: ' + await Public.sum('id') + ', ';
-        index += 'mea: ' + await Public.sum('id') / await Public.count() + '.'
-        return res.send(index);
+        const count = await Public.count();
+        const min = await Public.min('id');
+        const max = await Public.max('id');
+        const sum = await Public.sum('id');
+        const mean = await Public.sum('id') / await Public.count();
+        return res.send({
+            index : {
+                count : count,
+                min : min,
+                max : max,
+                sum : sum,
+                mean : mean,
+            }
+        });
     },
     i : async (req, res, next) => {
         const amount = 2;
         const {
             key = '',
         } = req['query'];
+        // http://localhost:8888/lab/i?key=ana
         const index = await Public.findAll({
             where : {
-                name : {
+                title : {
                     [Op.like] : `%${ key }%`
                 },
             },
             order : [
-                ['name', 'ASC']
+                ['title', 'ASC']
             ],
             limit : amount,
             offset : amount,
@@ -163,7 +173,7 @@ module.exports = {
         const allNames = '_r';
         const {
             key = '',
-        } = req.query;
+        } = req['query'];
         return res.render(allNames, {
             script : getScript(allNames),
             searchAction : getURLPath('/lab/', 'r'),

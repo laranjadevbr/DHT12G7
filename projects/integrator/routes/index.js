@@ -28,7 +28,9 @@ const controls = [
 
     { control : category, path : 'category', },
     { control : client, path : 'client', },
-    { control : index, path : '', },
+
+    { control : index, path : 'index', },
+
     { control : jsonAdmin, path : 'json-admin', },
     { control : jsonClient, path : 'json-client', },
     { control : jsonRecipe, path : 'json-recipe', },
@@ -38,21 +40,22 @@ const controls = [
     { control : service, path : 'service', },
     { control : user, path : 'user', },
 ];
-let getRouter = (method, prefix, object) => {
+let getRouter = (controller, URLPath, object) => {
     for (let i = 0; i < object['length']; i++) {
         router[object[i]['method']](
-            String(prefix + object[i]['title'] + object[i]['param']),
-            method[object[i]['control']],
+            String(URLPath + object[i]['title'] + object[i]['param']),
+            controller[object[i]['control']],
         );
     }
 };
 for (let i = 0; i < controls['length']; i++) {
     if (isThere(['controllers', controls[i]['path'] + '.js'])) {
-        getRouter(
-            require('../controllers/' + controls[i]['path']),
-            controls[i]['path'] ? '/' + controls[i]['path'].split('-').join('/') + '/' : '/',
-            controls[i]['control']
-        );
+        const controller = require('../controllers/' + controls[i]['path']);
+        const URLPath = controls[i]['path'] !== 'index' ?
+            controls[i]['path'] ? '/' + controls[i]['path'].split('-').join('/') + '/' : '/'
+        : '/';
+        const object = controls[i]['control'];
+        getRouter(controller, URLPath, object);
     }
 }
 module.exports = router;

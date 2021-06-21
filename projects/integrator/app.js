@@ -6,18 +6,8 @@ const express = require('express');
 const logger = require('morgan');
 const methodOverride = require('method-override');
 const path = require('path');
-const router = require('./routes');
 const session = require('express-session');
 require('dotenv').config();
-
-const {
-  capitalize,
-  cleaner,
-  currency,
-  roman,
-  script,
-  validate,
-} = require('./utils');
 
 const app = express();
 
@@ -49,29 +39,17 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', router);
+app.use('/', require('./routes'));
 
-const routers = [
-  // ['/', '/index'],
-];
-
-for (let i = 0; i < routers['length']; i++)
-  app.use(routers[i][0], (req, res, next) => {
-    return res.redirect(routers[i][1]);
-  });
-
+const {
+  forEveryone,
+  getScript,
+} = require('./utils');
 app.use((req, res, next) => {
   return res.status(404).render('404', {
     pageMessage : 'this page is not found!',
-    script : script('404'),
-    capitalize,
-    cleaner,
-    currency,
-    roman,
-    validate,
-    session : (req, res, next) => {
-      return req.session.user;
-    },
+    script : getScript('404'),
+    ...forEveryone(),
   });
 });
 
