@@ -14,7 +14,7 @@ const {
     inputType : inputType,
 } = option = require('../database/options');
 const bcrypt = require('bcrypt');
-const currentList = require('../database/clients');
+const currentList = require('../database/json/clients');
 const jsonVariable = 'recipe';
 const jsonArchive = jsonVariable + '.js';
 const jsonFolder = 'database';

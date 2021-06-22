@@ -25,7 +25,7 @@ const isLast = isTheLast = (string, character) => {
     return string.substr(string['length'] - 1, string['length']) === character ? true : false;
 };
 
-const getCurrency = (string) => {
+const currency = getCurrency = (string) => {
     return (string).toLocaleString('pt-br', {
         style : 'currency',
         currency : 'USD',
@@ -60,8 +60,11 @@ const getOnlyNumber = (string) => {
     return string.replace(/^[0-9]/g, '').trim();
 };
 
-const pageTitle = getPageTitle = (prefix, suffix) => {
-    return (isThis(suffix, 'undefined') ? prefix : prefix + suffix).split('/').join(' ').split('-').join(' ').trim();
+const pageTitle = getPageTitle = (object) => {
+    let strign = '';
+    strign += object['prefix'] ? object['prefix'] : '';
+    strign += object['suffix'] ? object['suffix'] : '';
+    return strign.split('/').join(' ').split('-').join(' ').trim();
 };
 
 const saver = (variable, jsonVariable, jsonFolder, jsonArchive) => {
@@ -72,12 +75,16 @@ const saver = (variable, jsonVariable, jsonFolder, jsonArchive) => {
     fs.appendFileSync(filePath, 'module.exports = ' + jsonVariable + ';');
 };
 
-const JSONCreator = (name, content, path) => {
-    fs.writeFileSync(urlJoin(path), 'const ' + name + ' = ');
-    fs.appendFileSync(urlJoin(path), JSON.stringify(content));
-    fs.appendFileSync(urlJoin(path), ';');
-    fs.appendFileSync(urlJoin(path), 'module.exports = ' + name + ';');
+
+const JSONModify = JSONCreator = (object) => {
+     fs.writeFileSync(path.join('.', object['path']), 'const ' + object['name'] + ' = ');
+    fs.appendFileSync(path.join('.', object['path']), JSON.stringify(object['content']));
+    fs.appendFileSync(path.join('.', object['path']), ';');
+    fs.appendFileSync(path.join('.', object['path']), 'module.exports = ' + object['name'] + ';');
 };
+
+
+
 
 const roman = getRomanNumber = (number) => {
     let r = '';
@@ -102,10 +109,10 @@ const roman = getRomanNumber = (number) => {
     return r;
 };
 
-const viewName = getViewName = (prefix, suffix) => {
-    prefix = prefix.split('/').join('-');
-    prefix = prefix.substr(1, prefix['length'] - 2);
-    return prefix += !isThis(suffix, 'undefined') ? '-' + suffix : '';
+const viewName = getViewName = (object) => {
+    let prefix = object['prefix'] ? object['prefix'].split('/').join('-').substr(1, object['prefix']['length'] - 2) : '';
+    let suffix = object['suffix'] ? object['suffix'] : '';
+    return prefix += suffix ? '-' + suffix : '';
 };
 
 const getCNPJNumber = (array) => {
@@ -158,22 +165,21 @@ const getPart = (string, endPoint) => {
     return result;
 };
 const getHash = (password) => {
-    return bcrypt.hashSync(String(password), 10);
+    return bcrypt.hashSync(String(password), bcrypt.genSaltSync(10));
 };
-const isEqual = (clientPassword, dataBasePassword) => {
-    return bcrypt.compareSync(clientPassword, dataBasePassword) ? true : false;
+const isEqual = (object) => {
+    return bcrypt.compareSync(object['client'], object['dataBase']) ? true : false;
 };
-const navbar = getNavbar = JSONPagination = (query, number, array) => {
-    let list = [];
-    for (let i = Number(query * number); i <= Number(query * number + number - 1); i++) list.push(array[i]);
-    let full = Math.round(Number(array['length'] - 1) / number) - 1;
-    let next = Number(query) < Number(full) ? Number(query) + 1 : Number(full);
-    let prev = Number(query) <= 1 ? 1 : Number(query) - 1;
+const navbar = getNavbar = JSONPagination = (object) => {
+    const listPage = [];
+    for (let i = object['query'] * object['number']; i < object['query'] * object['number'] + object['number']; i++)
+        listPage.push(object['array'][i]);
+    const fullPage = Math.round(object['array']['length'] - 1) / object['number'] - 1;
     return {
-        full,
-        list,
-        next,
-        prev,
+        fullPage : fullPage,
+        listPage : listPage,
+        nextPage : object['query'] < fullPage ? object['query'] + 1 : fullPage,
+        prevPage : object['query'] <= 1 ? 1 : object['query'] - 1,
     };
 };
 const getModelPagination = (object) => {
@@ -184,6 +190,24 @@ const getModelPagination = (object) => {
         prevPage : Number(object['page']) <= 1 ? 1 : Number(object['page']) - 1,
     };
 };
+const getFormHeader = (object) => {
+    return {
+        form : {
+            action : getURLPath({
+                prefix : object['prefix'],
+                suffix : object['suffix'],
+            }),
+            ...object['enctype'] ? {
+                enctype : object['enctype'],
+            } : {
+            },
+            ...object['method'] ? {
+                method : object['method'],
+            } : {
+            },
+        },
+    };
+};
 const getModelParams = (object) => {
     return {
         ...object['model'] && object['alias'] ? {
@@ -192,23 +216,28 @@ const getModelParams = (object) => {
                 as : object['alias'],
                 required : false,
             },
-        } : { },
+        } : {
+        },
         ...object['limit'] ? {
-            limit : object['limit']
-        } : { },
+            limit : object['limit'],
+        } : {
+        },
         ...object['offset'] ? {
-            offset : object['offset']
-        } : { },
+            offset : object['offset'],
+        } : {
+        },
         ...object['column'] ? {
             order : [
                 [object['column'], 'ASC'],
             ],
-        } : { },
+        } : {
+        },
         ...object['param'] && object['column'] ? {
             where : {
                 [object['column']] : object['param'],
             },
-        } : { },
+        } : {
+        },
     };
 };
 const getModelSearchParams = (object) => {
@@ -353,8 +382,11 @@ const plural = getPlural = (string) => {
     return string.trim().toLowerCase();
 };
 
-const urlPath = getURLPath = (prefix, suffix) => {
-    return String(isThis(suffix, 'undefined') ? prefix : prefix + suffix).trim().toLowerCase();
+const urlPath = getURLPath = (object) => {
+    let strign = '';
+    strign += object['prefix'] ? object['prefix'] : '';
+    strign += object['suffix'] ? object['suffix'] : '';
+    return strign.trim().toLowerCase();
 };
 
 const session = (req, res, next) => {
@@ -368,7 +400,8 @@ const forEveryone = () => {
         roman,
         session,
         validate,
-        // 
+        //
+        currency, 
         getCurrency,
         getRomanNumber,
     };
@@ -402,13 +435,16 @@ module.exports = {
     getURLPath,
     getValidate,
     getViewName,
+
+    getFormHeader,
     // 
     isEqual,
     isLast,
     isTheLast,
     isThere,
     isThis,
-    // 
+    //
+    JSONModify,
     JSONCreator,
     JSONPagination,
     // 

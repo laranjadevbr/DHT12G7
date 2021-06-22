@@ -23,10 +23,10 @@ module.exports = (sequelize, DataType) => {
         timestamps : false,
     });
     Order.associate = (modelsList) => {
-        Order.belongsTo(modelsList.Public, {
-            foreignKey : 'fk_public',
-            as : 'public',
-        });
+        // Order.belongsTo(modelsList.Public, {
+        //     foreignKey : 'fk_public',
+        //     as : 'public',
+        // });
         // Order.belongsToMany(modelsList.Event, {
         //     foreignKey : 'fk_event',
         //     as : 'event',

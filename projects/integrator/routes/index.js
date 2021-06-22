@@ -21,16 +21,14 @@ const controls = [
     { control : admin, path : 'admin', },
     { control : api, path : 'api-admin', },
     { control : api, path : 'api-category', },
-
-        { control : api, path : 'api-event', },
-        { control : api, path : 'api-product', },
-        { control : api, path : 'api-service', },
+    
+    { control : api, path : 'api-event', },
+    { control : api, path : 'api-product', },
+    { control : api, path : 'api-service', },
 
     { control : category, path : 'category', },
     { control : client, path : 'client', },
-
     { control : index, path : 'index', },
-
     { control : jsonAdmin, path : 'json-admin', },
     { control : jsonClient, path : 'json-client', },
     { control : jsonRecipe, path : 'json-recipe', },
@@ -56,6 +54,6 @@ for (let i = 0; i < controls['length']; i++) {
         : '/';
         const object = controls[i]['control'];
         getRouter(controller, URLPath, object);
-    }
-}
+    };
+};
 module.exports = router;

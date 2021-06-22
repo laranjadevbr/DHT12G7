@@ -51,7 +51,13 @@ module.exports = {
             count,
             rows : index,
         } = await Category.findAndCountAll({
-            ...getModelParams(Product, 'product', '', 'id', amount, (page - 1) * amount),
+            ...getModelParams({
+                model : Product,
+                alias : 'product',
+                column : 'id',
+                limit : amount,
+                offset : (page - 1) * amount,
+            }),
         });
         const allNames = 'all';
         return res.render(getViewName(prefix, allNames), {
@@ -61,15 +67,24 @@ module.exports = {
             pageTitle : getPageTitle(prefix, allNames),
             pathPrefix : getViewName(prefix),
             script : getScript(allNames),
-            ...getModelPagination(amount, count, page),
             ...forEveryone(),
+            ...getModelPagination({
+                count : count,
+                amount : amount,
+                page : page,
+            }),
         });
     },
     one : async (req, res, next) => {
         const allNames = 'one';
         const { id } = req['params'];
         const index = await Category.findOne({
-            ...getModelParams(Product, 'product',id, 'id', '', ''),
+            ...getModelParams({
+                model : Product,
+                alias : 'product',
+                param : id,
+                column : 'id',
+            }),
         });
         return res.render(getViewName(prefix, allNames), {
             index : index['product'],
@@ -107,7 +122,10 @@ module.exports = {
         const allNames = 'edit';
         const { id } = req['params'];
         const index = await Category.findOne({
-            ...getModelParams('', '', id, 'id', '', ''),
+            ...getModelParams({
+                param : id,
+                column : 'id',
+            }),
         });
         return res.render(getViewName(prefix, allNames), {
             form : {
@@ -130,14 +148,20 @@ module.exports = {
             ...req['body'],
         },
         {
-            ...getModelParams('', '', id, 'id', '', ''),
+            ...getModelParams({
+                param : id,
+                column : 'id',
+            }),
         });
         return res.redirect(getURLPath(prefix, 'all'));
     },
     destroy : async (req, res, next) => {
         const { id } = req['params'];
         const index = await Category.destroy({
-            ...getModelParams('', '', id, 'id', '', ''),
+            ...getModelParams({
+                param : id,
+                column : 'id',
+            }),
         });
         return res.redirect(getURLPath(prefix, 'all'));
     },

@@ -23,31 +23,14 @@ const {
 } = require('../models');
 const prefix = '/product/';
 const {
-    capitalize,
-    cleaner,
-    currency,
-    dismember,
-    getCNPJ,
-    getCPF,
-    getNumber,
-    getPhone,
-    getRandomDate,
-    getRandomInt,
-    navbar,
-    onlyNumbers,
-    pageTitle,
-    plural,
-    readjust,
-    roman,
-    saver,
-    script,
-    urlPath,
-    validate,
-    viewName,
+    forEveryone,
+    getModelPagination,
+    getModelParams,
+    getPageTitle,
+    getScript,
+    getURLPath,
+    getViewName,
 } = require('../utils');
-const session = (req, res, next) => {
-    return req.session.user;
-};
 const bulkList = [];
 for (let i = 0; i < 10; i++) {
     bulkList.push({
@@ -62,83 +45,96 @@ module.exports = {
         return res.redirect(prefix + 'all');
     },
     all : async (req, res, next) => {
-        const index = await Product.findAll({
-            include : {
+        const amount = 2;
+        const {
+            page = 1,
+            key = '',
+        } = req['query'];
+        const {
+            count,
+            rows : index,
+        } = await Product.findAndCountAll({
+            ...getModelParams({
                 model : Category,
-                as : 'category',
-                required : true,
-            },
+                alias : 'category',
+                param : key,
+                column : 'title',
+                limit : amount,
+                offset : (page - 1) * amount,
+            }),
         });
         const allNames = 'all';
-        return res.render(viewName(prefix, allNames), {
+        return res.render(getViewName(prefix, allNames), {
             index : index,
             item : item,
-            pageTitle : pageTitle(prefix, allNames),
-            pathPrefix : viewName(prefix),
-            script : script(allNames),
-            capitalize,
-            cleaner,
-            currency,
-            roman,
-            session,
-            validate,
+            inputType : inputType,
+            key : key,
+            pageTitle : getPageTitle(prefix, allNames),
+            pathPrefix : getViewName(prefix),
+            script : getScript(allNames),
+            searchAction : getURLPath(prefix, 'search'),
+            ...forEveryone(),
+            ...getModelPagination({
+                count : count,
+                amount : amount,
+                page : page,
+            }),
         });
     },
     one : async (req, res, next) => {
+        const allNames = 'one';
         const { id } = req['params'];
         const index = await Product.findOne({
-            where : {
-                id : id,
-            },
-            include : {
+            ...getModelParams({
                 model : Category,
-                as : 'category',
-                required : true,
-            },
+                alias : 'category',
+                param : id,
+                column : 'id',
+            }),
         });
-        const allNames = 'one';
-        return res.render(viewName(prefix, allNames), {
+        return res.render(getViewName(prefix, allNames), {
+            form : {
+                action : getURLPath(prefix, 'all'),
+                enctype : '',
+                method : 'POST'
+            },
+            btnTitle : 'come back',
+            formElement : view,
             index : index,
-            item : item,
-            pageTitle : pageTitle(prefix, allNames),
-            pathPrefix : viewName(prefix),
-            script : script(allNames),
-            capitalize,
-            cleaner,
-            currency,
-            roman,
-            session,
-            validate,
+            inputType : inputType,
+            pageTitle : getPageTitle(prefix, allNames),
+            script : getScript(allNames),
+            ...forEveryone(),
         });
     },
     create : async (req, res, next) => {
         const allNames = 'create';
-        return res.render(viewName(prefix, allNames), {
+        return res.render(getViewName(prefix, allNames), {
             form : {
-                action : urlPath(prefix, allNames),
+                action : getURLPath(prefix, allNames),
                 enctype : '',
                 method : 'POST',
             },
             btnTitle : allNames,
             formElement : create,
             inputType : inputType,
-            pageTitle : pageTitle(prefix, allNames),
-            script : script(allNames),
-            capitalize,
-            cleaner,
-            currency,
-            roman,
-            session,
-            validate,
+            pageTitle : getPageTitle(prefix, allNames),
+            script : getScript(allNames),
+            ...forEveryone(),
         });
     },
     edit : async (req, res, next) => {
         const allNames = 'edit';
         const { id } = req['params'];
-        const index = await Product.findByPk(id);
-        return res.render(viewName(prefix, allNames), {
+        const index = await Product.findOne({
+            ...getModelParams({
+                param : id,
+                column : 'id',
+            }),
+        });
+        return res.render(getViewName(prefix, allNames), {
             form : {
-                action : urlPath(prefix, allNames) + '/' + id + '?_method=PUT',
+                action : getURLPath(prefix, allNames) + '/' + id + '?_method=PUT',
                 enctype : '',
                 method : 'POST',
             },
@@ -146,21 +142,16 @@ module.exports = {
             formElement : edit,
             index : index,
             inputType : inputType,
-            pageTitle : pageTitle(prefix, allNames),
-            script : script(allNames),
-            capitalize,
-            cleaner,
-            currency,
-            roman,
-            session,
-            validate,
+            pageTitle : getPageTitle(prefix, allNames),
+            script : getScript(allNames),
+            ...forEveryone(),
         });
     },
     store : async (req, res, next) => {
         const index = await Product.create({
-            ...req.body
+            ...req['body'],
         });
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath(prefix, 'all'));
     },
     update : async (req, res, next) => {
         const { id } = req['params'];
@@ -168,25 +159,22 @@ module.exports = {
             ...req['body'],
         },
         {
-            where : {
-                id : id,
-            },
-            include : {
-                model : Category,
-                as : 'category',
-                required : true,
-            },
+            ...getModelParams({
+                param : id,
+                column : 'id',
+            }),
         });
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath(prefix, 'all'));
     },
     destroy : async (req, res, next) => {
-        const { id } = req.params;
+        const { id } = req['params'];
         const index = await Product.destroy({
-            where : {
-                id : id,
-            }
+            ...getModelParams({
+                param : id,
+                column : 'id',
+            }),
         });
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath(prefix, 'all'));
     },
     bulk : async (req, res, next) => {
         const index = await Product.bulkCreate(bulkList);

@@ -10,35 +10,15 @@ const {
 } = require('../models');
 const prefix = '/order/';
 const {
-    capitalize,
-    cleaner,
-    currency,
-    dismember,
-    getCNPJ,
-    getCPF,
-    getNumber,
-    getPhone,
-    getRandomDate,
-    getRandomInt,
-    navbar,
-    onlyNumbers,
-    pageTitle,
-    plural,
-    readjust,
-    roman,
-    saver,
-    script,
+    getRandomNumber,
     urlPath,
-    validate,
-    viewName,
+    getModelParams,
+    forEveryone,
 } = require('../utils');
-const session = (req, res, next) => {
-    return req.session.user;
-};
 const bulkList = [];
 for (let i = 0; i < 10; i++) {
     bulkList.push({
-        fk_public : getRandomInt(1, 9),
+        fk_public : getRandomNumber(1, 9),
     });
 };
 module.exports = {
@@ -48,54 +28,38 @@ module.exports = {
     all : async (req, res, next) => {
         const allNames = 'all';
         const index = await Order.findAll({
-            include : {
-                model : Public,
-                as : 'public',
-                required : true,
-            },
+            ...getModelParams({
+                model : Product,
+                alias : 'product',
+            }),
         });
-        return res.send(index);
-        // return res.render(viewName(prefix, allNames), {
-        //     index : index,
-        //     item : item,
-        //     pageTitle : pageTitle(prefix, allNames),
-        //     pathPrefix : viewName(prefix),
-        //     script : script(allNames),
-        //     capitalize,
-        //     cleaner,
-        //     currency,
-        //     roman,
-        //     validate,
-        //     session,
-        // });
+        return res.render(viewName(prefix, allNames), {
+            index : index,
+            item : item,
+            pageTitle : pageTitle(prefix, allNames),
+            pathPrefix : viewName(prefix),
+            script : script(allNames),
+            ...forEveryone(),
+        });
     },
     one : async (req, res, next) => {
         const allNames = 'one';
         const { id } = req['params'];
         const index = await Order.findOne({
-            where : {
-                id : id,
-            },
-            include : {
-                model : Public,
-                as : 'public',
-                required : true,
-            },
+            ...getModelParams({
+                model : Product,
+                alias : 'product',
+                param : id,
+            }),
         });
-        return res.send(index);
-        // return res.render(viewName(prefix, allNames), {
-        //     index : index,
-        //     item : item,
-        //     pageTitle : pageTitle(prefix, allNames),
-        //     pathPrefix : viewName(prefix),
-        //     script : script(allNames),
-        //     capitalize,
-        //     cleaner,
-        //     currency,
-        //     roman,
-        //     validate,
-        //     session,
-        // });
+        return res.render(viewName(prefix, allNames), {
+            index : index,
+            item : item,
+            pageTitle : pageTitle(prefix, allNames),
+            pathPrefix : viewName(prefix),
+            script : script(allNames),
+            ...forEveryone(),
+        });
     },
     create : async (req, res, next) => {
     },
@@ -103,14 +67,9 @@ module.exports = {
         const allNames = 'edit';
         const { id } = req['params'];
         const index = await Order.findOne({
-            where : {
-                id : id,
-            },
-            include : {
-                model : Public,
-                as : 'public',
-                required : true,
-            },
+            ...getModelParams({
+                param : id,
+            }),
         });
         return res.send(index);
     },
@@ -126,23 +85,18 @@ module.exports = {
             ...req.body,
         },
         {
-            where : {
-                id : id,
-            },
-            include : {
-                model : Public,
-                as : 'public',
-                required : true,
-            },
+            ...getModelParams({
+                param : id,
+            }),
         });
         return res.redirect(urlPath(prefix, 'all'));
     },
     destroy : async (req, res, next) => {
         const { id } = req['params'];
         const index = await Order.destroy({
-            where : {
-                id : id,
-            },
+            ...getModelParams({
+                param : id,
+            }),
         });
         return res.redirect(urlPath(prefix, 'all'));
     },

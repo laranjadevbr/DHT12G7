@@ -15,12 +15,25 @@ module.exports = {
         // http://localhost:8888/api/admin/all?key=francisco
         const { key } = req['query'];
         let params = key ? {
-            ...getModelParams(Order, 'order', key, 'title'),
-            ...getModelSearchParams([
-                'title',
-            ], key),
+            ...getModelParams({
+                model : Order,
+                alias : 'order',
+                param : key,
+                column : 'title',
+            }),
+            ...getModelSearchParams({
+                array : [
+                    'title',
+                ],
+                key : key,
+            }),
         } : {
-            ...getModelParams(Order, 'order', key, 'title'),
+            ...getModelParams({
+                model : Order,
+                alias : 'order',
+                param : key,
+                column : 'title',
+            }),
         };
         const {
             count,
@@ -42,7 +55,12 @@ module.exports = {
             return res.redirect(prefix);
         } else {
             const index = await Public.findOne({
-                ...getModelParams(Order, 'order', id, 'id'),
+                ...getModelParams({
+                    model : Order,
+                    alias : 'order',
+                    param : id,
+                    column : 'id',
+                }),
             }).then(result => {
                 return res.status(200).json({
                     result : result,

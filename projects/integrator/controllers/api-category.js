@@ -15,7 +15,11 @@ module.exports = {
             count,
             rows,
         } = await Category.findAndCountAll({
-            ...getModelParams(Product, 'product', '', 'title'),
+            ...getModelParams({
+                model : Product,
+                alias : 'product',
+                column : 'title',
+            }),
         }).then(result => {
             return res.status(200).json({
                 count : result['count'],
@@ -33,7 +37,12 @@ module.exports = {
             return res.redirect(prefix);
         } else {
             const index = await Category.findOne({
-                ...getModelParams(Product, 'product', id, 'id'),
+                ...getModelParams({
+                    model : Product,
+                    alias : 'product',
+                    param : id,
+                    column : 'id',
+                }),
             }).then(result => {
                 return res.status(200).json({
                     result : result,

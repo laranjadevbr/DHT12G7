@@ -14,7 +14,7 @@ const action = {
     cards : (req, res, next) => {
         const allNames = 'cards';
         return res.render(allNames, {
-            index : require('../database/recipe'),
+            index : require('../database/json/recipe'),
             pageTitle : allNames,
             script : getScript(allNames),
             ...forEveryone(),
