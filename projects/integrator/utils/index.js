@@ -4,7 +4,7 @@ const urlJoin = require('url-join');
 const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
 
-const getRandomInt = getRandomNumber = (min, max) => {
+const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min);
 };
 
@@ -48,7 +48,7 @@ const getDOCNumber = (array) => {
     return result;
 };
 
-const script = getScript = (fileName) => {
+const getScript = (fileName) => {
     return isThere(['public', 'javascripts', fileName + '.js']) ?
     '<script type=\"module\" src=\"/javascripts/' + fileName + '.js\"></script>' : '';
 };
@@ -57,23 +57,14 @@ const getOnlyNumber = (string) => {
     return string.replace(/^[0-9]/g, '').trim();
 };
 
-const pageTitle = getPageTitle = (object) => {
+const getPageTitle = (object) => {
     let strign = '';
     strign += object['prefix'] ? object['prefix'] : '';
     strign += object['suffix'] ? object['suffix'] : '';
     return strign.split('/').join(' ').split('-').join(' ').trim();
 };
 
-const saver = (variable, jsonVariable, jsonFolder, jsonArchive) => {
-    let filePath = path.join('.', jsonFolder, jsonArchive);
-    fs.writeFileSync(filePath, 'const ' + jsonVariable + ' = ');
-    fs.appendFileSync(filePath, JSON.stringify(variable));
-    fs.appendFileSync(filePath, ';');
-    fs.appendFileSync(filePath, 'module.exports = ' + jsonVariable + ';');
-};
-
-
-const JSONModify = JSONCreator = (object) => {
+const JSONModify = (object) => {
      fs.writeFileSync(path.join('.', object['path']), 'const ' + object['name'] + ' = ');
     fs.appendFileSync(path.join('.', object['path']), JSON.stringify(object['content']));
     fs.appendFileSync(path.join('.', object['path']), ';');
@@ -106,7 +97,7 @@ const roman = getRomanNumber = (number) => {
     return r;
 };
 
-const viewName = getViewName = (object) => {
+const getViewName = (object) => {
     let prefix = object['prefix'] ? object['prefix'].split('/').join('-').substr(1, object['prefix']['length'] - 2) : '';
     let suffix = object['suffix'] ? object['suffix'] : '';
     return prefix += suffix ? '-' + suffix : '';
@@ -167,26 +158,48 @@ const getHash = (password) => {
 const isEqual = (object) => {
     return bcrypt.compareSync(object['client'], object['dataBase']) ? true : false;
 };
-const navbar = getNavbar = JSONPagination = (object) => {
+const getNavbar = JSONPagination = (object) => {
     const listPage = [];
-    for (let i = object['query'] * object['number']; i < object['query'] * object['number'] + object['number']; i++)
+    for (let i = object['offset'] * object['limit']; i < object['offset'] * object['limit'] + object['limit']; i++)
         listPage.push(object['array'][i]);
-    const fullPage = Math.round(object['array']['length'] - 1) / object['number'] - 1;
+    const fullPage = Math.round(object['array']['length'] - 1) / object['limit'] - 1;
     return {
         fullPage : fullPage,
         listPage : listPage,
-        nextPage : object['query'] < fullPage ? object['query'] + 1 : fullPage,
-        prevPage : object['query'] <= 1 ? 1 : object['query'] - 1,
+        nextPage : object['offset'] < fullPage ? object['offset'] + 1 : fullPage,
+        prevPage : object['offset'] <= 1 ? 1 : object['offset'] - 1,
     };
 };
 const getModelPagination = (object) => {
     const fullPage = Math.round(object['count'] / object['amount']);
     return {
         fullPage : fullPage <= 1 ? undefined : fullPage,
-        nextPage : Number(object['page']) < fullPage ? Number(object['page']) + 1 : fullPage,
-        prevPage : Number(object['page']) <= 1 ? 1 : Number(object['page']) - 1,
+        nextPage : Number(object['offset']) < fullPage ? Number(object['offset']) + 1 : fullPage,
+        prevPage : Number(object['offset']) <= 1 ? 1 : Number(object['offset']) - 1,
     };
 };
+
+const getSalaryRange = (gap, end) => {
+    const result = [];
+    result.push({
+        id : 0,
+        minimum : '',
+        maximum : '',
+        option : '',
+    });
+    for (let i = 1; i < end; i++) {
+        let minimum = gap * (i + 0);
+        let maximum = gap * (i + 1) - 0.01;
+        result.push({
+            id : i,
+            minimum : minimum,
+            maximum : maximum,
+            option : 'from ' + getCurrency(minimum) + ' to ' + getCurrency(maximum),
+        });
+    }
+    return result;
+};
+
 const getFormHeader = (object) => {
     return {
         form : {
@@ -256,7 +269,7 @@ const getModelSearchParams = (object) => {
         },
     };
 };
-const capitalize = (string) => {
+const getFirstUpperCase = capitalize = (string) => {
     let result = '', array = string.split(' ');
     for (let i = 0; i < array['length']; i++) {
         if (array[i] == 'cep' || array[i] == 'cnpj' || array[i] == 'cpf' || array[i] == 'rg' || array[i] == 'uf') {
@@ -372,14 +385,37 @@ const onlyNumbers = (string) => {
     return string.replace(/^[0-9]/g, '');
 };
 
-const plural = getPlural = (string) => {
+const getPlural = (string) => {
     if (isTheLast(string, 'y')) string = string.substr(0, string['length'] - 1) + 'ies';
     else if (isTheLast(string, 's')) string += 'es';
     else string += 's';
     return string.trim().toLowerCase();
 };
 
-const urlPath = getURLPath = (object) => {
+
+const objectCreator = (array) => {
+    const result = [];
+    result.push({
+        id : 0,
+        option : '',
+    });
+    for (let i = 0; i < array['length']; i++)
+        result.push({
+            id : i + 1,
+            option : array[i],
+        });
+    return result;
+};
+
+
+const arrayUnifier = (array, param) => {
+    const result = [];
+    for (let i = 0; i < param['length']; i++)
+        typeof array[param[i]] !== 'undefined' ? result.push(...array[param[i]]) : undefined;
+    return result;
+};
+
+const getURLPath = (object) => {
     let strign = '';
     strign += object['prefix'] ? object['prefix'] : '';
     strign += object['suffix'] ? object['suffix'] : '';
@@ -403,17 +439,15 @@ const forEveryone = () => {
         getRomanNumber,
     };
 };
-
 module.exports = {
+    arrayUnifier,
     forEveryone,
-    //
-    capitalize,
-    cleaner,
-    // 
     getCNPJNumber,
     getCPFNumber,
     getCurrency,
     getDOCNumber,
+    getFirstUpperCase,
+    getFormHeader,
     getHash,
     getModelPagination,
     getModelParams,
@@ -425,35 +459,19 @@ module.exports = {
     getPhoneNumber,
     getPlural,
     getRandomDate,
-    getRandomInt,
     getRandomNumber,
     getRomanNumber,
+    getSalaryRange,
     getScript,
     getURLPath,
     getValidate,
     getViewName,
-
-    getFormHeader,
-    // 
     isEqual,
     isLast,
     isTheLast,
     isThere,
     isThis,
-    //
     JSONModify,
-    JSONCreator,
     JSONPagination,
-    // 
-    navbar,
-    onlyNumbers,
-    pageTitle,
-    plural,
-    roman,
-    saver,
-    script,
-    session,
-    urlPath,
-    validate,
-    viewName,
+    objectCreator,
 };

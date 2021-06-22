@@ -14,7 +14,10 @@ module.exports = {
     all : async (req, res, next) => {
         // http://localhost:8888/api/admin/all?key=francisco
         const { key } = req['query'];
-        let params = {
+        const {
+            count,
+            rows,
+        } = await Public.findAndCountAll({
             ...getModelParams({
                 model : Order,
                 alias : 'order',
@@ -30,11 +33,7 @@ module.exports = {
                 }),
             } : {
             },
-        };
-        const {
-            count,
-            rows,
-        } = await Public.findAndCountAll(params).then(result => {
+        }).then(result => {
             return res.status(200).json({
                 count : result['count'],
                 rows : result['rows'],

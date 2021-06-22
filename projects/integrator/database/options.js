@@ -1,5 +1,7 @@
 const {
-    getCurrency,
+    getSalaryRange,
+    objectCreator,
+    arrayUnifier,
 } = require('../utils');
 const L = [
     'a', 'b', 'c', 'd', 'e',
@@ -15,45 +17,6 @@ for (let i = 0; i < number; i++) {
     description += 'Tempora, cumque voluptatum nemo commodi veniam iste saepe vitae odit amet quisquam totam!' + ' ';
     description += 'Est dolorum totam sequi officiis eaque consequatur optio necessitatibus!';
     description += i < number ? ' ' : '';
-}
-const getSalaryRange = (gap, end) => {
-    const result = [];
-    result.push({
-        id : 0,
-        minimum : '',
-        maximum : '',
-        option : '',
-    });
-    for (let i = 1; i < end; i++) {
-        let minimum = gap * (i + 0);
-        let maximum = gap * (i + 1) - 0.01;
-        result.push({
-            id : i,
-            minimum : minimum,
-            maximum : maximum,
-            option : 'from ' + getCurrency(minimum) + ' to ' + getCurrency(maximum),
-        });
-    }
-    return result;
-};
-const objectCreator = (array) => {
-    const result = [];
-    result.push({
-        id : 0,
-        option : '',
-    });
-    for (let i = 0; i < array['length']; i++)
-        result.push({
-            id : i + 1,
-            option : array[i],
-        });
-    return result;
-};
-const arrayUnifier = (array, param) => {
-    const result = [];
-    for (let i = 0; i < param['length']; i++)
-        typeof array[param[i]] !== 'undefined' ? result.push(...array[param[i]]) : undefined;
-    return result;
 };
 module.exports = {
     boolean : objectCreator([

@@ -56,7 +56,9 @@ const formBuilder = (array, disabled) => {
 let nameListBuilder = (index) => {
     const result = [];
     for (let i = 0; i < index['length']; i++)
-        index[i]['note'] !== 'deleted' ? result.push(index[i]['name']) : undefined;
+        index[i]['note'] !== 'deleted' ?
+        result.push(index[i]['name']) :
+        undefined;
     return result;
 }
 const public = [

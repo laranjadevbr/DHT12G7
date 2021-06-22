@@ -80,7 +80,7 @@ module.exports = {
             ...getModelPagination({
                 count : count,
                 amount : amount,
-                page : page,
+                offset : page,
             }),
         });
     },
@@ -309,7 +309,7 @@ module.exports = {
             ...getModelPagination({
                 count : count,
                 amount : amount,
-                page : page,
+                offset : page,
             }),
         });
     },

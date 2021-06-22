@@ -1,37 +1,17 @@
 const {
-    capitalize,
-    plural,
+    getFirstUpperCase,
+    getPlural,
 } = require('../utils');
 const {
-    eventDate,
-    everyoneAddress,
-    everyoneContact,
-    everyoneCost,
-    everyoneCreate,
-    everyonePicture,
-    everyoneProfile,
-    everyoneState,
-    id,
+    getModelEvent,
 } = require('../utils/sequelize');
 const allName = 'event';
 module.exports = (sequelize, DataType) => {
-	const Event = sequelize.define(capitalize(allName), {
-        ...id(DataType),
-        fk_category : {
-            allowNull : false,
-            type : DataType.INTEGER,
-        },
-        ...everyoneProfile(DataType),
-        ...everyonePicture(DataType),
-        ...everyoneCost(DataType),
-        ...eventDate(DataType),
-        ...everyoneAddress(DataType),
-        ...everyoneContact(DataType),
-        ...everyoneState(DataType),
-        ...everyoneCreate(DataType),
+	const Event = sequelize.define(getFirstUpperCase(allName), {
+        ...getModelEvent(DataType),
     },
     {
-        tableName : plural(allName),
+        tableName : getPlural(allName),
         timestamps : false,
     });
     Event.associate = (modelsList) => {

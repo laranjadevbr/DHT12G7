@@ -31,13 +31,14 @@ module.exports = {
     index : (req, res, next) => {
     },
     all : (req, res, next) => {
+        const amount = 2;
         const allNames = 'all';
         const { page = 1 } = req['query'];
         return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             index : JSONPagination({
                 array : dataBase,
-                number : 2,
-                query : page,
+                limit : amount,
+                offset : page,
             })['listPage'],
             item : item,
             pageTitle : getPageTitle({
@@ -49,8 +50,8 @@ module.exports = {
             ...forEveryone(),
             ...JSONPagination({
                 array : dataBase,
-                number : 2,
-                query : page,
+                limit : amount,
+                offset : page,
             }),
         });
     },
@@ -58,7 +59,7 @@ module.exports = {
         const allNames = 'one';
         const { id } = req['params'];
         const index = dataBase.find((index) => {
-            return index['id'] == id
+            return index['id'] == id;
         });
         return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             btnTitle : 'come back',

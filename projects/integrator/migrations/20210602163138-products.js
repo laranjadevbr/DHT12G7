@@ -1,32 +1,18 @@
 'use strict';
 const {
-  plural,
+  getPlural,
 } = require('../utils');
 const {
-  everyoneCost,
-  everyoneCreate,
-  everyonePicture,
-  everyoneProfile,
-  everyoneState,
-  id,
+  getModelProduct,
 } = require('../utils/sequelize');
 const allName = 'product';
 module.exports = {
   up : async (queryInterface, Sequelize) => {
-    return queryInterface.createTable(plural(allName), {
-      ...id(Sequelize),
-      fk_category : {
-        allowNull : false,
-        type : Sequelize.INTEGER,
-      },
-      ...everyoneProfile(Sequelize),
-      ...everyonePicture(Sequelize),
-      ...everyoneCost(Sequelize),
-      ...everyoneState(Sequelize),
-      ...everyoneCreate(Sequelize),
+    return queryInterface.createTable(getPlural(allName), {
+      ...getModelProduct(Sequelize),
     });
   },
   down : async (queryInterface, Sequelize) => {
-    return queryInterface.dropTable(plural(allName));
+    return queryInterface.dropTable(getPlural(allName));
   },
 };

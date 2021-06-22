@@ -6,14 +6,15 @@ const {
 const {
     Order,
     Product,
-    Public,
 } = require('../models');
 const prefix = '/order/';
 const {
-    getRandomNumber,
-    urlPath,
-    getModelParams,
     forEveryone,
+    getModelParams,
+    getPageTitle,
+    getRandomNumber,
+    getScript,
+    getViewName,
 } = require('../utils');
 const bulkList = [];
 for (let i = 0; i < 10; i++) {
@@ -23,7 +24,10 @@ for (let i = 0; i < 10; i++) {
 };
 module.exports = {
     index : async (req, res, next) => {
-        return res.redirect(prefix + 'all');
+        return res.redirect(getURLPath({
+            prefix : prefix,
+            suffix : 'all',
+        }));
     },
     all : async (req, res, next) => {
         const allNames = 'all';
@@ -33,12 +37,15 @@ module.exports = {
                 alias : 'product',
             }),
         });
-        return res.render(viewName(prefix, allNames), {
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             index : index,
             item : item,
-            pageTitle : pageTitle(prefix, allNames),
-            pathPrefix : viewName(prefix),
-            script : script(allNames),
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
+            pathPrefix : getViewName({ prefix : prefix }),
+            script : getScript(allNames),
             ...forEveryone(),
         });
     },
@@ -52,12 +59,15 @@ module.exports = {
                 param : id,
             }),
         });
-        return res.render(viewName(prefix, allNames), {
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             index : index,
             item : item,
-            pageTitle : pageTitle(prefix, allNames),
-            pathPrefix : viewName(prefix),
-            script : script(allNames),
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
+            pathPrefix : getViewName({ prefix : prefix }),
+            script : getScript(allNames),
             ...forEveryone(),
         });
     },
@@ -77,19 +87,25 @@ module.exports = {
         const index = await Order.create({
             ...req['body'],
         });
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath({
+            prefix : prefix,
+            suffix : 'all',
+        }));
     },
     update : async (req, res, next) => {
         const { id } = req['params'];
         const index = await Order.update({
-            ...req.body,
+            ...req['body'],
         },
         {
             ...getModelParams({
                 param : id,
             }),
         });
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath({
+            prefix : prefix,
+            suffix : 'all',
+        }));
     },
     destroy : async (req, res, next) => {
         const { id } = req['params'];
@@ -98,7 +114,10 @@ module.exports = {
                 param : id,
             }),
         });
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath({
+            prefix : prefix,
+            suffix : 'all',
+        }));
     },
     bulk : async (req, res, next) => {
         const index = await Order.bulkCreate(bulkList);

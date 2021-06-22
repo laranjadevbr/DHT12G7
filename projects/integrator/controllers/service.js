@@ -3,7 +3,7 @@ const {
         service : {
             create,
             edit,
-        }
+        },
     },
 } = require('../database/elements');
 const {
@@ -18,43 +18,29 @@ const {
 } = require('../models');
 const prefix = '/service/';
 const {
-    capitalize,
-    cleaner,
-    currency,
-    dismember,
-    getCNPJ,
-    getCPF,
-    getNumber,
-    getPhone,
-    getRandomDate,
-    getRandomInt,
-    navbar,
-    onlyNumbers,
-    pageTitle,
-    plural,
-    readjust,
-    roman,
-    saver,
-    script,
-    urlPath,
-    validate,
-    viewName,
+    forEveryone,
+    getURLPath,
+    getScript,
+    getRandomNumber,
+    getModelParams,
+    getFormHeader,
+    getViewName,
 } = require('../utils');
-const session = (req, res, next) => {
-    return req.session.user;
-};
 const bulkList = [];
 for (let i = 0; i < 10; i++) {
     bulkList.push({
-        fk_category : getRandomInt(1, 9),
         title : title,
         description : description,
-        cost : getRandomInt(100, 999),
+        cost : getRandomNumber(100, 999),
+        fk_category : getRandomNumber(1, 9),
     });
 };
 module.exports = {
     index : async (req, res, next) => {
-        return res.redirect(prefix + 'all');
+        return res.redirect(getURLPath({
+            prefix : prefix,
+            suffix : 'all',
+        }));
     },
     all : async (req, res, next) => {
     },
@@ -62,75 +48,87 @@ module.exports = {
     },
     create : async (req, res, next) => {
         const allNames = 'create';
-        return res.render(viewName(prefix, allNames), {
-            form : {
-                action : urlPath(prefix, allNames),
-                enctype : '',
-                method : 'POST',
-            },
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             btnTitle : allNames,
             formElement : create,
             inputType : inputType,
-            pageTitle : pageTitle(prefix, allNames),
-            script : script(allNames),
-            capitalize,
-            cleaner,
-            currency,
-            roman,
-            session,
-            validate,
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
+            script : getScript(allNames),
+            ...forEveryone(),
+            ...getFormHeader({
+                prefix : prefix,
+                suffix : allNames,
+                method : 'POST',
+            }),
         });
     },
     edit : async (req, res, next) => {
         const allNames = 'edit';
         const { id } = req['params'];
-        const index = await Product.findByPk(id);
-        return res.render(viewName(prefix, allNames), {
-            form : {
-                action : urlPath(prefix, allNames) + '/' + id + '?_method=PUT',
-                enctype : '',
-                method : 'POST',
-            },
+        const index = await Product.findOne({
+            ...getModelParams({
+                param : id,
+                column : 'id',
+            }),
+        });
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             btnTitle : 'update',
             formElement : edit,
             index : index,
             inputType : inputType,
-            pageTitle : pageTitle(prefix, allNames),
-            script : script(allNames),
-            capitalize,
-            cleaner,
-            currency,
-            roman,
-            session,
-            validate,
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
+            script : getScript(allNames),
+            ...forEveryone(),
+            ...getFormHeader({
+                prefix : prefix,
+                suffix : allNames + '/' + id + '?_method=PUT',
+                method : 'POST',
+            }),
         });
     },
     store : async (req, res, next) => {
         const index = await Service.create({
-            ...req['body']
+            ...req['body'],
         });
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath({
+            prefix : prefix,
+            suffix : 'all',
+        }));
     },
     update : async (req, res, next) => {
-        const { id } = req.params;
+        const { id } = req['params'];
         const index = await Service.update({
-            ...req['body']
+            ...req['body'],
         },
         {
-            where : {
-                id : id,
-            },
+            ...getModelParams({
+                param : id,
+                column : 'id',
+            }),
         });
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath({
+            prefix : prefix,
+            suffix : 'all',
+        }));
     },
     destroy : async (req, res, next) => {
         const { id } = req['params'];
         const index = await Service.destroy({
-            where : {
-                id : id,
-            }
+            ...getModelParams({
+                param : id,
+                column : 'id',
+            }),
         });
-        return res.redirect(urlPath(prefix, 'all'));
+        return res.redirect(getURLPath({
+            prefix : prefix,
+            suffix : 'all',
+        }));
     },
     bulk : async (req, res, next) => {
         const index = await Service.bulkCreate(bulkList);

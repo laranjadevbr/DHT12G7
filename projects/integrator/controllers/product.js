@@ -30,6 +30,7 @@ const {
     getPageTitle,
     getScript,
     getURLPath,
+    getRandomNumber,
     getViewName,
 } = require('../utils');
 const bulkList = [];
@@ -37,8 +38,8 @@ for (let i = 0; i < 10; i++) {
     bulkList.push({
         title : title,
         description : description,
-        cost : Math.floor(Math.random() * 999 + 100),
-        fk_category : Math.floor(Math.random() * 9 + 1),
+        cost : getRandomNumber(100, 999),
+        fk_category : getRandomNumber(1, 9),
     });
 };
 module.exports = {
@@ -86,7 +87,7 @@ module.exports = {
             ...getModelPagination({
                 count : count,
                 amount : amount,
-                page : page,
+                offset : page,
             }),
         });
     },

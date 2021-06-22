@@ -167,7 +167,7 @@ module.exports = {
             ...getModelPagination({
                 count : count,
                 amount : amount,
-                page : page,
+                offset : page,
             }),
         });
     },
@@ -257,7 +257,7 @@ module.exports = {
         });
     },
     update : async (req, res, next) => {
-        const { id } = req.params;
+        const { id } = req['params'];
         const index = await Public.update({
             ...req['body'],
         },
@@ -398,7 +398,7 @@ module.exports = {
             ...getModelPagination({
                 count : count,
                 amount : amount,
-                page : page,
+                offset : page,
             }),
         });
     },
