@@ -24,6 +24,7 @@ const {
 const prefix = '/category/';
 const {
     forEveryone,
+    getFormHeader,
     getModelPagination,
     getModelParams,
     getPageTitle,
@@ -60,12 +61,17 @@ module.exports = {
             }),
         });
         const allNames = 'all';
-        return res.render(getViewName(prefix, allNames), {
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             index : index,
             item : item,
             inputType : inputType,
-            pageTitle : getPageTitle(prefix, allNames),
-            pathPrefix : getViewName(prefix),
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
+            pathPrefix : getViewName({
+                prefix : prefix,
+            }),
             script : getScript(allNames),
             ...forEveryone(),
             ...getModelPagination({
@@ -86,11 +92,14 @@ module.exports = {
                 column : 'id',
             }),
         });
-        return res.render(getViewName(prefix, allNames), {
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             index : index['product'],
             item : item,
             inputType : inputType,
-            pageTitle : getPageTitle(prefix, allNames),
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
             pathPrefix : getViewName('/product/'),
             script : getScript(allNames),
             ...forEveryone(),
@@ -98,18 +107,21 @@ module.exports = {
     },
     create : async (req, res, next) => {
         const allNames = 'create';
-        return res.render(getViewName(prefix, allNames), {
-            form : {
-                action : getURLPath(prefix, allNames),
-                enctype : '',
-                method : 'POST',
-            },
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             btnTitle : allNames,
             formElement : create,
             inputType : inputType,
-            pageTitle : getPageTitle(prefix, allNames),
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
             script : getScript(allNames),
             ...forEveryone(),
+            ...getFormHeader({
+                prefix : prefix,
+                suffix : allNames,
+                method : 'POST',
+            }),
         });
     },
     store : async (req, res, next) => {
@@ -127,19 +139,22 @@ module.exports = {
                 column : 'id',
             }),
         });
-        return res.render(getViewName(prefix, allNames), {
-            form : {
-                action : getURLPath(prefix, allNames) + '/' + id + '?_method=PUT',
-                enctype : '',
-                method : 'POST',
-            },
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             btnTitle : 'update',
             formElement : edit,
             index : index,
             inputType : inputType,
-            pageTitle : getPageTitle(prefix, allNames),
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
             script : getScript(allNames),
             ...forEveryone(),
+            ...getFormHeader({
+                prefix : prefix,
+                suffix : allNames + '/' + id + '?_method=PUT',
+                method : 'POST',
+            }),
         });
     },
     update : async (req, res, next) => {

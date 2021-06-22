@@ -49,11 +49,8 @@ const getDOCNumber = (array) => {
 };
 
 const script = getScript = (fileName) => {
-    return isThere([
-        'public',
-        'javascripts',
-        fileName + '.js',
-    ]) ? '<script type=\"module\" src=\"/javascripts/' + fileName + '.js\"></script>' : '';
+    return isThere(['public', 'javascripts', fileName + '.js']) ?
+    '<script type=\"module\" src=\"/javascripts/' + fileName + '.js\"></script>' : '';
 };
 
 const getOnlyNumber = (string) => {

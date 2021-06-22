@@ -170,13 +170,16 @@ module.exports = {
         });
     },
     r : async (req, res, next) => {
-        const allNames = '_r';
         const {
             key = '',
         } = req['query'];
+        const allNames = '_r';
         return res.render(allNames, {
             script : getScript(allNames),
-            searchAction : getURLPath('/lab/', 'r'),
+            searchAction : getURLPath({
+                prefix : '/lab/',
+                suffix : 'r',
+            }),
             ...forEveryone(),
         });
     },

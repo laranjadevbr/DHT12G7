@@ -5,11 +5,11 @@ const {
             edit,
             view,
             login,
-        },
+        }
     },
     names : {
         public : item,
-    },
+    }
 } = require('../database/elements');
 const {
     inputType : inputType,
@@ -21,6 +21,7 @@ const {
 const prefix = '/client/';
 let {
     forEveryone,
+    getFormHeader,
     getHash,
     getModelPagination,
     getModelParams,
@@ -33,7 +34,10 @@ let {
 } = require('../utils');
 module.exports = {
     index : async (req, res, next) => {
-        return res.redirect(getURLPath(prefix, 'all'));
+        return res.redirect(getURLPath({
+            prefix : prefix,
+            suffix : 'all',
+        }));
     },
     all : async (req, res, next) => {
         const amount = 2;
@@ -55,15 +59,23 @@ module.exports = {
             }),
         });
         const allNames = 'all';
-        return res.render(getViewName(prefix, allNames), {
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             index : index,
             item : item,
             inputType : inputType,
             key : key,
-            pageTitle : getPageTitle(prefix, allNames),
-            pathPrefix : getViewName(prefix),
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
+            pathPrefix : getViewName({
+                prefix : prefix
+            }),
             script : getScript(allNames),
-            searchAction : getURLPath(prefix, 'search'),
+            searchAction : getURLPath({
+                prefix : prefix,
+                suffix : 'search',
+            }),
             ...forEveryone(),
             ...getModelPagination({
                 count : count,
@@ -74,7 +86,7 @@ module.exports = {
     },
     one : async (req, res, next) => {
         const allNames = 'one';
-        const { id } = req.params;
+        const { id } = req['params'];
         const index = await Public.findOne({
             ...getModelParams({
                 model : Order,
@@ -83,35 +95,41 @@ module.exports = {
                 column : 'id',
             }),
         });
-        return res.render(getViewName(prefix, allNames), {
-            form : {
-                action : getURLPath(prefix, 'all'),
-                enctype : '',
-                method : 'POST'
-            },
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             btnTitle : 'come back',
             formElement : view,
             index : index,
             inputType : inputType,
-            pageTitle : getPageTitle(prefix, allNames),
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
             script : getScript(allNames),
             ...forEveryone(),
+            ...getFormHeader({
+                prefix : prefix,
+                suffix : 'all',
+                method : 'POST',
+            }),
         });
     },
     create : async (req, res, next) => {
         const allNames = 'create';
-        return res.render(getViewName(prefix, allNames), {
-            form : {
-                action : getURLPath(prefix, allNames),
-                enctype : '',
-                method : 'POST',
-            },
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             btnTitle : allNames,
             formElement : create,
             inputType : inputType,
-            pageTitle : getPageTitle(prefix, allNames),
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
             script : getScript(allNames),
             ...forEveryone(),
+            ...getFormHeader({
+                prefix : prefix,
+                suffix : allNames,
+                method : 'POST',
+            }),
         });
     },
     store : async (req, res, next) => {
@@ -119,7 +137,10 @@ module.exports = {
         const index = await Public.create({
             ...req['body'],
         });
-        return res.redirect(getURLPath(prefix, 'all'));
+        return res.redirect(getURLPath({
+            prefix : prefix,
+            suffix : 'all',
+        }));
     },
     edit : async (req, res, next) => {
         const allNames = 'edit';
@@ -130,23 +151,26 @@ module.exports = {
                 column : 'id',
             }),
         });
-        return res.render(getViewName(prefix, allNames), {
-            form : {
-                action : getURLPath(prefix, allNames) + '/' + id + '?_method=PUT',
-                enctype : '',
-                method : 'POST',
-            },
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             btnTitle : 'update',
             formElement : edit,
             index : index,
             inputType : inputType,
-            pageTitle : getPageTitle(prefix, allNames),
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
             script : getScript(allNames),
             ...forEveryone(),
+            ...getFormHeader({
+                prefix : prefix,
+                suffix : allNames + '/' + id + '?_method=PUT',
+                method : 'POST',
+            }),
         });
     },
     update : async (req, res, next) => {
-        const { id } = req['params'];
+        const { id } = req.params;
         const index = await Public.update({
             ...req['body'],
         },
@@ -156,7 +180,10 @@ module.exports = {
                 column : 'id',
             }),
         });
-        return res.redirect(getURLPath(prefix, 'all'));
+        return res.redirect(getURLPath({
+            prefix : prefix,
+            suffix : 'all',
+        }));
     },
     destroy : async (req, res, next) => {
         const { id } = req['params'];
@@ -166,38 +193,47 @@ module.exports = {
                 column : 'id',
             }),
         });
-        return res.redirect(getURLPath(prefix, 'all'));
+        return res.redirect(getURLPath({
+            prefix : prefix,
+            suffix : 'all',
+        }));
     },
     login : async (req, res, next) => {
         const allNames = 'login';
-        return res.render(getViewName(prefix, allNames), {
-            form : {
-                action : getURLPath(prefix, 'authenticate'),
-                enctype : '',
-                method : 'POST',
-            },
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             btnTitle : allNames,
             formElement : login,
             inputType : inputType,
-            pageTitle : getPageTitle(prefix, allNames),
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
             script : getScript(allNames),
             ...forEveryone(),
+            ...getFormHeader({
+                prefix : prefix,
+                suffix : 'authenticate',
+                method : 'POST',
+            }),
         });
     },
     authenticate : async (req, res, next) => {
         let screen = (method, allNames) => {
-            return method.render(getViewName(prefix, allNames), {
-                form : {
-                    action : getURLPath(prefix, allNames),
-                    enctype : '',
-                    method : 'POST',
-                },
+            return method.render(getViewName({ prefix : prefix, suffix : allNames }), {
                 btnTitle : allNames,
                 formElement : login,
                 inputType : inputType,
-                pageTitle : getPageTitle(prefix, allNames),
+                pageTitle : getPageTitle({
+                    prefix : prefix,
+                    suffix : allNames,
+                }),
                 script : getScript(allNames),
                 ...forEveryone(),
+                ...getFormHeader({
+                    prefix : prefix,
+                    suffix : allNames,
+                    method : 'POST',
+                }),
             });
         };
         const {
@@ -211,10 +247,13 @@ module.exports = {
             }),
         });
         if (!user) screen(res, 'login');
-        if (!isEqual(password, user['password'])) screen(res, 'login');
+        if (!isEqual({ client : password, dataBase : user['password'] })) screen(res, 'login');
         user['password'] = undefined;
         req.session.user = user;
-        return res.redirect(getURLPath(prefix, 'all'));
+        return res.redirect(getURLPath({
+            prefix : prefix,
+            suffix : 'all',
+        }));
     },
     logout : async (req, res, next) => {
         req.session.destroy();
@@ -249,15 +288,23 @@ module.exports = {
             }),
         });
         const allNames = 'all';
-        return res.render(getViewName(prefix, allNames), {
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             index : index,
             item : item,
             inputType : inputType,
             key : key,
-            pageTitle : getPageTitle(prefix, allNames),
-            pathPrefix : getViewName(prefix),
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
+            pathPrefix : getViewName({
+                prefix : prefix,
+            }),
             script : getScript(allNames),
-            searchAction : getURLPath(prefix, 'search'),
+            searchAction : getURLPath({
+                prefix : prefix,
+                suffix : 'search',
+            }),
             ...forEveryone(),
             ...getModelPagination({
                 count : count,

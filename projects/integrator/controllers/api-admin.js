@@ -14,26 +14,22 @@ module.exports = {
     all : async (req, res, next) => {
         // http://localhost:8888/api/admin/all?key=francisco
         const { key } = req['query'];
-        let params = key ? {
+        let params = {
             ...getModelParams({
                 model : Order,
                 alias : 'order',
                 param : key,
                 column : 'title',
             }),
-            ...getModelSearchParams({
-                array : [
-                    'title',
-                ],
-                key : key,
-            }),
-        } : {
-            ...getModelParams({
-                model : Order,
-                alias : 'order',
-                param : key,
-                column : 'title',
-            }),
+            ...key ? {
+                ...getModelSearchParams({
+                    array : [
+                        'title',
+                    ],
+                    key : key,
+                }),
+            } : {
+            },
         };
         const {
             count,

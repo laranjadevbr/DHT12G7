@@ -24,6 +24,7 @@ const {
 const prefix = '/product/';
 const {
     forEveryone,
+    getFormHeader,
     getModelPagination,
     getModelParams,
     getPageTitle,
@@ -64,15 +65,23 @@ module.exports = {
             }),
         });
         const allNames = 'all';
-        return res.render(getViewName(prefix, allNames), {
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             index : index,
             item : item,
             inputType : inputType,
             key : key,
-            pageTitle : getPageTitle(prefix, allNames),
-            pathPrefix : getViewName(prefix),
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
+            pathPrefix : getViewName({
+                prefix : prefix,
+            }),
             script : getScript(allNames),
-            searchAction : getURLPath(prefix, 'search'),
+            searchAction : getURLPath({
+                prefix : prefix,
+                suffix : 'search',
+            }),
             ...forEveryone(),
             ...getModelPagination({
                 count : count,
@@ -92,35 +101,41 @@ module.exports = {
                 column : 'id',
             }),
         });
-        return res.render(getViewName(prefix, allNames), {
-            form : {
-                action : getURLPath(prefix, 'all'),
-                enctype : '',
-                method : 'POST'
-            },
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             btnTitle : 'come back',
             formElement : view,
             index : index,
             inputType : inputType,
-            pageTitle : getPageTitle(prefix, allNames),
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
             script : getScript(allNames),
             ...forEveryone(),
+            ...getFormHeader({
+                prefix : prefix,
+                suffix : 'all',
+                method : 'POST',
+            }),
         });
     },
     create : async (req, res, next) => {
         const allNames = 'create';
-        return res.render(getViewName(prefix, allNames), {
-            form : {
-                action : getURLPath(prefix, allNames),
-                enctype : '',
-                method : 'POST',
-            },
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             btnTitle : allNames,
             formElement : create,
             inputType : inputType,
-            pageTitle : getPageTitle(prefix, allNames),
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
             script : getScript(allNames),
             ...forEveryone(),
+            ...getFormHeader({
+                prefix : prefix,
+                suffix : allNames,
+                method : 'POST',
+            }),
         });
     },
     edit : async (req, res, next) => {
@@ -132,26 +147,32 @@ module.exports = {
                 column : 'id',
             }),
         });
-        return res.render(getViewName(prefix, allNames), {
-            form : {
-                action : getURLPath(prefix, allNames) + '/' + id + '?_method=PUT',
-                enctype : '',
-                method : 'POST',
-            },
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
             btnTitle : 'update',
             formElement : edit,
             index : index,
             inputType : inputType,
-            pageTitle : getPageTitle(prefix, allNames),
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
             script : getScript(allNames),
             ...forEveryone(),
+            ...getFormHeader({
+                prefix : prefix,
+                suffix : allNames + '/' + id + '?_method=PUT',
+                method : 'POST',
+            }),
         });
     },
     store : async (req, res, next) => {
         const index = await Product.create({
             ...req['body'],
         });
-        return res.redirect(getURLPath(prefix, 'all'));
+        return res.redirect(getURLPath({
+            prefix : prefix,
+            suffix : 'all',
+        }));
     },
     update : async (req, res, next) => {
         const { id } = req['params'];
@@ -164,7 +185,10 @@ module.exports = {
                 column : 'id',
             }),
         });
-        return res.redirect(getURLPath(prefix, 'all'));
+        return res.redirect(getURLPath({
+            prefix : prefix,
+            suffix : 'all',
+        }));
     },
     destroy : async (req, res, next) => {
         const { id } = req['params'];
@@ -174,7 +198,10 @@ module.exports = {
                 column : 'id',
             }),
         });
-        return res.redirect(getURLPath(prefix, 'all'));
+        return res.redirect(getURLPath({
+            prefix : prefix,
+            suffix : 'all',
+        }));
     },
     bulk : async (req, res, next) => {
         const index = await Product.bulkCreate(bulkList);
