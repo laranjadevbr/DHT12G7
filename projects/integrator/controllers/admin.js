@@ -115,7 +115,14 @@ module.exports = {
             count,
             rows : index,
         } = await Public.findAndCountAll({
-            ...getModelParams(Order, 'order', key, 'title', amount, (page - 1) * amount),
+            ...getModelParams({
+                model : Order,
+                alias : 'order',
+                param : key,
+                column : 'title',
+                limit : amount,
+                offset : (page - 1) * amount,
+            }),
         });
         const allNames = 'all';
         return res.render(getViewName(prefix, allNames), {
@@ -127,15 +134,24 @@ module.exports = {
             pathPrefix : getViewName(prefix),
             script : getScript(allNames),
             searchAction : getURLPath(prefix, 'search'),
-            ...getModelPagination(amount, count, page),
             ...forEveryone(),
+            ...getModelPagination({
+                count : count,
+                amount : amount,
+                page : page,
+            }),
         });
     },
     one : async (req, res, next) => {
         const allNames = 'one';
         const { id } = req.params;
         const index = await Public.findOne({
-            ...getModelParams(Order, 'order', id, 'id', '', ''),
+            ...getModelParams({
+                model : Order,
+                alias : 'order',
+                param : id,
+                column : 'id',
+            }),
         });
         return res.render(getViewName(prefix, allNames), {
             form : {
@@ -179,7 +195,10 @@ module.exports = {
         const allNames = 'edit';
         const { id } = req['params'];
         const index = await Public.findOne({
-            ...getModelParams('', '', id, 'id'),
+            ...getModelParams({
+                param : id,
+                column : 'id',
+            }),
         });
         return res.render(getViewName(prefix, allNames), {
             form : {
@@ -202,14 +221,20 @@ module.exports = {
             ...req['body'],
         },
         {
-            ...getModelParams('', '', id, 'id', '', ''),
+            ...getModelParams({
+                param : id,
+                column : 'id',
+            }),
         });
         return res.redirect(getURLPath(prefix, 'all'));
     },
     destroy : async (req, res, next) => {
         const { id } = req['params'];
         const index = await Public.destroy({
-            ...getModelParams('', '', id, 'id', '', ''),
+            ...getModelParams({
+                param : id,
+                column : 'id',
+            }),
         });
         return res.redirect(getURLPath(prefix, 'all'));
     },
@@ -250,7 +275,10 @@ module.exports = {
             password,
         } = req['body'];
         const user = await Public.findOne({
-            ...getModelParams('', '', email, 'email', '', ''),
+            ...getModelParams({
+                param : email,
+                column : 'email',
+            }),
         });
         if (!user) screen(res, 'login');
         if (!isEqual(password, user['password'])) screen(res, 'login');
@@ -276,11 +304,21 @@ module.exports = {
             count,
             rows : index,
         } = await Public.findAndCountAll({
-            ...getModelParams(Order, 'order', '', 'id', amount, (page - 1) * amount),
-            ...getModelSearchParams([
-                'description',
-                'title',
-            ], key),
+            ...getModelParams({
+                model : Order,
+                alias : 'order',
+                param : key,
+                column : 'id',
+                limit : amount,
+                offset : (page - 1) * amount,
+            }),
+            ...getModelSearchParams({
+                array : [
+                    'description',
+                    'title',
+                ],
+                key : key,
+            }),
         });
         const allNames = 'all';
         return res.render(getViewName(prefix, allNames), {
@@ -292,8 +330,12 @@ module.exports = {
             pathPrefix : getViewName(prefix),
             script : getScript(allNames),
             searchAction : getURLPath(prefix, 'search'),
-            ...getModelPagination(amount, count, page),
             ...forEveryone(),
+            ...getModelPagination({
+                count : count,
+                amount : amount,
+                page : page,
+            }),
         });
     },
 }

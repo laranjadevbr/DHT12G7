@@ -176,57 +176,52 @@ const navbar = getNavbar = JSONPagination = (query, number, array) => {
         prev,
     };
 };
-const getModelPagination = (amount, count, page) => {
-    const fullPage = Math.round(count / amount);
-    const nextPage = Number(page) < Number(fullPage) ? Number(page) + 1 : Number(fullPage);
-    const prevPage = Number(page) <= 1 ? 1 : Number(page) - 1;
+const getModelPagination = (object) => {
+    const fullPage = Math.round(object['count'] / object['amount']);
     return {
         fullPage : fullPage <= 1 ? undefined : fullPage,
-        nextPage : nextPage,
-        prevPage : prevPage,
+        nextPage : Number(object['page']) < fullPage ? Number(object['page']) + 1 : fullPage,
+        prevPage : Number(object['page']) <= 1 ? 1 : Number(object['page']) - 1,
     };
 };
-const getModelParams = (model, alias, param, column, limit, offset) => {
-    const objectInclude = model && alias ? {
-        include : {
-            model : model,
-            as : alias,
-            required : false,
-        },
-    } : { };
-    const objectLimit = limit ? {
-        limit : limit,
-    } : { };
-    const objectOffset = offset ? {
-        offset : offset,
-    } : { };
-    const objectOrder = column ? {
-        order : [
-            [column, 'ASC'],
-        ],
-    } : { };
-    const objectWhere = param && column ? {
-        where : {
-            [column] : param,
-        },
-    } : { };
+const getModelParams = (object) => {
     return {
-    ...objectInclude,
-    ...objectLimit,
-    ...objectOffset,
-    ...objectOrder,
-    ...objectWhere,
+        ...object['model'] && object['alias'] ? {
+            include : {
+                model : object['model'],
+                as : object['alias'],
+                required : false,
+            },
+        } : { },
+        ...object['limit'] ? {
+            limit : object['limit']
+        } : { },
+        ...object['offset'] ? {
+            offset : object['offset']
+        } : { },
+        ...object['column'] ? {
+            order : [
+                [object['column'], 'ASC'],
+            ],
+        } : { },
+        ...object['param'] && object['column'] ? {
+            where : {
+                [object['column']] : object['param'],
+            },
+        } : { },
     };
 };
-const getModelSearchParams = (array, key) => {
+const getModelSearchParams = (object) => {
     const result = [];
-    for (let i = 0; i < array['length']; i++) {
-        result.push({
-            [array[i]] : {
-                [Op.like] : `%${ key }%`,
-            },
-        });
-    };
+    if (!object['array'] || !object['key']) { } else {
+        for (let i = 0; i < object['array']['length']; i++) {
+            result.push({
+                [object['array'][i]] : {
+                    [Op.like] : `%${ object['key'] }%`,
+                },
+            });
+        };
+    }
     return {
         where : {
             [Op.or] : [
