@@ -1,7 +1,7 @@
 const {
+    arrayUnifier,
     getSalaryRange,
     objectCreator,
-    arrayUnifier,
 } = require('../utils');
 const L = [
     'a', 'b', 'c', 'd', 'e',

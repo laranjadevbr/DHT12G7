@@ -1,12 +1,12 @@
 const {
-    isLast,
+    isTheLast,
     isThis,
 } = require('../utils');
 let getTitle = getControl = (index) => {
-    return isLast(index, '?') ? index.substr(0, index['length'] - 1) : index;
+    return isTheLast(index, '?') ? index.substr(0, index['length'] - 1) : index;
 };
 let getParam = (index) => {
-    return isLast(index, '?') ? '/:id?' : '';
+    return isTheLast(index, '?') ? '/:id?' : '';
 };
 let getRoute = (route, method) => {
     const result = [];
