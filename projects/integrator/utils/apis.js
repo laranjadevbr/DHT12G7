@@ -9,8 +9,8 @@ const everyoneApis = (object) => {
             return res.redirect(getURLPath({
                 ...object['prefix'] ? {
                     prefix : object['prefix'],
+                    suffix : 'all',
                 } : { },
-                suffix : 'all',
             }));
         },
         all : async (req, res, next) => {
@@ -22,11 +22,9 @@ const everyoneApis = (object) => {
                 ...getModelParams({
                     param : key,
                     column : 'title',
-                    ...object['includeName'] ? {
-                        model : object['includeName'],
-                    } : { },
-                    ...object['includeAlias'] ? {
+                    ...object['includeAlias'] && object['includeName'] ? {
                         alias : object['includeAlias'],
+                        model : object['includeName'],
                     } : { },
                 }),
                 ...key ? {
@@ -36,8 +34,7 @@ const everyoneApis = (object) => {
                             'title',
                         ],
                     }),
-                } : {
-                },
+                } : { },
             }).then(result => {
                 return res.status(200).json({
                     count : result['count'],
@@ -55,18 +52,16 @@ const everyoneApis = (object) => {
                 return res.redirect(getURLPath({
                     ...object['prefix'] ? {
                         prefix : object['prefix'],
+                        suffix : 'all',
                     } : { },
-                    suffix : 'all',
                 }));
             } else {
                 const index = await object['modelName'].findOne({
                     ...getModelParams({
                         param : id,
-                        ...object['includeName'] ? {
-                            model : object['includeName'],
-                        } : { },
-                        ...object['includeAlias'] ? {
+                        ...object['includeAlias'] && object['includeName'] ? {
                             alias : object['includeAlias'],
+                            model : object['includeName'],
                         } : { },
                     }),
                 }).then(result => {

@@ -12,10 +12,6 @@ const {
 } = require('../database/elements');
 const {
     inputType : inputType,
-    lorem : {
-        title,
-        description,
-    },
 } = option = require('../database/options');
 const {
     Category,
@@ -32,13 +28,6 @@ const {
     getURLPath,
     getViewName,
 } = require('../utils');
-const bulkList = [];
-for (let i = 0; i < 10; i++) {
-    bulkList.push({
-        title : title,
-        description : description,
-    });
-};
 module.exports = {
     index : async (req, res, next) => {
         return res.redirect(getURLPath({ prefix : prefix, suffix : 'all' }));
@@ -183,7 +172,7 @@ module.exports = {
         return res.redirect(getURLPath({ prefix : prefix, suffix : 'all' }));
     },
     bulk : async (req, res, next) => {
-        const index = await Category.bulkCreate(bulkList);
+        const index = await Category.bulkCreate(require('../bulkmakers/category-product'));
         return res.send(index);
     },
     search : async (req, res, next) => {

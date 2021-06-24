@@ -12,10 +12,6 @@ const {
 } = require('../database/elements');
 const {
     inputType : inputType,
-    lorem : {
-        title,
-        description,
-    },
 } = option = require('../database/options');
 const {
     Category,
@@ -30,18 +26,8 @@ const {
     getPageTitle,
     getScript,
     getURLPath,
-    getRandomNumber,
     getViewName,
 } = require('../utils');
-const bulkList = [];
-for (let i = 0; i < 10; i++) {
-    bulkList.push({
-        title : title,
-        description : description,
-        cost : getRandomNumber(100, 999),
-        fk_category : getRandomNumber(1, 9),
-    });
-};
 module.exports = {
     index : async (req, res, next) => {
         return res.redirect(prefix + 'all');
@@ -201,7 +187,7 @@ module.exports = {
         }));
     },
     bulk : async (req, res, next) => {
-        const index = await Product.bulkCreate(bulkList);
+        const index = await Product.bulkCreate(require('../bulkmakers/product'));
         return res.send(index);
     },
     search : async (req, res, next) => {

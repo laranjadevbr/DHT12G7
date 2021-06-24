@@ -10,18 +10,18 @@ const {
         service : item,
     }
 } = require('../database/elements');
+
 const {
     inputType : inputType,
-    lorem : {
-        title,
-        description,
-    },
 } = option = require('../database/options');
+
 const {
     Category,
     Service,
 } = require('../models');
+
 const prefix = '/service/';
+
 const {
     forEveryone,
     getFormHeader,
@@ -30,18 +30,9 @@ const {
     getPageTitle,
     getScript,
     getURLPath,
-    getRandomNumber,
     getViewName,
 } = require('../utils');
-const bulkList = [];
-for (let i = 0; i < 10; i++) {
-    bulkList.push({
-        title : title,
-        description : description,
-        cost : getRandomNumber(100, 999),
-        fk_category : getRandomNumber(1, 9),
-    });
-};
+
 module.exports = {
     index : async (req, res, next) => {
         return res.redirect(getURLPath({
@@ -204,7 +195,7 @@ module.exports = {
         }));
     },
     bulk : async (req, res, next) => {
-        const index = await Service.bulkCreate(bulkList);
+        const index = await Service.bulkCreate(require('../bulkmakers/service'));
         return res.send(index);
     },
     search : async (req, res, next) => {

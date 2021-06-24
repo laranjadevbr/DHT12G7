@@ -10,6 +10,6 @@ module.exports = {
         modelName : Category,
         includeAlias : 'service',
         includeName : Service,
-        prefix : '/api-category-service/',
+        prefix : 'api-category-service',
     }),
 };

@@ -12,16 +12,10 @@ const {
     forEveryone,
     getModelParams,
     getPageTitle,
-    getRandomNumber,
     getScript,
     getViewName,
 } = require('../utils');
-const bulkList = [];
-for (let i = 0; i < 10; i++) {
-    bulkList.push({
-        fk_public : getRandomNumber(1, 10),
-    });
-};
+
 module.exports = {
     index : async (req, res, next) => {
         return res.redirect(getURLPath({
@@ -120,7 +114,7 @@ module.exports = {
         }));
     },
     bulk : async (req, res, next) => {
-        const index = await Order.bulkCreate(bulkList);
+        const index = await Order.bulkCreate(require('../bulkmakers/order'));
         return res.send(index);
     },
     search : async (req, res, next) => {

@@ -7,6 +7,6 @@ const {
 module.exports = {
     ...everyoneApis({
         modelName : Product,
-        prefix : '/api-product/',
+        prefix : 'api-product',
     }),
 };

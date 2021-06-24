@@ -337,8 +337,7 @@ const getPlural = (string) => {
     return string.trim().toLowerCase();
 };
 const getURLPath = (object) => {
-    let strign = object['prefix'] + object['suffix'];
-    return strign.split('-').join('/').trim().toLowerCase();
+    return String('/' + object['prefix'] + '/' + object['suffix']).split('-').join('/').trim().toLowerCase();
 };
 const session = (req, res, next) => {
     return req.session.user;

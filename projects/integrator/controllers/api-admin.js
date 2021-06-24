@@ -10,6 +10,6 @@ module.exports = {
         modelName : Public,
         includeAlias : 'order',
         includeName : Order,
-        prefix : '/api-admin/',
+        prefix : 'api-admin',
     }),
 };
