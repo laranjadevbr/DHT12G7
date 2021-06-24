@@ -19,7 +19,7 @@ const {
 const bulkList = [];
 for (let i = 0; i < 10; i++) {
     bulkList.push({
-        fk_public : getRandomNumber(1, 9),
+        fk_public : getRandomNumber(1, 10),
     });
 };
 module.exports = {

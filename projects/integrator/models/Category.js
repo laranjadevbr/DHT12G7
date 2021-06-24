@@ -23,10 +23,10 @@ module.exports = (sequelize, DataType) => {
         //     foreignKey : 'fk_category',
         //     as : 'event',
         // });
-        // Category.hasMany(modelsList.Service, {
-        //     foreignKey : 'fk_category',
-        //     as : 'service',
-        // });
+        Category.hasMany(modelsList.Service, {
+            foreignKey : 'fk_category',
+            as : 'service',
+        });
     };
 	return Category;
 };

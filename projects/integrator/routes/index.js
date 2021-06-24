@@ -19,8 +19,12 @@ const {
 } = obj = require('./routes');
 const controls = [
     { control : admin, path : 'admin', },
+    
     { control : api, path : 'api-admin', },
-    { control : api, path : 'api-category', },
+
+    { control : api, path : 'api-category-event', },
+    { control : api, path : 'api-category-product', },
+    { control : api, path : 'api-category-service', },
     
     { control : api, path : 'api-event', },
     { control : api, path : 'api-product', },

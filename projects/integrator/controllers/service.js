@@ -3,8 +3,12 @@ const {
         service : {
             create,
             edit,
-        },
+            view,
+        }
     },
+    names : {
+        service : item,
+    }
 } = require('../database/elements');
 const {
     inputType : inputType,
@@ -14,16 +18,19 @@ const {
     },
 } = option = require('../database/options');
 const {
+    Category,
     Service,
 } = require('../models');
 const prefix = '/service/';
 const {
     forEveryone,
-    getURLPath,
-    getScript,
-    getRandomNumber,
-    getModelParams,
     getFormHeader,
+    getModelPagination,
+    getModelParams,
+    getPageTitle,
+    getScript,
+    getURLPath,
+    getRandomNumber,
     getViewName,
 } = require('../utils');
 const bulkList = [];
@@ -43,8 +50,77 @@ module.exports = {
         }));
     },
     all : async (req, res, next) => {
+        const amount = 2;
+        const {
+            page = 1,
+            key = '',
+        } = req['query'];
+        const {
+            count,
+            rows : index,
+        } = await Service.findAndCountAll({
+            ...getModelParams({
+                model : Category,
+                alias : 'category',
+                param : key,
+                column : 'title',
+                limit : amount,
+                offset : (page - 1) * amount,
+            }),
+        });
+        const allNames = 'all';
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+            index : index,
+            item : item,
+            inputType : inputType,
+            key : key,
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
+            pathPrefix : getViewName({
+                prefix : prefix,
+            }),
+            script : getScript(allNames),
+            searchAction : getURLPath({
+                prefix : prefix,
+                suffix : 'search',
+            }),
+            ...forEveryone(),
+            ...getModelPagination({
+                count : count,
+                amount : amount,
+                offset : page,
+            }),
+        });
     },
     one : async (req, res, next) => {
+        const allNames = 'one';
+        const { id } = req['params'];
+        const index = await Service.findOne({
+            ...getModelParams({
+                model : Category,
+                alias : 'category',
+                param : id,
+            }),
+        });
+        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+            btnTitle : 'come back',
+            formElement : view,
+            index : index,
+            inputType : inputType,
+            pageTitle : getPageTitle({
+                prefix : prefix,
+                suffix : allNames,
+            }),
+            script : getScript(allNames),
+            ...forEveryone(),
+            ...getFormHeader({
+                prefix : prefix,
+                suffix : 'all',
+                method : 'POST',
+            }),
+        });
     },
     create : async (req, res, next) => {
         const allNames = 'create';
@@ -68,10 +144,9 @@ module.exports = {
     edit : async (req, res, next) => {
         const allNames = 'edit';
         const { id } = req['params'];
-        const index = await Product.findOne({
+        const index = await Service.findOne({
             ...getModelParams({
                 param : id,
-                column : 'id',
             }),
         });
         return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
@@ -109,7 +184,6 @@ module.exports = {
         {
             ...getModelParams({
                 param : id,
-                column : 'id',
             }),
         });
         return res.redirect(getURLPath({
@@ -122,7 +196,6 @@ module.exports = {
         const index = await Service.destroy({
             ...getModelParams({
                 param : id,
-                column : 'id',
             }),
         });
         return res.redirect(getURLPath({

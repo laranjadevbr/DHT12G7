@@ -29,11 +29,11 @@ module.exports = (sequelize, DataType) => {
             as : 'product',
             through : modelsList.Item,
         });
-        // Order.belongsToMany(modelsList.Service, {
-        //     foreignKey : 'fk_service',
-        //     as : 'service',
-        //     through : modelsList.Item,
-        // });
+        Order.belongsToMany(modelsList.Service, {
+            foreignKey : 'fk_service',
+            as : 'service',
+            through : modelsList.Item,
+        });
     };
     return Order;
 };

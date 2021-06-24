@@ -11,7 +11,6 @@ const {
     },
     lorem : {
         description,
-        title,
     },
 } = option = require('../database/options');
 const getIDColumns = (Sequelize) => {
@@ -47,7 +46,7 @@ const getDateColumns = (Sequelize) => {
 const getAddressColumns = (Sequelize) => {
     return {
         cep : Sequelize.STRING(cep),
-        getAddressColumns : Sequelize.STRING,
+        address : Sequelize.STRING,
         number : Sequelize.INTEGER,
         district : Sequelize.STRING,
         city : Sequelize.STRING,
@@ -149,7 +148,7 @@ const getCompanyColumns = (Sequelize, Entity) => {
 const getCurriculumColumns = (Sequelize) => {
     return {
         profession : Sequelize.STRING,
-        getCurriculumColumns : {
+        curriculum : {
             defaultValue : description,
             type : Sequelize.TEXT,
         },
@@ -177,15 +176,11 @@ const getLevelColumns = (Sequelize) => {
     };
 };
 
-// -----
-
 const getModelCategory = (Sequelize) => {
     return {
         ...getIDColumns(Sequelize),
-        // 
         ...getProfileColumns(Sequelize),
         ...getPictureColumns(Sequelize),
-        // 
         ...getCreateColumns(Sequelize),
         ...getStateColumns(Sequelize),
     };
@@ -193,20 +188,16 @@ const getModelCategory = (Sequelize) => {
 const getModelEvent = (Sequelize) => {
     return {
         ...getIDColumns(Sequelize),
-        // 
         fk_category : {
             allowNull : false,
             type : Sequelize.INTEGER,
         },
-        // 
         ...getProfileColumns(Sequelize),
         ...getPictureColumns(Sequelize),
         ...getCostColumns(Sequelize),
         ...getDateColumns(Sequelize),
         ...getAddressColumns(Sequelize),
         ...getContactColumns(Sequelize),
-        
-        // 
         ...getCreateColumns(Sequelize),
         ...getStateColumns(Sequelize),
     };
@@ -214,7 +205,6 @@ const getModelEvent = (Sequelize) => {
 const getModelItem = (Sequelize) => {
     return {
         ...getIDColumns(Sequelize),
-        // 
         fk_order : {
             allowNull : false,
             type : Sequelize.INTEGER,
@@ -231,7 +221,6 @@ const getModelItem = (Sequelize) => {
             allowNull : false,
             type : Sequelize.INTEGER,
         },
-        // 
         ...getStateColumns(Sequelize),
         ...getCreateColumns(Sequelize),
     };
@@ -239,12 +228,10 @@ const getModelItem = (Sequelize) => {
 const getModelOrder = (Sequelize) => {
     return {
         ...getIDColumns(Sequelize),
-        // 
         fk_public : {
             allowNull : false,
             type : Sequelize.INTEGER,
         },
-        // 
         ...getStateColumns(Sequelize),
         ...getCreateColumns(Sequelize),
     };
@@ -252,16 +239,13 @@ const getModelOrder = (Sequelize) => {
 const getModelProduct = (Sequelize) => {
     return {
         ...getIDColumns(Sequelize),
-        // 
         fk_category : {
             allowNull : false,
             type : Sequelize.INTEGER,
         },
-        // 
         ...getProfileColumns(Sequelize),
         ...getPictureColumns(Sequelize),
         ...getCostColumns(Sequelize),
-        // 
         ...getStateColumns(Sequelize),
         ...getCreateColumns(Sequelize),
     };
@@ -269,7 +253,6 @@ const getModelProduct = (Sequelize) => {
 const getModelPublic = (Sequelize) => {
     return {
         ...getIDColumns(Sequelize),
-        // 
         ...getProfileColumns(Sequelize),
         ...getPictureColumns(Sequelize),
         ...getAddColumns(Sequelize),
@@ -280,24 +263,20 @@ const getModelPublic = (Sequelize) => {
         ...getCompanyColumns(Sequelize),
         ...getAccessColumns(Sequelize),
         ...getLevelColumns(Sequelize),
-        // 
         ...getStateColumns(Sequelize),
         ...getCreateColumns(Sequelize),
     };
 };
 const getModelService = (Sequelize) => {
     return {
-        ...getIDColumns(Sequelize),
-        // 
+        ...getIDColumns(Sequelize), 
         fk_category : {
             allowNull : false,
             type : Sequelize.INTEGER,
         },
-        // 
         ...getProfileColumns(Sequelize),
         ...getPictureColumns(Sequelize),
         ...getCostColumns(Sequelize),
-        // 
         ...getStateColumns(Sequelize),
         ...getCreateColumns(Sequelize),
     };
@@ -310,4 +289,4 @@ module.exports = {
     getModelProduct,
     getModelPublic,
     getModelService,
-}
+};

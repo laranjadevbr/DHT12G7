@@ -1,13 +1,12 @@
 const {
-    Public,
-    Order,
+    Event,
 } = require('../models');
+const prefix = '/api-event/';
 const {
     getModelParams,
     getModelSearchParams,
     getURLPath,
 } = require('../utils');
-const prefix = '/api-admin/';
 module.exports = {
     index : async (req, res, next) => {
         return res.redirect(getURLPath({ prefix : prefix, suffix : 'all' }));
@@ -17,10 +16,8 @@ module.exports = {
         const {
             count,
             rows,
-        } = await Public.findAndCountAll({
+        } = await Event.findAndCountAll({
             ...getModelParams({
-                model : Order,
-                alias : 'order',
                 param : key,
                 column : 'id',
             }),
@@ -49,10 +46,8 @@ module.exports = {
         if (!id) {
             return res.redirect(getURLPath({ prefix : prefix, suffix : 'all' }));
         } else {
-            const index = await Public.findOne({
+            const index = await Event.findOne({
                 ...getModelParams({
-                    model : Order,
-                    alias : 'order',
                     param : id,
                 }),
             }).then(result => {

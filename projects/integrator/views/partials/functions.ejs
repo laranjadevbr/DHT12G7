@@ -49,17 +49,6 @@
     btnClass += 'dark';
     btnClass += btnClass === btnString ? 'primary' : '';
 
-    // let btnFunction = (style, outline) => {
-    //     btnClass = '';
-    //     outline = outline;
-    //     outline = outline ? 'outline-' : '';
-    //     btnString = 'btn btn-' + outline;
-    //     btnClass = btnString;
-    //     btnClass += style;
-    //     btnClass += btnClass === btnString ? 'primary' : '';
-    //     return btnClass;
-    // }
-
     btnColorI = 'dark';
     btnColorII = 'light';
     btnColorIII = 'danger';
@@ -74,6 +63,38 @@
 
     navbar = [
         {
+            name : 'apis',
+            path : '#',
+            menu : [
+                {
+                    title : 'admin',
+                    content : [
+                        {
+                            name : 'admin',
+                            path : '/api/admin',
+                        },
+                    ],
+                },
+                {
+                    title : 'category',
+                    content : [
+                        // {
+                        //     name : 'event',
+                        //     path : '/api/category/event',
+                        // },
+                        {
+                            name : 'product',
+                            path : '/api/category/product',
+                        },
+                        {
+                            name : 'service',
+                            path : '/api/category/service',
+                        },
+                    ],
+                },
+            ],
+        },
+        {
             name : 'json',
             path : '#',
             menu : [
@@ -82,11 +103,11 @@
                     content : [
                         {
                             name : 'list',
-                            path : '/json-admin/all',
+                            path : '/json/admin/all',
                         },
                         {
                             name : 'new registration',
-                            path : '/json-admin/create',
+                            path : '/json/admin/create',
                         },
                     ],
                 },
@@ -95,19 +116,19 @@
                     content : [
                         {
                             name : 'list',
-                            path : '/json-client/all',
+                            path : '/json/client/all',
                         },
                         {
                             name : 'new registration',
-                            path : '/json-client/create',
+                            path : '/json/client/create',
                         },
                         {
                             name : validate(session) ? 'login' : '',
-                            path : validate(session) ? '/json-client/login' : '',
+                            path : validate(session) ? '/json/client/login' : '',
                         },
                         {
                             name : validate(session) ? '' : 'logout',
-                            path : validate(session) ? '' : '/json-client/logout',
+                            path : validate(session) ? '' : '/json/client/logout',
                         },
                     ],
                 },
@@ -116,15 +137,11 @@
                     content : [
                         {
                             name : 'list',
-                            path : '/json-recipe/all',
+                            path : '/json/recipe/all',
                         },
-                        // {
-                        //     name : 'menu',
-                        //     path : '/json-recipe/menu',
-                        // },
                         {
                             name : 'new registration',
-                            path : '/json-recipe/create',
+                            path : '/json/recipe/create',
                         },
                     ],
                 },
@@ -172,11 +189,6 @@
                             name : 'login',
                             path : '/admin/login',
                         },
-                        // {
-                        //     name : 'logout',
-                        //     path : '/admin/logout',
-                        // },
-
                     ],
                 },
                 {
@@ -194,10 +206,6 @@
                             name : 'login',
                             path : '/client/login',
                         },
-                        // {
-                        //     name : 'logout',
-                        //     path : '/client/logout',
-                        // },
                     ],
                 },
                 {
@@ -215,10 +223,6 @@
                             name : 'login',
                             path : '/user/login',
                         },
-                        // {
-                        //     name : 'logout',
-                        //     path : '/user/logout',
-                        // },
                     ],
                 },
             ],

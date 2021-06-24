@@ -1,25 +1,38 @@
 const {
     Category,
-    Product,
+    Event,
 } = require('../models');
-const prefix = '/api-categoty/all/';
+const prefix = '/api-category-event/';
 const {
     getModelParams,
+    getModelSearchParams,
+    getURLPath,
 } = require('../utils');
 module.exports = {
     index : async (req, res, next) => {
-        return res.redirect(prefix);
+        return res.redirect(getURLPath({ prefix : prefix, suffix : 'all' }));
     },
     all : async (req, res, next) => {
+        const { key } = req['query'];
         const {
             count,
             rows,
         } = await Category.findAndCountAll({
             ...getModelParams({
-                model : Product,
-                alias : 'product',
-                column : 'title',
+                model : Event,
+                alias : 'event',
+                param : key,
+                column : 'id',
             }),
+            ...key ? {
+                ...getModelSearchParams({
+                    array : [
+                        'title',
+                    ],
+                    key : key,
+                }),
+            } : {
+            },
         }).then(result => {
             return res.status(200).json({
                 count : result['count'],
@@ -34,14 +47,13 @@ module.exports = {
     one : async (req, res, next) => {
         const { id } = req['params'];
         if (!id) {
-            return res.redirect(prefix);
+            return res.redirect(getURLPath({ prefix : prefix, suffix : 'all' }));
         } else {
             const index = await Category.findOne({
                 ...getModelParams({
-                    model : Product,
-                    alias : 'product',
+                    model : Event,
+                    alias : 'event',
                     param : id,
-                    column : 'id',
                 }),
             }).then(result => {
                 return res.status(200).json({

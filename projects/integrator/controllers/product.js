@@ -99,7 +99,6 @@ module.exports = {
                 model : Category,
                 alias : 'category',
                 param : id,
-                column : 'id',
             }),
         });
         return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
@@ -145,7 +144,6 @@ module.exports = {
         const index = await Product.findOne({
             ...getModelParams({
                 param : id,
-                column : 'id',
             }),
         });
         return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
@@ -183,7 +181,6 @@ module.exports = {
         {
             ...getModelParams({
                 param : id,
-                column : 'id',
             }),
         });
         return res.redirect(getURLPath({
@@ -196,7 +193,6 @@ module.exports = {
         const index = await Product.destroy({
             ...getModelParams({
                 param : id,
-                column : 'id',
             }),
         });
         return res.redirect(getURLPath({

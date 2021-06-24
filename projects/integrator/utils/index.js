@@ -3,7 +3,6 @@ const path = require('path');
 const urlJoin = require('url-join');
 const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
-
 const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min);
 };
@@ -341,7 +340,7 @@ const getURLPath = (object) => {
     let strign = '';
     strign += object['prefix'] ? object['prefix'] : '';
     strign += object['suffix'] ? object['suffix'] : '';
-    return strign.trim().toLowerCase();
+    return strign.split('-').join('/').trim().toLowerCase();
 };
 const session = (req, res, next) => {
     return req.session.user;
@@ -385,7 +384,6 @@ const getSalaryRange = (gap, end) => {
     }
     return result;
 };
-
 const forEveryone = () => {
     return {
         capitalize,
