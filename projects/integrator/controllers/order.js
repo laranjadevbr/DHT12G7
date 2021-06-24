@@ -37,7 +37,7 @@ module.exports = {
                 alias : 'product',
             }),
         });
-        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+        return res.render('menu', {
             index : index,
             item : item,
             pageTitle : getPageTitle({
@@ -59,7 +59,7 @@ module.exports = {
                 param : id,
             }),
         });
-        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+        return res.render('form', {
             index : index,
             item : item,
             pageTitle : getPageTitle({

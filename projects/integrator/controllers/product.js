@@ -66,7 +66,7 @@ module.exports = {
             }),
         });
         const allNames = 'all';
-        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+        return res.render('menu', {
             index : index,
             item : item,
             inputType : inputType,
@@ -101,7 +101,7 @@ module.exports = {
                 param : id,
             }),
         });
-        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+        return res.render('form', {
             btnTitle : 'come back',
             formElement : view,
             index : index,
@@ -121,7 +121,7 @@ module.exports = {
     },
     create : async (req, res, next) => {
         const allNames = 'create';
-        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+        return res.render('form', {
             btnTitle : allNames,
             formElement : create,
             inputType : inputType,
@@ -146,7 +146,7 @@ module.exports = {
                 param : id,
             }),
         });
-        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+        return res.render('form', {
             btnTitle : 'update',
             formElement : edit,
             index : index,

@@ -34,7 +34,7 @@ module.exports = {
         const amount = 2;
         const allNames = 'all';
         const { page = 1 } = req['query'];
-        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+        return res.render('menu', {
             index : JSONPagination({
                 array : dataBase,
                 limit : amount,
@@ -61,7 +61,7 @@ module.exports = {
         const index = dataBase.find((index) => {
             return index['id'] == id;
         });
-        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+        return res.render('form', {
             btnTitle : 'come back',
             formElement : view,
             index : index,
@@ -82,7 +82,7 @@ module.exports = {
     },
     create : (req, res, next) => {
         const allNames = 'create';
-        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+        return res.render('form', {
             btnTitle : allNames,
             formElement : create,
             inputType : inputType,
@@ -106,7 +106,7 @@ module.exports = {
         const index = dataBase.find((index) => {
             return index['id'] == id;
         });
-        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+        return res.render('form', {
             btnTitle : 'update',
             formElement : edit,
             index : index,

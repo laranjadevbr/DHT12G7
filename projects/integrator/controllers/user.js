@@ -59,7 +59,7 @@ module.exports = {
             }),
         });
         const allNames = 'all';
-        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+        return res.render('menu', {
             index : index,
             item : item,
             inputType : inputType,
@@ -95,7 +95,7 @@ module.exports = {
                 column : 'id',
             }),
         });
-        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+        return res.render('form', {
             btnTitle : 'come back',
             formElement : view,
             index : index,
@@ -115,7 +115,7 @@ module.exports = {
     },
     create : async (req, res, next) => {
         const allNames = 'create';
-        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+        return res.render('form', {
             btnTitle : allNames,
             formElement : create,
             inputType : inputType,
@@ -151,7 +151,7 @@ module.exports = {
                 column : 'id',
             }),
         });
-        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+        return res.render('form', {
             btnTitle : 'update',
             formElement : edit,
             index : index,
@@ -200,7 +200,7 @@ module.exports = {
     },
     login : async (req, res, next) => {
         const allNames = 'login';
-        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+        return res.render('form', {
             btnTitle : allNames,
             formElement : login,
             inputType : inputType,
@@ -219,7 +219,7 @@ module.exports = {
     },
     authenticate : async (req, res, next) => {
         let screen = (method, allNames) => {
-            return method.render(getViewName({ prefix : prefix, suffix : allNames }), {
+            return method.render('form', {
                 btnTitle : allNames,
                 formElement : login,
                 inputType : inputType,
@@ -288,7 +288,7 @@ module.exports = {
             }),
         });
         const allNames = 'all';
-        return res.render(getViewName({ prefix : prefix, suffix : allNames }), {
+        return res.render('menu', {
             index : index,
             item : item,
             inputType : inputType,
