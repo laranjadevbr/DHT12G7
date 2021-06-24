@@ -4,7 +4,7 @@ const {
             create,
             edit,
             view,
-        }
+        },
     },
     names : {
         category : item,
@@ -21,7 +21,7 @@ const {
     Category,
     Product,
 } = require('../models');
-const prefix = '/category/';
+const prefix = '/category-product/';
 const {
     forEveryone,
     getFormHeader,
@@ -41,7 +41,7 @@ for (let i = 0; i < 10; i++) {
 };
 module.exports = {
     index : async (req, res, next) => {
-        return res.redirect(prefix + 'all');
+        return res.redirect(getURLPath({ prefix : prefix, suffix : 'all' }));
     },
     all : async (req, res, next) => {
         const amount = 2;
@@ -92,7 +92,7 @@ module.exports = {
                 column : 'id',
             }),
         });
-        return res.render('form', {
+        return res.render('menu', {
             index : index['product'],
             item : item,
             inputType : inputType,
@@ -100,7 +100,9 @@ module.exports = {
                 prefix : prefix,
                 suffix : allNames,
             }),
-            pathPrefix : getViewName('/product/'),
+            pathPrefix : getViewName({
+                prefix : prefix,
+            }),
             script : getScript(allNames),
             ...forEveryone(),
         });
@@ -128,7 +130,7 @@ module.exports = {
         const index = await Category.create({
             ...req['body'],
         });
-        return res.redirect(getURLPath(prefix, 'all'));
+        return res.redirect(getURLPath({ prefix : prefix, suffix : 'all' }));
     },
     edit : async (req, res, next) => {
         const allNames = 'edit';
@@ -168,7 +170,7 @@ module.exports = {
                 column : 'id',
             }),
         });
-        return res.redirect(getURLPath(prefix, 'all'));
+        return res.redirect(getURLPath({ prefix : prefix, suffix : 'all' }));
     },
     destroy : async (req, res, next) => {
         const { id } = req['params'];
@@ -178,7 +180,7 @@ module.exports = {
                 column : 'id',
             }),
         });
-        return res.redirect(getURLPath(prefix, 'all'));
+        return res.redirect(getURLPath({ prefix : prefix, suffix : 'all' }));
     },
     bulk : async (req, res, next) => {
         const index = await Category.bulkCreate(bulkList);

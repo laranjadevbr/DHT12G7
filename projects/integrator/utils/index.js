@@ -82,7 +82,7 @@ const roman = getRomanNumber = (number) => {
     return r;
 };
 const getViewName = (object) => {
-    let prefix = object['prefix'] ? object['prefix'].split('/').join('-').substr(1, object['prefix']['length'] - 2) : '';
+    let prefix = object['prefix'] ? object['prefix'].substr(1, object['prefix']['length'] - 2).split('-').join('/') : '';
     let suffix = object['suffix'] ? object['suffix'] : '';
     return prefix += suffix ? '-' + suffix : '';
 };
@@ -337,9 +337,7 @@ const getPlural = (string) => {
     return string.trim().toLowerCase();
 };
 const getURLPath = (object) => {
-    let strign = '';
-    strign += object['prefix'] ? object['prefix'] : '';
-    strign += object['suffix'] ? object['suffix'] : '';
+    let strign = object['prefix'] + object['suffix'];
     return strign.split('-').join('/').trim().toLowerCase();
 };
 const session = (req, res, next) => {

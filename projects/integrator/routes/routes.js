@@ -73,36 +73,10 @@ module.exports = {
     api : [
         ...view,
     ],
-    admin : [
+    public : [
         ...bulk,
         ...change,
         ...log,
-        ...search,
-        ...view,
-    ],
-    client : [
-        ...bulk,
-        ...change,
-        ...log,
-        ...search,
-        ...view,
-    ],
-    user : [
-        ...bulk,
-        ...change,
-        ...log,
-        ...search,
-        ...view,
-    ],
-    category : [
-        ...bulk,
-        ...change,
-        ...search,
-        ...view,
-    ],
-    event : [
-        ...bulk,
-        ...change,
         ...search,
         ...view,
     ],
@@ -112,29 +86,11 @@ module.exports = {
         ...search,
         ...view,
     ],
-    service : [
-        ...bulk,
+    json : [
         ...change,
-        ...search,
         ...view,
     ],
-    order : [
-        ...bulk,
-        ...change,
-        ...search,
-        ...view,
-    ],
-    jsonAdmin : [
-        ...change,
-        ...log,
-        ...view,
-    ],
-    jsonClient : [
-        ...change,
-        ...log,
-        ...view,
-    ],
-    jsonRecipe : [
+    recipe : [
         ...change,
         ...view,
         ...getRoute([

@@ -1,0 +1,88 @@
+const {
+    getModelParams,
+    getModelSearchParams,
+    getURLPath,
+} = require('./');
+const everyoneApis = (object) => {
+    const actions = {
+        index : async (req, res, next) => {
+            return res.redirect(getURLPath({
+                ...object['prefix'] ? {
+                    prefix : object['prefix'],
+                } : { },
+                suffix : 'all',
+            }));
+        },
+        all : async (req, res, next) => {
+            const { key } = req['query'];
+            const {
+                count,
+                rows,
+            } = await object['modelName'].findAndCountAll({
+                ...getModelParams({
+                    param : key,
+                    column : 'title',
+                    ...object['includeName'] ? {
+                        model : object['includeName'],
+                    } : { },
+                    ...object['includeAlias'] ? {
+                        alias : object['includeAlias'],
+                    } : { },
+                }),
+                ...key ? {
+                    ...getModelSearchParams({
+                        key : key,
+                        array : [
+                            'title',
+                        ],
+                    }),
+                } : {
+                },
+            }).then(result => {
+                return res.status(200).json({
+                    count : result['count'],
+                    rows : result['rows'],
+                });
+            }).catch(error => {
+                return res.status(400).json({
+                    error : error,
+                });
+            });
+        },
+        one : async (req, res, next) => {
+            const { id } = req['params'];
+            if (!id) {
+                return res.redirect(getURLPath({
+                    ...object['prefix'] ? {
+                        prefix : object['prefix'],
+                    } : { },
+                    suffix : 'all',
+                }));
+            } else {
+                const index = await object['modelName'].findOne({
+                    ...getModelParams({
+                        param : id,
+                        ...object['includeName'] ? {
+                            model : object['includeName'],
+                        } : { },
+                        ...object['includeAlias'] ? {
+                            alias : object['includeAlias'],
+                        } : { },
+                    }),
+                }).then(result => {
+                    return res.status(200).json({
+                        result : result,
+                    });
+                }).catch(error => {
+                    return res.status(400).json({
+                        error : error,
+                    });
+                });
+            };
+        },
+    };
+    return actions;
+};
+module.exports = {
+    everyoneApis,
+}

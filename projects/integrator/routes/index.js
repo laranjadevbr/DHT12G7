@@ -3,44 +3,46 @@ const {
     isThere,
 } = require('../utils');
 const {
-    admin,
     api,
-    category,
-    client,
     index,
-    jsonAdmin,
-    jsonClient,
-    jsonRecipe,
+    json,
     lab,
-    order,
     product,
-    service,
-    user,
+    public,
+    recipe,
 } = obj = require('./routes');
 const controls = [
-    { control : admin, path : 'admin', },
-    
     { control : api, path : 'api-admin', },
 
     { control : api, path : 'api-category-event', },
     { control : api, path : 'api-category-product', },
     { control : api, path : 'api-category-service', },
-    
+
     { control : api, path : 'api-event', },
     { control : api, path : 'api-product', },
     { control : api, path : 'api-service', },
 
-    { control : category, path : 'category', },
-    { control : client, path : 'client', },
     { control : index, path : 'index', },
-    { control : jsonAdmin, path : 'json-admin', },
-    { control : jsonClient, path : 'json-client', },
-    { control : jsonRecipe, path : 'json-recipe', },
+
+    { control : json, path : 'json-admin', },
+    { control : json, path : 'json-client', },
+
     { control : lab, path : 'lab', },
-    { control : order, path : 'order', },
+
+    { control : product, path : 'category-event', },
+    { control : product, path : 'category-product', },
+    { control : product, path : 'category-service', },
+
+    { control : product, path : 'event', },
+    { control : product, path : 'order', },
     { control : product, path : 'product', },
-    { control : service, path : 'service', },
-    { control : user, path : 'user', },
+    { control : product, path : 'service', },
+
+    { control : public, path : 'admin', },
+    { control : public, path : 'client', },
+    { control : public, path : 'user', },
+
+    { control : recipe, path : 'json-recipe', },
 ];
 let getRouter = (controller, URLPath, object) => {
     for (let i = 0; i < object['length']; i++) {
