@@ -15,7 +15,7 @@
                         let route = URLPath;
                         route += Number(prevPage);
                         html += '<a class=\"page-link\" href=\"' + route + '\">';
-                        html += capitalize('Previous');
+                        html += getFirstUpperCase('Previous');
                         html += '</a>';
                         html += '</li>';
                     %>
@@ -41,7 +41,7 @@
                         let route = URLPath;
                         route += Number(nextPage);
                         html += '<a class=\"page-link\" href=\"' + route + '\">';
-                        html += capitalize('Next');
+                        html += getFirstUpperCase('Next');
                         html += '</a>';
                         html += '</li>';
                     %>

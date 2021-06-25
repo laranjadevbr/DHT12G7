@@ -1,18 +1,12 @@
 <%
-    let getDATE = (string) => {
-        let d = new Date(string).getDate().toString().padStart(2, '0'),
-        m = (new Date(string).getMonth() + 1).toString().padStart(2, '0'),
-        y = new Date(string).getFullYear();
-        return d + '/' + m + '/' + y;
-    }
     let listing = (title, contents) => {
         let html = '';
-        if (!validate(title) || !validate(contents)) { } else {
+        if (!getValidation(title) || !getValidation(contents)) { } else {
             html += '<h' + subtitleNumber + '>';
-            html += capitalize(title);
+            html += getFirstUpperCase(title);
             html += '</h' + subtitleNumber + '>';
             if (title === 'cost') {
-                html += '<p>' + currency(Number(contents)) + '</p>';
+                html += '<p>' + getCurrency(Number(contents)) + '</p>';
             } else if (title === 'access key') {
                 html += '<p>';
                     html += '<a href=\"mailto:' + contents.toLowerCase() + '\" target=\"_blank\">';
@@ -20,7 +14,7 @@
                     html += '</a>';
                 html += '</p>';
             } else if (title === 'birth date' || title === 'created' || title === 'updated') {
-                html += '<p>' + getDATE(contents) + '</p>';
+                html += '<p>' + getDateFormat(contents) + '</p>';
             } else {
                 html += '<p>' + contents + '</p>';
             }
@@ -39,12 +33,12 @@
     html += '<div class=\"right-all\">';
         html += '<a href=\"' + pathPrefix + 'edit/' + index['id'] + '\">';
             html += '<button type=\"submit\" class=\"' + btnClass.trim() + '\">';
-                html += capitalize('edit');
+                html += getFirstUpperCase('edit');
             html += '</button>';
         html += '</a>';
         html += '<button type=\"submit\" class=\"' + btnClass.trim() + '\"';
         html += ' onclick=\"location.href=document.referrer\">';
-            html += capitalize('come back');
+            html += getFirstUpperCase('come back');
         html += '</button>';
     html += '</div>';
 %>

@@ -123,12 +123,12 @@
                             path : '/json/client/create',
                         },
                         {
-                            name : validate(session) ? 'login' : '',
-                            path : validate(session) ? '/json/client/login' : '',
+                            name : getValidation(session) ? 'login' : '',
+                            path : getValidation(session) ? '/json/client/login' : '',
                         },
                         {
-                            name : validate(session) ? '' : 'logout',
-                            path : validate(session) ? '' : '/json/client/logout',
+                            name : getValidation(session) ? '' : 'logout',
+                            path : getValidation(session) ? '' : '/json/client/logout',
                         },
                     ],
                 },
@@ -179,15 +179,15 @@
                     content : [
                         {
                             name : 'list',
-                            path : '/admin/all',
+                            path : '/public/admin/all',
                         },
                         {
                             name : 'new registration',
-                            path : '/admin/create',
+                            path : '/public/admin/create',
                         },
                         {
                             name : 'login',
-                            path : '/admin/login',
+                            path : '/public/admin/login',
                         },
                     ],
                 },
@@ -196,32 +196,32 @@
                     content : [
                         {
                             name : 'list',
-                            path : '/client/all',
+                            path : '/public/client/all',
                         },
                         {
                             name : 'new registration',
-                            path : '/client/create',
+                            path : '/public/client/create',
                         },
                         {
                             name : 'login',
-                            path : '/client/login',
+                            path : '/public/client/login',
                         },
                     ],
                 },
                 {
-                    title : 'user',
+                    title : 'users',
                     content : [
                         {
                             name : 'list',
-                            path : '/user/all',
+                            path : '/public/user/all',
                         },
                         {
                             name : 'new registration',
-                            path : '/user/create',
+                            path : '/public/user/create',
                         },
                         {
                             name : 'login',
-                            path : '/user/login',
+                            path : '/public/user/login',
                         },
                     ],
                 },

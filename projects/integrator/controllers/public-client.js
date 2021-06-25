@@ -10,7 +10,7 @@ module.exports = {
         modelName : Public,
         includeAlias : 'order',
         includeName : Order,
-        prefix : 'admin',
+        prefix : 'public-client',
         bulkMaker : require('../bulkmakers/public'),
     }),
 };

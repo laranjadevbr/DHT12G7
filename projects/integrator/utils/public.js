@@ -18,7 +18,6 @@ let {
     getModelPagination,
     getModelParams,
     getModelSearchParams,
-    getPageTitle,
     getScript,
     getURLPath,
     isEqual,
@@ -55,11 +54,8 @@ const everyonePublic = (object) => {
                 item : item,
                 inputType : require('../database/options')['inputType'],
                 key : key,
-                pageTitle : getPageTitle({
-                    prefix : object['prefix'],
-                    suffix : 'all',
-                }),
-                pathPrefix : object['prefix'],
+                pageTitle : object['prefix'].split('-').join(' ') + ' all',
+                pathPrefix : object['prefix'].split('-').join('/'),
                 script : getScript('all'),
                 searchAction : getURLPath({
                     prefix : object['prefix'],
@@ -88,10 +84,7 @@ const everyonePublic = (object) => {
                 formElement : view,
                 index : index,
                 inputType : require('../database/options')['inputType'],
-                pageTitle : getPageTitle({
-                    prefix : object['prefix'],
-                    suffix : 'one',
-                }),
+                pageTitle : object['prefix'].split('-').join(' ') + ' one',
                 script : getScript('one'),
                 ...forEveryone(),
                 ...getFormHeader({
@@ -106,10 +99,7 @@ const everyonePublic = (object) => {
                 btnTitle : 'create',
                 formElement : create,
                 inputType : require('../database/options')['inputType'],
-                pageTitle : getPageTitle({
-                    prefix : object['prefix'],
-                    suffix : 'create',
-                }),
+                pageTitle : object['prefix'].split('-').join(' ') + ' create',
                 script : getScript('create'),
                 ...forEveryone(),
                 ...getFormHeader({
@@ -142,10 +132,7 @@ const everyonePublic = (object) => {
                 formElement : edit,
                 index : index,
                 inputType : require('../database/options')['inputType'],
-                pageTitle : getPageTitle({
-                    prefix : object['prefix'],
-                    suffix : 'edit',
-                }),
+                pageTitle : object['prefix'].split('-').join(' ') + ' edit',
                 script : getScript('edit'),
                 ...forEveryone(),
                 ...getFormHeader({
@@ -189,10 +176,7 @@ const everyonePublic = (object) => {
                 btnTitle : 'login',
                 formElement : login,
                 inputType : require('../database/options')['inputType'],
-                pageTitle : getPageTitle({
-                    prefix : object['prefix'],
-                    suffix : 'login',
-                }),
+                pageTitle : object['prefix'].split('-').join(' ') + ' login',
                 script : getScript('login'),
                 ...forEveryone(),
                 ...getFormHeader({
@@ -218,10 +202,7 @@ const everyonePublic = (object) => {
                     btnTitle : allNames,
                     formElement : login,
                     inputType : require('../database/options')['inputType'],
-                    pageTitle : getPageTitle({
-                        prefix : object['prefix'],
-                        suffix : allNames,
-                    }),
+                    pageTitle : object['prefix'].split('-').join(' ') + ' ' + allNames,
                     script : getScript(allNames),
                     ...forEveryone(),
                     ...getFormHeader({
@@ -231,9 +212,11 @@ const everyonePublic = (object) => {
                     }),
                 });
             };
-
             if (!user) screen(res, 'login');
-            if (!isEqual({ client : password, dataBase : user['password'] })) screen(res, 'login');
+            if (!isEqual({
+                client : password,
+                dataBase : user['password'],
+            })) screen(res, 'login');
             user['password'] = undefined;
             req.session.user = user;
             return res.redirect(getURLPath({
@@ -280,11 +263,8 @@ const everyonePublic = (object) => {
                 item : item,
                 inputType : require('../database/options')['inputType'],
                 key : key,
-                pageTitle : getPageTitle({
-                    prefix : object['prefix'],
-                    suffix : 'all',
-                }),
-                pathPrefix : object['prefix'],
+                pageTitle : object['prefix'].split('-').join(' ') + ' all',
+                pathPrefix : object['prefix'].split('-').join('/'),
                 script : getScript('all'),
                 searchAction : getURLPath({
                     prefix : object['prefix'],

@@ -19,43 +19,37 @@
                 toggle : false,
             },
         ];
-        let bottomMenu = (array, index) => {
+        let getBottomMenu = (array, index) => {
             let html = '';
             html += '<div class=\"on-the-right\" id=\"bottom-menu\">';
                 for (let x = 0; x < btns['length']; x++) {
                     let currentPath = '/' + pathPrefix + '/' + btns[x]['title'] + '/' + array[index]['id'];
-                    currentPath = validate(btns[x]['path']) ? currentPath : '#';
+                    currentPath = getValidation(btns[x]['path']) ? currentPath : '#';
                     html += '<a href=\"' + currentPath.toLowerCase() + '\"';
-                    html += validate(btns[x]['target']) ? ' data-bs-toggle=\"modal\"' : '';
-                    html += validate(btns[x]['toggle']) ? ' data-bs-target=\"#modal-' + array[index]['id'] + '\"' : '';
+                    html += getValidation(btns[x]['target']) ? ' data-bs-toggle=\"modal\"' : '';
+                    html += getValidation(btns[x]['toggle']) ? ' data-bs-target=\"#modal-' + array[index]['id'] + '\"' : '';
                     html += '>';
                         html += '<button type=\"submit\"';
                         btnClass = btnClass.substr(btnClass.indexOf(btnString), btnString['length']);
-                        if (validate(array[index]['active']) || typeof array[index]['active'] === 'undefined' || array[index]['active'] === null) {
+                        if (!getValidation(array[index]['active'])) {
                             btnClass += index % 2 === 0 ? btnColorI : btnColorI;
                         } else { btnClass += btnColorIII; }
                         html += ' class=\"' + btnClass.trim() + '\"';
                         html += ' style=\"margin: 0 0 0 1rem;\"';
                         html += '>';
-                        html += capitalize(btns[x]['title'] === 'one' ? 'view' : btns[x]['title']);
+                        html += getFirstUpperCase(btns[x]['title'] === 'one' ? 'view' : btns[x]['title']);
                         html += '</button>';
                     html += '</a>';
                 }
             html += '</div>';
             return html;
         };
-        let getDATE = (string) => {
-            let d = new Date(string).getDate().toString().padStart(2, '0'),
-            m = (new Date(string).getMonth() + 1).toString().padStart(2, '0'),
-            y = new Date(string).getFullYear();
-            return d + '/' + m + '/' + y;
-        }
         let listing = (title, contents) => {
             let html = '';
-            if (!validate(title) || !validate(contents)) { } else {
-                html += '<h' + subtitleNumber + '>' + capitalize(title) + '</h' + subtitleNumber + '>';
+            if (!getValidation(title) || !getValidation(contents)) { } else {
+                html += '<h' + subtitleNumber + '>' + getFirstUpperCase(title) + '</h' + subtitleNumber + '>';
                 if (title === 'cost') {
-                    html += '<p>' + currency(Number(contents)) + '</p>';
+                    html += '<p>' + getCurrency(Number(contents)) + '</p>';
                 } else if (title === 'access key' || title === 'e-mail') {
                     html += '<p>';
                         html += '<a href=\"mailto:' + contents.toLowerCase() + '\" target=\"_blank\">';
@@ -63,7 +57,7 @@
                         html += '</a>';
                     html += '</p>';
                 } else if (title === 'birth date' || title === 'created' || title === 'updated') {
-                    html += '<p>' + getDATE(contents) + '</p>';
+                    html += '<p>' + getDateFormat(contents) + '</p>';
                 } else {
                     html += '<p>' + contents + '</p>';
                 }
@@ -71,7 +65,7 @@
             }
             return html;
         };
-        let modal = (array, modalBody, index) => {
+        let getModal = (array, modalBody, index) => {
             let result = '';
             result += '<div class=\"modal fade\" id=\"modal-' + array[index]['id'] + '\">';
                 result += '<div class=\"modal-dialog\">';
@@ -86,11 +80,11 @@
                             let currentPath = '/' + pathPrefix + '/' + 'delete' + '/' + array[index]['id'] + '?_method=DELETE';
                             result += '<form action=\"' + currentPath.trim().toLowerCase() + '\" method=\"POST\">';
                                 result += '<button type=\"submit\" class=\"' + btnClass.trim() + '\">';
-                                    result += capitalize('yes!');
+                                    result += getFirstUpperCase('yes!');
                                 result += '</button>';
                             result += '</form>';
                             result += '<button type=\"button\" class=\"' + btnClass.trim() + '\" data-bs-dismiss=\"modal\">';
-                                result += capitalize('no.');
+                                result += getFirstUpperCase('no.');
                             result += '</button>';
                         result += '</div>';
                     result += '</div>';
@@ -98,10 +92,10 @@
             result += '</div>';   
             return result;
         };
-        let currentStyle = (array, index) => {
+        let getCurrentStyle = (array, index) => {
             currentClass = '';
             currentClass += ' bg-';
-            if (validate(array[index]['active']) || typeof array[index]['active'] === 'undefined' || !array[index]['active']) {
+            if (!getValidation(array[index]['active'])) {
                 currentClass += index % 2 === 0 ? 'light' : 'dark';
             } else { currentClass += 'danger'; }
             currentClass += index < array['length'] ? ' mb-' + mb : '';
@@ -109,7 +103,7 @@
             currentClass += ' rounded';
             currentClass += ' shadow-sm';
             currentClass += ' text-';
-            if (validate(array[index]['active']) || typeof array[index]['active'] === 'undefined' || !array[index]['active']) {
+            if (!getValidation(array[index]['active'])) {
                 currentClass += index % 2 === 0 ? 'dark' : 'light';
             } else { currentClass += 'light'; }
             return currentClass;
@@ -119,7 +113,7 @@
         <% for (let i = 0; i < index['length']; i++) { %>
             <%
                 let html = '', modalBody = '';
-                html += '<div class=\"' + currentStyle(index, i) + '\">';
+                html += '<div class=\"' + getCurrentStyle(index, i) + '\">';
                     for (let x = 0; x < item['length']; x++) {
                         let title = typeof item[x] === 'string' ? item[x] : item[x][1];                        
                         let contents = title === 'category'
@@ -131,8 +125,8 @@
                         html += listing(title, contents);
                     }
                 html += '</div>';
-                html += bottomMenu(index, i);
-                html += modal(index, modalBody, i);
+                html += getBottomMenu(index, i);
+                html += getModal(index, modalBody, i);
                 html += '<div class=\"clear mb-' + mb + '\"></div>';
             %>
             <%- html; %>

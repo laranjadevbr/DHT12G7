@@ -9,18 +9,15 @@ const getRandomNumber = (min, max) => {
 const isThere = (array) => {
     return fs.existsSync(urlJoin(array)) ? true : false;
 };
-const validate = getValidation = (variable) => {
+const getValidation = (variable) => {
     if (!variable) return false;
     else if (isThis(variable, 'undefined')) return false;
-    else if (!variable && isThis(variable, 'boolean')) return false;
-    else if (!variable && isThis(variable, 'number')) return false;
-    else if (!variable && isThis(variable, 'string')) return false;
     else return true;
 };
 const isTheLast = (string, character) => {
     return string.substr(string['length'] - 1, string['length']) === character ? true : false;
 };
-const currency = getCurrency = (string) => {
+const getCurrency = (string) => {
     return (string).toLocaleString('pt-br', {
         style : 'currency',
         currency : 'USD',
@@ -47,19 +44,13 @@ const getScript = (string) => {
         string + '.js',
     ]) ? '<script type=\"module\" src=\"/javascripts/' + string + '.js\"></script>' : '';
 };
-const getPageTitle = (object) => {
-    let result = '';
-    result += object['prefix'] ? object['prefix'] : '';
-    result += object['suffix'] ? ' ' + object['suffix'] : '';
-    return result.trim().toLowerCase();
-};
 const JSONModify = (object) => {
      fs.writeFileSync(path.join('.', object['path']), 'const ' + object['name'] + ' = ');
     fs.appendFileSync(path.join('.', object['path']), JSON.stringify(object['content']));
     fs.appendFileSync(path.join('.', object['path']), ';');
     fs.appendFileSync(path.join('.', object['path']), 'module.exports = ' + object['name'] + ';');
 };
-const roman = getRomanNumber = (number) => {
+const getRomanNumber = (number) => {
     let r = '';
     let division = 0;
     let rest = number;
@@ -106,7 +97,7 @@ const getCPFNumber = () => {
 const getRandomDate = (start, end) => {
     start = new Date(start).getTime();
     end = new Date(end).getTime();
-    return start > end ? new Date(getRandomNumber(end, start)): new Date(getRandomNumber(start, end));
+    return start > end ? new Date(getRandomNumber(end, start)) : new Date(getRandomNumber(start, end));
 };
 const getPhoneNumber = (array) => {
     let num = '', result = '(';
@@ -184,7 +175,7 @@ const getModelParams = (object) => {
                 [object['column'], 'ASC'],
             ],
         } : { },
-        ...object['param'] && object['column'] ? {
+        ...object['column'] && object['param'] ? {
             where : {
                 [object['column']] : object['param'],
             },
@@ -211,7 +202,7 @@ const getModelSearchParams = (object) => {
         } : { },
     };
 };
-const getFirstUpperCase = capitalize = (string) => {
+const getFirstUpperCase = (string) => {
     let result = '', array = string.split(' ');
     for (let i = 0; i < array['length']; i++) {
         if (array[i] == 'cep' || array[i] == 'cnpj' || array[i] == 'cpf' || array[i] == 'rg' || array[i] == 'uf') {
@@ -228,7 +219,7 @@ const getFirstUpperCase = capitalize = (string) => {
     }
     return result;
 };
-const cleaner = toClean = (result) => {
+const toClean = (result) => {
     let array = [
         ['&nbsp;', ' '],
         [' ', '-'],
@@ -375,26 +366,25 @@ const getSalaryRange = (gap, end) => {
     }
     return result;
 };
+let getDateFormat = (string) => {
+    const day = new Date(string).getDate().toString().padStart(2, '0'),
+    month = (new Date(string).getMonth() + 1).toString().padStart(2, '0'),
+    year = new Date(string).getFullYear();
+    return day + '/' + month + '/' + year;
+}
 const forEveryone = () => {
     return {
-        capitalize,
-        cleaner,
-        currency,
         getCurrency,
+        getDateFormat,
         getFirstUpperCase,
         getRomanNumber,
         getValidation,
-        roman,
         session,
         toClean,
-        validate,
     };
 };
 module.exports = {
     arrayUnifier,
-    capitalize,
-    cleaner,
-    currency,
     forEveryone,
     getCNPJNumber,
     getCPFNumber,
@@ -406,12 +396,10 @@ module.exports = {
     getModelPagination,
     getModelParams,
     getModelSearchParams,
-    getPageTitle,
     getPhoneNumber,
     getPlural,
     getRandomDate,
     getRandomNumber,
-    getRomanNumber,
     getSalaryRange,
     getScript,
     getURLPath,
@@ -423,8 +411,6 @@ module.exports = {
     JSONModify,
     JSONPagination,
     objectCreator,
-    roman,
     session,
     toClean,
-    validate,
 };

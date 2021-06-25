@@ -38,9 +38,9 @@ const controls = [
     { control : product, path : 'product', },
     { control : product, path : 'service', },
 
-    { control : public, path : 'admin', },
-    { control : public, path : 'client', },
-    { control : public, path : 'user', },
+    { control : public, path : 'public-admin', },
+    { control : public, path : 'public-client', },
+    { control : public, path : 'public-user', },
 
     { control : recipe, path : 'json-recipe', },
 ];

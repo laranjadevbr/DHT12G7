@@ -27,35 +27,35 @@
     <%- '<div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">'; %>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <% for (let x = 0; x <= Number(navbar['length'] - 1); x++) { %>
-          <%- '<li' + (validate(navbar[x]['menu']) ? ' class=\"nav-item dropdown\"' : ' class=\"nav-item\"') + '>'; %>
+          <%- '<li' + (getValidation(navbar[x]['menu']) ? ' class=\"nav-item dropdown\"' : ' class=\"nav-item\"') + '>'; %>
             <%
-              let id = 'dropDown' + roman(x + 1);
+              let id = 'dropDown' + getRomanNumber(x + 1);
               html = '';
               html += '<a';
-              html += validate(navbar[x]['menu']) ? ' aria-expanded=\"false\"' : '';
-              html += validate(navbar[x]['menu']) ? ' class=\"nav-link dropdown-toggle\"' : ' class=\"nav-link\"';
-              html += validate(navbar[x]['menu']) ? ' data-bs-toggle=\"dropdown\"' : '';
+              html += getValidation(navbar[x]['menu']) ? ' aria-expanded=\"false\"' : '';
+              html += getValidation(navbar[x]['menu']) ? ' class=\"nav-link dropdown-toggle\"' : ' class=\"nav-link\"';
+              html += getValidation(navbar[x]['menu']) ? ' data-bs-toggle=\"dropdown\"' : '';
               html += ' href=\"' + navbar[x]['path'].trim().toLowerCase() + '\"';
-              html += validate(navbar[x]['menu']) ? ' id=\"' + id.trim().toLowerCase() + '\"' : '';
-              html += validate(navbar[x]['menu']) ? ' role=\"button\"' : '';
+              html += getValidation(navbar[x]['menu']) ? ' id=\"' + id.trim().toLowerCase() + '\"' : '';
+              html += getValidation(navbar[x]['menu']) ? ' role=\"button\"' : '';
               html += '>';
-              html += capitalize(navbar[x]['name'].trim());
+              html += getFirstUpperCase(navbar[x]['name'].trim());
               html += '</a>';
             %>
             <%- html; %>
-            <% if (!validate(navbar[x]['menu'])) { } else { %>
+            <% if (!getValidation(navbar[x]['menu'])) { } else { %>
               <%- '<ul class=\"dropdown-menu p-3\" aria-labelledby=\"' + id.trim().toLowerCase() + '\">'; %>
                 <% for (let y = 0; y <= Number(navbar[x]['menu']['length'] - 1); y++) { %>
                   <%- '<li>'; %>
-                    <%- validate(navbar[x]['menu'][y]['title']) ? '<h6>' + capitalize(navbar[x]['menu'][y]['title']) + ':' + '</h6>' : ''; %>
+                    <%- getValidation(navbar[x]['menu'][y]['title']) ? '<h6>' + getFirstUpperCase(navbar[x]['menu'][y]['title']) + ':' + '</h6>' : ''; %>
                     <%- '<ul>'; %>
                       <% for (let z = 0; z <= Number(navbar[x]['menu'][y]['content']['length'] - 1); z++) { %>
                         <%
                           html = '';
                           html += '<li>';
-                            let href = validate(navbar[x]['menu'][y]['content'][z]['path']) ? navbar[x]['menu'][y]['content'][z]['path'] : '#';
+                            let href = getValidation(navbar[x]['menu'][y]['content'][z]['path']) ? navbar[x]['menu'][y]['content'][z]['path'] : '#';
                             html += '<a class=\"dropdown-item\" href=\"' + href + '\">';
-                              html += capitalize(navbar[x]['menu'][y]['content'][z]['name'].trim());
+                              html += getFirstUpperCase(navbar[x]['menu'][y]['content'][z]['name'].trim());
                             html += '</a>';
                           html += '</li>';
                         %>
@@ -73,5 +73,5 @@
     </div>
   </nav>
 </div>
-<%- typeof pageTitle !== 'undefined' ? '<h1>' + capitalize(pageTitle) + '</h1>' : ''; %>
+<%- typeof pageTitle !== 'undefined' ? '<h1>' + getFirstUpperCase(pageTitle) + '</h1>' : ''; %>
 <div class="<%- currentClass.trim(); %>" id="content">
