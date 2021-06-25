@@ -17,7 +17,7 @@ const {
     Category,
     Product,
 } = require('../models');
-const prefix = '/category-product/';
+const prefix = 'category-product';
 const {
     forEveryone,
     getFormHeader,

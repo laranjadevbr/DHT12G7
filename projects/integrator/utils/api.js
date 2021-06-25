@@ -4,7 +4,7 @@ const {
     getURLPath,
 } = require('./');
 const everyoneApis = (object) => {
-    const actions = {
+    const Action = {
         index : async (req, res, next) => {
             return res.redirect(getURLPath({
                 ...object['prefix'] ? {
@@ -76,7 +76,7 @@ const everyoneApis = (object) => {
             };
         },
     };
-    return actions;
+    return Action;
 };
 module.exports = {
     everyoneApis,

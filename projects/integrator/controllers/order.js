@@ -7,7 +7,7 @@ const {
     Order,
     Product,
 } = require('../models');
-const prefix = '/order/';
+const prefix = 'order';
 const {
     forEveryone,
     getModelParams,

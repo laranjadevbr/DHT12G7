@@ -20,7 +20,7 @@ const {
     Service,
 } = require('../models');
 
-const prefix = '/service/';
+const prefix = 'service';
 
 const {
     forEveryone,

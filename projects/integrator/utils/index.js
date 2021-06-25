@@ -6,8 +6,8 @@ const { Op } = require('sequelize');
 const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min);
 };
-const isThere = (filePath) => {
-    return fs.existsSync(urlJoin(filePath)) ? true : false;
+const isThere = (array) => {
+    return fs.existsSync(urlJoin(array)) ? true : false;
 };
 const validate = getValidation = (variable) => {
     if (!variable) return false;
@@ -40,18 +40,18 @@ const getDOCNumber = (array) => {
     }
     return result;
 };
-const getScript = (fileName) => {
+const getScript = (string) => {
     return isThere([
         'public',
         'javascripts',
-        fileName + '.js',
-    ]) ? '<script type=\"module\" src=\"/javascripts/' + fileName + '.js\"></script>' : '';
+        string + '.js',
+    ]) ? '<script type=\"module\" src=\"/javascripts/' + string + '.js\"></script>' : '';
 };
 const getPageTitle = (object) => {
-    let strign = '';
-    strign += object['prefix'] ? object['prefix'] : '';
-    strign += object['suffix'] ? object['suffix'] : '';
-    return strign.split('/').join(' ').split('-').join(' ').trim();
+    let result = '';
+    result += object['prefix'] ? object['prefix'] : '';
+    result += object['suffix'] ? ' ' + object['suffix'] : '';
+    return result.trim().toLowerCase();
 };
 const JSONModify = (object) => {
      fs.writeFileSync(path.join('.', object['path']), 'const ' + object['name'] + ' = ');
@@ -80,11 +80,6 @@ const roman = getRomanNumber = (number) => {
         }
     }
     return r;
-};
-const getViewName = (object) => {
-    let prefix = object['prefix'] ? object['prefix'].substr(1, object['prefix']['length'] - 2).split('-').join('/') : '';
-    let suffix = object['suffix'] ? object['suffix'] : '';
-    return prefix += suffix ? '-' + suffix : '';
 };
 const getCNPJNumber = (array) => {
     let num = '', result = '';
@@ -135,7 +130,7 @@ const JSONPagination = (object) => {
     const listPage = [];
     for (let i = object['offset'] * object['limit']; i < object['offset'] * object['limit'] + object['limit']; i++)
         listPage.push(object['array'][i]);
-    const fullPage = Math.round(object['array']['length'] - 1) / object['limit'] - 1;
+    const fullPage = Math.round((object['array']['length'] - 1) / object['limit'] - 1);
     return {
         fullPage : fullPage,
         listPage : listPage,
@@ -154,18 +149,18 @@ const getModelPagination = (object) => {
 const getFormHeader = (object) => {
     return {
         form : {
-            action : getURLPath({
-                prefix : object['prefix'],
-                suffix : object['suffix'],
-            }),
+            ...object['prefix'] && object['suffix'] ? {
+                action : getURLPath({
+                    prefix : object['prefix'],
+                    suffix : object['suffix'],
+                }),
+            } : { },
             ...object['enctype'] ? {
                 enctype : object['enctype'],
-            } : {
-            },
+            } : { },
             ...object['method'] ? {
                 method : object['method'],
-            } : {
-            },
+            } : { },
         },
     };
 };
@@ -177,47 +172,43 @@ const getModelParams = (object) => {
                 as : object['alias'],
                 required : false,
             },
-        } : {
-        },
+        } : { },
         ...object['limit'] ? {
             limit : object['limit'],
-        } : {
-        },
+        } : { },
         ...object['offset'] ? {
             offset : object['offset'],
-        } : {
-        },
+        } : { },
         ...object['column'] ? {
             order : [
                 [object['column'], 'ASC'],
             ],
-        } : {
-        },
+        } : { },
         ...object['param'] && object['column'] ? {
             where : {
                 [object['column']] : object['param'],
             },
-        } : {
-        },
+        } : { },
     };
 };
 const getModelSearchParams = (object) => {
     const result = [];
     if (!object['array'] || !object['key']) { } else {
-        for (let i = 0; i < object['array']['length']; i++) {
+        for (let i = 0; i < object['array']['length']; i++)
             result.push({
                 [object['array'][i]] : {
                     [Op.like] : `%${ object['key'] }%`,
                 },
             });
-        };
     }
     return {
-        where : {
-            [Op.or] : [
-                ...result,
-            ],
-        },
+        ...result ? {
+            where : {
+                [Op.or] : [
+                    ...result,
+                ],
+            },
+        } : { },
     };
 };
 const getFirstUpperCase = capitalize = (string) => {
@@ -330,14 +321,17 @@ const cleaner = toClean = (result) => {
         result = result.split(array[i][0]).join(array[i][1]);
     return result.trim();
 };
-const getPlural = (string) => {
-    if (isTheLast(string, 'y')) string = string.substr(0, string['length'] - 1) + 'ies';
-    else if (isTheLast(string, 's')) string += 'es';
-    else string += 's';
-    return string.trim().toLowerCase();
+const getPlural = (result) => {
+    if (isTheLast(result, 'y')) result = result.substr(0, result['length'] - 1) + 'ies';
+    else if (isTheLast(result, 's')) result += 'es';
+    else result += 's';
+    return result.trim().toLowerCase();
 };
 const getURLPath = (object) => {
-    return String('/' + object['prefix'] + '/' + object['suffix']).split('-').join('/').trim().toLowerCase();
+    let result = '';
+    result += object['prefix'] ? '/' + object['prefix'].split('-').join('/') : '';
+    result += object['suffix'] ? '/' + object['suffix'] : '';
+    return result.trim().toLowerCase();
 };
 const session = (req, res, next) => {
     return req.session.user;
@@ -422,7 +416,6 @@ module.exports = {
     getScript,
     getURLPath,
     getValidation,
-    getViewName,
     isEqual,
     isTheLast,
     isThere,

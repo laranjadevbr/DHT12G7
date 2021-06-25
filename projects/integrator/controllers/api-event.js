@@ -3,7 +3,7 @@ const {
 } = require('../models');
 const {
     everyoneApis,
-} = require('../utils/apis');
+} = require('../utils/api');
 module.exports = {
     ...everyoneApis({
         modelName : Event,
