@@ -1,12 +1,12 @@
 const {
-    forms : {
+    form : {
         service : {
             create,
             edit,
             view,
         }
     },
-    names : {
+    name : {
         service : item,
     }
 } = require('../database/elements');

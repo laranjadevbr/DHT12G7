@@ -24,9 +24,6 @@ const controls = [
 
     { control : index, path : 'index', },
 
-    { control : json, path : 'json-admin', },
-    { control : json, path : 'json-client', },
-
     { control : lab, path : 'lab', },
 
     { control : product, path : 'category-event', },
@@ -44,6 +41,8 @@ const controls = [
     { control : public, path : 'public-user', },
 
     { control : recipe, path : 'json-recipe', },
+    { control : json, path : 'json-admin', },
+    { control : json, path : 'json-client', },
 ];
 let getRouter = (controller, URLPath, object) => {
     for (let i = 0; i < object['length']; i++) {

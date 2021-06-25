@@ -1,18 +1,6 @@
-const {
-    lengths : {
-        cep,
-        cnh,
-        cnpj,
-        cpf,
-        passport,
-        phone,
-        rg,
-        uf,
-    },
-    lorem : {
-        description,
-    },
-} = option = require('../database/options');
+const option = require('../database/options');
+const { cep, cnh, cnpj, cpf, passport, phone, rg, uf } = option['lengths'];
+const { description } = option['lorem'];
 const getIDColumns = (Sequelize) => {
     return {
         id : {

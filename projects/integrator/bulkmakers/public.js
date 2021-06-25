@@ -1,8 +1,4 @@
 const option = require('../database/options');
-const first = option['name']['first'];
-const last = option['name']['last'];
-const generous = option['generous'];
-const description = option['lorem']['description'];
 let {
     getCNPJNumber,
     getCPFNumber,
@@ -20,20 +16,22 @@ let getRandomIndex = (object) => {
         undefined;
     return result[Math.floor(Math.random() * result['length'])];
 };
-const name = [];
 let pushIndex = (index) => {
     const result = [];
-    for (let i = 0; i < first[index]['length']; i++) {
+    for (let i = 0; i < option['name']['first'][index]['length']; i++) {
         result.push({
-            first : first[index][i].toLowerCase(),
-            last : last[Math.floor(Math.random() * last['length'])].toLowerCase(),
+            first : option['name']['first'][index][i].toLowerCase(),
+            last : option['name']['last'][Math.floor(Math.random() * option['name']['last']['length'])].toLowerCase(),
             gender : index.toLowerCase(),
         });
     };
     return result;
 };
-for (let i = 0; i < generous['length']; i++)
-    generous[i]['option'] !== '' ? name.push(...pushIndex(generous[i]['option'])) : undefined;
+const name = [];
+for (let i = 0; i < option['generous']['length']; i++)
+    option['generous'][i]['option'] !== ''
+    ? name.push(...pushIndex(option['generous'][i]['option']))
+    : undefined;
 const bulkMaker = [];
 for (let i = 0; i < name['length']; i++) {
     let email = name[i]['first'].substr(0, 1);
@@ -49,7 +47,7 @@ for (let i = 0; i < name['length']; i++) {
     password = getHash(password);
     bulkMaker.push({
         title : name[i]['first'] + ' ' + name[i]['last'],
-        description : description,
+        description : option['lorem']['description'],
         gender : name[i]['gender'],
         birthdate : getRandomDate(
             new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()),
@@ -73,7 +71,7 @@ for (let i = 0; i < name['length']; i++) {
             require : option,
             array : 'profession',
         }),
-        curriculum : description,
+        curriculum : option['lorem']['description'],
         salary : getRandomIndex({
             require : option,
             array : 'salary',

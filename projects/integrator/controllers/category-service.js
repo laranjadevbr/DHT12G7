@@ -6,10 +6,10 @@ let {
     isThere,
 } = require('../utils');
 let {
-    everyoneProduct,
-} = require('../utils/product');
+    everyoneItem,
+} = require('../utils/item');
 module.exports = {
-    ...everyoneProduct({
+    ...everyoneItem({
         title : 'category',
         modelName : Category,
         includeAlias : 'service',

@@ -2,7 +2,7 @@ const {
     forEveryone,
     getScript,
 } = require('../utils');
-const action = {
+const Action = {
     accordion : (req, res, next) => {
         const allNames = 'accordion';
         return res.render(allNames, {
@@ -27,4 +27,4 @@ const action = {
         });
     },
 };
-module.exports = action;
+module.exports = Action;

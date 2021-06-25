@@ -1,5 +1,5 @@
 const {
-    forms : {
+    form : {
         public : {
             create,
             edit,
@@ -7,7 +7,7 @@ const {
             login,
         },
     },
-    names : {
+    name : {
         public : item,
     },
 } = require('../database/elements');

@@ -17,6 +17,9 @@ const everyonePublic = (object) => {
                 suffix : 'all',
             }));
         },
+
+        // -----
+
         all : async (req, res, next) => {
             const amount = 2;
             const {
@@ -80,6 +83,9 @@ const everyonePublic = (object) => {
                 }),
             });
         },
+
+        // -----
+
         create : async (req, res, next) => {
             return res.render('form', {
                 btnTitle : 'create',
@@ -105,6 +111,9 @@ const everyonePublic = (object) => {
                 suffix : 'all',
             }));
         },
+
+        // -----
+
         edit : async (req, res, next) => {
             const { id } = req['params'];
             const index = await object['modelName'].findOne({
@@ -142,6 +151,9 @@ const everyonePublic = (object) => {
                 suffix : 'all',
             }));
         },
+
+        // -----
+
         destroy : async (req, res, next) => {
             const { id } = req['params'];
             const index = await object['modelName'].destroy({
@@ -154,6 +166,9 @@ const everyonePublic = (object) => {
                 suffix : 'all',
             }));
         },
+
+        // -----
+
         login : async (req, res, next) => {
             return res.render('form', {
                 btnTitle : 'login',
@@ -211,12 +226,18 @@ const everyonePublic = (object) => {
             req.session.destroy();
             return res.redirect('/');
         },
+
+        // -----
+
         bulk : async (req, res, next) => {
             const index = object['bulkMaker']
             ? await object['modelName'].bulkCreate(object['bulkMaker'])
             : 'File not found!';
             return res.send(index);
         },
+
+        // -----
+        
         search : async (req, res, next) => {
             const amount = 2;
             const {

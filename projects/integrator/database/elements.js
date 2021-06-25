@@ -95,14 +95,6 @@ const event = [
     { title : 'state', object : 'state' },
     { title : 'create', object : 'create' },
 ];
-const product = [
-    { title : '', object : 'id' },
-    { title : 'profile', object : 'profile' },
-    { title : 'picture', object : 'picture' },
-    { title : 'cost', object : 'cost' },
-    { title : 'state', object : 'state' },
-    { title : 'create', object : 'create' },
-];
 const service = [
     { title : '', object : 'id' },
     { title : 'profile', object : 'profile' },
@@ -133,9 +125,30 @@ const form = {
         view : formBuilder(event, true),
     },
     product : {
-        create : formBuilder(product, false),
-        edit : formBuilder(product, false),
-        view : formBuilder(product, true),
+        create : formBuilder([
+            // { title : '', object : 'id' },
+            { title : 'profile', object : 'profile' },
+            { title : 'picture', object : 'picture' },
+            { title : 'cost', object : 'cost' },
+            // { title : 'state', object : 'state' },
+            // { title : 'create', object : 'create' },
+        ], false),
+        edit : formBuilder([
+            // { title : '', object : 'id' },
+            { title : 'profile', object : 'profile' },
+            { title : 'picture', object : 'picture' },
+            { title : 'cost', object : 'cost' },
+            { title : 'state', object : 'state' },
+            // { title : 'create', object : 'create' },
+        ], false),
+        view : formBuilder([
+            { title : '', object : 'id' },
+            { title : 'profile', object : 'profile' },
+            { title : 'picture', object : 'picture' },
+            { title : 'cost', object : 'cost' },
+            { title : 'state', object : 'state' },
+            { title : 'create', object : 'create' },
+        ], true),
     },
     service : {
         create : formBuilder(service, false),
@@ -144,24 +157,7 @@ const form = {
     },
 };
 module.exports = {
-    forms : form,
     form : form,
-    names : {
-        category : nameListBuilder(form['category']['view']),
-        event : nameListBuilder(form['event']['view']),
-        order : [
-            'id',
-            ['fk_public', 'public'],
-            'approved',
-            'deleted',
-            'disable',
-            ['createdAt', 'created'],
-            ['updatedAt', 'updated'],
-        ],
-        product : nameListBuilder(form['product']['view']),
-        public : nameListBuilder(form['public']['view']),
-        service : nameListBuilder(form['service']['view']),
-    },
     name : {
         category : nameListBuilder(form['category']['view']),
         event : nameListBuilder(form['event']['view']),

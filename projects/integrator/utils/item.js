@@ -6,8 +6,8 @@ let {
     getModelSearchParams,
     getScript,
     getURLPath,
-} = require('./');
-const everyoneProduct = (object) => {
+} = require('.');
+const everyoneItem = (object) => {
     const Action = {
         index : async (req, res, next) => {
             return res.redirect(getURLPath({
@@ -15,6 +15,9 @@ const everyoneProduct = (object) => {
                 suffix : 'all',
             }));
         },
+
+        // -----
+
         all : async (req, res, next) => {
             const amount = 2;
             const {
@@ -78,6 +81,9 @@ const everyoneProduct = (object) => {
                 }),
             });
         },
+
+        // -----
+
         create : async (req, res, next) => {
             return res.render('form', {
                 btnTitle : 'create',
@@ -102,6 +108,9 @@ const everyoneProduct = (object) => {
                 suffix : 'all',
             }));
         },
+
+        // -----
+
         edit : async (req, res, next) => {
             const { id } = req['params'];
             const index = await object['modelName'].findOne({
@@ -139,6 +148,9 @@ const everyoneProduct = (object) => {
                 suffix : 'all',
             }));
         },
+
+        // -----
+
         destroy : async (req, res, next) => {
             const { id } = req['params'];
             const index = await object['modelName'].destroy({
@@ -151,12 +163,18 @@ const everyoneProduct = (object) => {
                 suffix : 'all',
             }));
         },
+
+        // ----
+
         bulk : async (req, res, next) => {
             const index = object['bulkMaker']
             ? await object['modelName'].bulkCreate(object['bulkMaker'])
             : 'File not found!';
             return res.send(index);
         },
+
+        // -----
+        
         search : async (req, res, next) => {
             const amount = 2;
             const {
@@ -207,5 +225,5 @@ const everyoneProduct = (object) => {
     return Action;
 };
 module.exports = {
-    everyoneProduct,  
+    everyoneItem,  
 };
