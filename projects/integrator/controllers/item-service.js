@@ -14,7 +14,7 @@ module.exports = {
         modelName : Service,
         includeAlias : 'category',
         includeName : Category,
-        prefix : 'product-service',
+        prefix : 'item-service',
         ...isThere(['bulkmakers', 'service.js']) ? {
             bulkMaker : require('../bulkmakers/service'),
         } : { },

@@ -1,6 +1,6 @@
 const {
     Category,
-    Event,
+    Product,
 } = require('../models');
 let {
     isThere,
@@ -10,13 +10,13 @@ let {
 } = require('../utils/product');
 module.exports = {
     ...everyoneProduct({
-        title : 'event',
-        modelName : Event,
+        title : 'product',
+        modelName : Product,
         includeAlias : 'category',
         includeName : Category,
-        prefix : 'product-event',
-        ...isThere(['bulkmakers', 'event.js']) ? {
-            bulkMaker : require('../bulkmakers/event'),
+        prefix : 'item-product',
+        ...isThere(['bulkmakers', 'product.js']) ? {
+            bulkMaker : require('../bulkmakers/product'),
         } : { },
     }),
 };
