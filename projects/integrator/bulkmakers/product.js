@@ -1,16 +1,10 @@
-const {
-    lorem : {
-        title,
-        description,
-    },
-} = option = require('../database/options');
-
+const option = require('../database/options');
+const title = option['lorem']['title'];
+const description = option['lorem']['description'];
 const {
     getRandomNumber,
 } = require('../utils');
-
 const bulkMaker = [];
-
 for (let i = 0; i < 10; i++) {
     bulkMaker.push({
         title : title,
@@ -19,5 +13,4 @@ for (let i = 0; i < 10; i++) {
         fk_category : getRandomNumber(1, 9),
     });
 };
-
 module.exports = bulkMaker;

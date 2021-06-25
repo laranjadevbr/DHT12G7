@@ -11,15 +11,6 @@ const action = {
             ...forEveryone(),
         });
     },
-    cards : (req, res, next) => {
-        const allNames = 'cards';
-        return res.render(allNames, {
-            index : require('../database/json/recipe'),
-            pageTitle : allNames,
-            script : getScript(allNames),
-            ...forEveryone(),
-        });
-    },
     index : (req, res, next) => {
         const allNames = 'index';
         return res.render(allNames, {

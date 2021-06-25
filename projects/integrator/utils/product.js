@@ -1,15 +1,13 @@
 let {
     forEveryone,
     getFormHeader,
-    getHash,
     getModelPagination,
     getModelParams,
     getModelSearchParams,
     getScript,
     getURLPath,
-    isEqual,
 } = require('./');
-const everyonePublic = (object) => {
+const everyoneProduct = (object) => {
     const Action = {
         index : async (req, res, next) => {
             return res.redirect(getURLPath({
@@ -96,7 +94,6 @@ const everyonePublic = (object) => {
             });
         },
         store : async (req, res, next) => {
-            req['body']['password'] = getHash(req['body']['password']);
             const index = await object['modelName'].create({
                 ...req['body'],
             });
@@ -154,63 +151,6 @@ const everyonePublic = (object) => {
                 suffix : 'all',
             }));
         },
-        login : async (req, res, next) => {
-            return res.render('form', {
-                btnTitle : 'login',
-                formElement : require('../database/elements')['form'][object['title']]['login'],
-                inputType : require('../database/options')['inputType'],
-                pageTitle : object['prefix'].split('-').join(' ') + ' login',
-                script : getScript('login'),
-                ...forEveryone(),
-                ...getFormHeader({
-                    prefix : object['prefix'],
-                    suffix : 'authenticate',
-                    method : 'POST',
-                }),
-            });
-        },
-        authenticate : async (req, res, next) => {
-            const {
-                email,
-                password,
-            } = req['body'];
-            const user = await object['modelName'].findOne({
-                ...getModelParams({
-                    param : email,
-                    column : 'email',
-                }),
-            });
-            let screen = (method, allNames) => {
-                return method.render('form', {
-                    btnTitle : allNames,
-                    formElement : require('../database/elements')['form'][object['title']]['login'],
-                    inputType : require('../database/options')['inputType'],
-                    pageTitle : object['prefix'].split('-').join(' ') + ' ' + allNames,
-                    script : getScript(allNames),
-                    ...forEveryone(),
-                    ...getFormHeader({
-                        prefix : object['prefix'],
-                        suffix : allNames,
-                        method : 'POST',
-                    }),
-                });
-            };
-            if (!user) screen(res, 'login');
-            if (!isEqual({
-                client : password,
-                dataBase : user['password'],
-            })) screen(res, 'login');
-            user['password'] = undefined;
-            req.session.user = user;
-            return res.redirect(getURLPath({
-                prefix : object['prefix'],
-                suffix : 'all',
-            }));
-        },
-        logout : async (req, res, next) => {
-            req.session.destroy();
-            return res.redirect('/');
-        },
         bulk : async (req, res, next) => {
             const index = object['bulkMaker']
             ? await object['modelName'].bulkCreate(object['bulkMaker'])
@@ -267,5 +207,5 @@ const everyonePublic = (object) => {
     return Action;
 };
 module.exports = {
-    everyonePublic,  
+    everyoneProduct,  
 };

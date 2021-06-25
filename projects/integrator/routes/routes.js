@@ -65,7 +65,6 @@ module.exports = {
         ...getRoute([
             ['', 'index'],
             'accordion',
-            'cards',
             'index',
             'maps',
         ], 'get'),

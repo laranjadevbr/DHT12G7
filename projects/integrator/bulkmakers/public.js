@@ -1,14 +1,8 @@
-const {
-    generous,
-    lorem : {
-        description,
-    },
-    name : {
-        first,
-        last,
-    }
-} = option = require('../database/options');
-
+const option = require('../database/options');
+const first = option['name']['first'];
+const last = option['name']['last'];
+const generous = option['generous'];
+const description = option['lorem']['description'];
 let {
     getCNPJNumber,
     getCPFNumber,
@@ -18,7 +12,6 @@ let {
     getRandomDate,
     getRandomNumber,
 } = require('../utils');
-
 let getRandomIndex = (object) => {
     const result = [];
     for (let i = 0; i < object['require'][object['array']]['length']; i++)
@@ -27,9 +20,7 @@ let getRandomIndex = (object) => {
         undefined;
     return result[Math.floor(Math.random() * result['length'])];
 };
-
 const name = [];
-
 let pushIndex = (index) => {
     const result = [];
     for (let i = 0; i < first[index]['length']; i++) {
@@ -41,12 +32,9 @@ let pushIndex = (index) => {
     };
     return result;
 };
-
 for (let i = 0; i < generous['length']; i++)
     generous[i]['option'] !== '' ? name.push(...pushIndex(generous[i]['option'])) : undefined;
-
 const bulkMaker = [];
-
 for (let i = 0; i < name['length']; i++) {
     let email = name[i]['first'].substr(0, 1);
     email += name[i]['last'].substr(0, 1);
@@ -95,5 +83,4 @@ for (let i = 0; i < name['length']; i++) {
         confirmation : password,
     });
 };
-
 module.exports = bulkMaker;

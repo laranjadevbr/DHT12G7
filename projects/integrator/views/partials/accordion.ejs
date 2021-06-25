@@ -1,7 +1,7 @@
-<% if (!validate(accordion)) { } else { %>
+<% if (!getValidation(accordion)) { } else { %>
   <div class="accordion" id="accordionExample">
     <% for (let i = 0; i <= Number(accordion['length'] - 1); i++) { %>
-      <% if (!validate(accordion[i]['title']) || !validate(accordion[i]['paragraph'])) { } else { %>
+      <% if (!getValidation(accordion[i]['title']) || !getValidation(accordion[i]['paragraph'])) { } else { %>
         <div class="accordion-item">
           <h2 class="accordion-header" id="heading<%= i; %>">
             <button

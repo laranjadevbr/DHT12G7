@@ -29,14 +29,15 @@ const controls = [
 
     { control : lab, path : 'lab', },
 
-    { control : product, path : 'category-event', },
+    // { control : product, path : 'category-event', },
     { control : product, path : 'category-product', },
-    { control : product, path : 'category-service', },
+    // { control : product, path : 'category-service', },
 
-    { control : product, path : 'event', },
     { control : product, path : 'order', },
-    { control : product, path : 'product', },
-    { control : product, path : 'service', },
+
+    { control : product, path : 'product-event', },
+    { control : product, path : 'product-product', },
+    { control : product, path : 'product-service', },
 
     { control : public, path : 'public-admin', },
     { control : public, path : 'public-client', },

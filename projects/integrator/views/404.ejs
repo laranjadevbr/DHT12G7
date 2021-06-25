@@ -2,5 +2,5 @@
 <%- include('./partials/functions'); %>
 <%- include('./partials/header'); %>
 <%- include('./partials/navbar'); %>
-<%- typeof pageMessage !== 'undefined' ? '<h1>' + capitalize(pageMessage) + '</h1>' : ''; %>
+<%- typeof pageMessage !== 'undefined' ? '<h1>' + getFirstUpperCase(pageMessage) + '</h1>' : ''; %>
 <%- include('./partials/footer') %>
