@@ -3,9 +3,6 @@ const {
     Service,
 } = require('../models');
 let {
-    isThere,
-} = require('../utils');
-let {
     everyoneItem,
 } = require('../utils/item');
 module.exports = {
@@ -15,8 +12,5 @@ module.exports = {
         includeAlias : 'service',
         includeName : Service,
         prefix : 'category-service',
-        // ...isThere(['bulkmakers', 'category.js']) ? {
-        //     bulkMaker : require('../bulkmakers/category'),
-        // } : { },
     }),
 };

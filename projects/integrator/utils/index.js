@@ -372,7 +372,7 @@ let getDateFormat = (string) => {
     year = new Date(string).getFullYear();
     return day + '/' + month + '/' + year;
 }
-const forEveryone = () => {
+const everyoneView = () => {
     return {
         getCurrency,
         getDateFormat,
@@ -385,10 +385,9 @@ const forEveryone = () => {
 };
 module.exports = {
     arrayUnifier,
-    forEveryone,
+    everyoneView,
     getCNPJNumber,
     getCPFNumber,
-    getCurrency,
     getDOCNumber,
     getFirstUpperCase,
     getFormHeader,
@@ -403,7 +402,6 @@ module.exports = {
     getSalaryRange,
     getScript,
     getURLPath,
-    getValidation,
     isEqual,
     isTheLast,
     isThere,
@@ -411,6 +409,4 @@ module.exports = {
     JSONModify,
     JSONPagination,
     objectCreator,
-    session,
-    toClean,
 };

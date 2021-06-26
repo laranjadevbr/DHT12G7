@@ -3,9 +3,6 @@ const {
     Order,
 } = require('../models');
 let {
-    isThere,
-} = require('../utils');
-let {
     everyonePublic,
 } = require('../utils/public');
 module.exports = {
@@ -15,8 +12,5 @@ module.exports = {
         includeAlias : 'order',
         includeName : Order,
         prefix : 'public-client',
-        // ...isThere(['bulkmakers', 'public.js']) ? {
-        //     bulkMaker : require('../bulkmakers/public'),
-        // } : { },
     }),
 };

@@ -1,4 +1,4 @@
-const formBuilder = (array, disabled) => {
+const formConstructor = (array, disabled) => {
     const result = [
         {
             active : true,
@@ -53,7 +53,7 @@ const formBuilder = (array, disabled) => {
     };
     return result;
 };
-let nameListBuilder = (index) => {
+let itemsListConstrucor = (index) => {
     const result = [];
     for (let i = 0; i < index['length']; i++)
         index[i]['note'] !== 'deleted' ?
@@ -61,71 +61,121 @@ let nameListBuilder = (index) => {
         undefined;
     return result;
 }
-const public = [
-    { title : '', object : 'id' },
-    { title : 'profile', object : 'profile' },
-    { title : '', object : 'add' },
-    { title : '', object : 'picture' },
-    // { title : 'hobbies', object : 'hobbies' },
-    { title : 'document', object : 'document' },
-    { title : 'address', object : 'address' },
-    { title : 'contact', object : 'contact' },
-    { title : 'curriculum', object : 'curriculum' },
-    { title : 'company', object : 'company' },
-    { title : 'access', object : 'access' },
-    { title : 'state', object : 'state' },
-    { title : '', object : 'level' },
-    { title : 'create', object : 'create' },
-];
-const category = [
-    { title : '', object : 'id' },
-    { title : 'profile', object : 'profile' },
-    { title : 'picture', object : 'picture' },
-    { title : 'state', object : 'state' },
-    { title : 'create', object : 'create' },
-];
-const event = [
-    { title : '', object : 'id' },
-    { title : 'profile', object : 'profile' },
-    { title : 'picture', object : 'picture' },
-    { title : 'cost', object : 'cost' },
-    { title : 'date', object : 'date' },
-    { title : 'address', object : 'address' },
-    { title : 'contact', object : 'contact' },
-    { title : 'state', object : 'state' },
-    { title : 'create', object : 'create' },
-];
-const service = [
-    { title : '', object : 'id' },
-    { title : 'profile', object : 'profile' },
-    { title : 'picture', object : 'picture' },
-    { title : 'cost', object : 'cost' },
-    { title : 'state', object : 'state' },
-    { title : 'create', object : 'create' },
-
-];
 const form = {
     public : {
-        create : formBuilder(public, false),
-        edit : formBuilder(public, false),
-        login : formBuilder([{
+        create : formConstructor([
+            // { title : '', object : 'id' },
+            { title : 'profile', object : 'profile' },
+            { title : '', object : 'add' },
+            { title : '', object : 'picture' },
+            // { title : 'hobbies', object : 'hobbies' },
+            { title : 'document', object : 'document' },
+            { title : 'address', object : 'address' },
+            { title : 'contact', object : 'contact' },
+            { title : 'curriculum', object : 'curriculum' },
+            { title : 'company', object : 'company' },
+            { title : 'access', object : 'access' },
+            // { title : 'state', object : 'state' },
+            // { title : '', object : 'level' },
+            // { title : 'create', object : 'create' },
+        ], false),
+        edit : formConstructor([
+            // { title : '', object : 'id' },
+            { title : 'profile', object : 'profile' },
+            { title : '', object : 'add' },
+            { title : '', object : 'picture' },
+            // { title : 'hobbies', object : 'hobbies' },
+            { title : 'document', object : 'document' },
+            { title : 'address', object : 'address' },
+            { title : 'contact', object : 'contact' },
+            { title : 'curriculum', object : 'curriculum' },
+            { title : 'company', object : 'company' },
+            { title : 'access', object : 'access' },
+            { title : 'state', object : 'state' },
+            { title : '', object : 'level' },
+            // { title : 'create', object : 'create' },
+        ], false),
+        login : formConstructor([{
             title : 'access data',
             object : 'access',
         }], false),
-        view : formBuilder(public, true),
+        view : formConstructor([
+            { title : '', object : 'id' },
+            { title : 'profile', object : 'profile' },
+            { title : '', object : 'add' },
+            { title : '', object : 'picture' },
+            // { title : 'hobbies', object : 'hobbies' },
+            { title : 'document', object : 'document' },
+            { title : 'address', object : 'address' },
+            { title : 'contact', object : 'contact' },
+            { title : 'curriculum', object : 'curriculum' },
+            { title : 'company', object : 'company' },
+            { title : 'access', object : 'access' },
+            { title : 'state', object : 'state' },
+            { title : '', object : 'level' },
+            { title : 'create', object : 'create' },
+        ], true),
     },
     category : {
-        create : formBuilder(category, false),
-        edit : formBuilder(category, false),
-        view : formBuilder(category, true),
+        create : formConstructor([
+            // { title : '', object : 'id' },
+            { title : 'profile', object : 'profile' },
+            { title : 'picture', object : 'picture' },
+            // { title : 'state', object : 'state' },
+            // { title : 'create', object : 'create' },
+        ], false),
+        edit : formConstructor([
+            // { title : '', object : 'id' },
+            { title : 'profile', object : 'profile' },
+            { title : 'picture', object : 'picture' },
+            { title : 'state', object : 'state' },
+            // { title : 'create', object : 'create' },
+        ], false),
+        view : formConstructor([
+            { title : '', object : 'id' },
+            { title : 'profile', object : 'profile' },
+            { title : 'picture', object : 'picture' },
+            { title : 'state', object : 'state' },
+            { title : 'create', object : 'create' },
+        ], true),
     },
     event : {
-        create : formBuilder(event, false),
-        edit : formBuilder(event, false),
-        view : formBuilder(event, true),
+        create : formConstructor([
+            // { title : '', object : 'id' },
+            { title : 'profile', object : 'profile' },
+            { title : 'picture', object : 'picture' },
+            { title : 'cost', object : 'cost' },
+            { title : 'date', object : 'date' },
+            { title : 'address', object : 'address' },
+            { title : 'contact', object : 'contact' },
+            // { title : 'state', object : 'state' },
+            // { title : 'create', object : 'create' },
+        ], false),
+        edit : formConstructor([
+            // { title : '', object : 'id' },
+            { title : 'profile', object : 'profile' },
+            { title : 'picture', object : 'picture' },
+            { title : 'cost', object : 'cost' },
+            { title : 'date', object : 'date' },
+            { title : 'address', object : 'address' },
+            { title : 'contact', object : 'contact' },
+            { title : 'state', object : 'state' },
+            // { title : 'create', object : 'create' },
+        ], false),
+        view : formConstructor([
+            { title : '', object : 'id' },
+            { title : 'profile', object : 'profile' },
+            { title : 'picture', object : 'picture' },
+            { title : 'cost', object : 'cost' },
+            { title : 'date', object : 'date' },
+            { title : 'address', object : 'address' },
+            { title : 'contact', object : 'contact' },
+            { title : 'state', object : 'state' },
+            { title : 'create', object : 'create' },
+        ], true),
     },
     product : {
-        create : formBuilder([
+        create : formConstructor([
             // { title : '', object : 'id' },
             { title : 'profile', object : 'profile' },
             { title : 'picture', object : 'picture' },
@@ -133,7 +183,7 @@ const form = {
             // { title : 'state', object : 'state' },
             // { title : 'create', object : 'create' },
         ], false),
-        edit : formBuilder([
+        edit : formConstructor([
             // { title : '', object : 'id' },
             { title : 'profile', object : 'profile' },
             { title : 'picture', object : 'picture' },
@@ -141,7 +191,7 @@ const form = {
             { title : 'state', object : 'state' },
             // { title : 'create', object : 'create' },
         ], false),
-        view : formBuilder([
+        view : formConstructor([
             { title : '', object : 'id' },
             { title : 'profile', object : 'profile' },
             { title : 'picture', object : 'picture' },
@@ -151,16 +201,37 @@ const form = {
         ], true),
     },
     service : {
-        create : formBuilder(service, false),
-        edit : formBuilder(service, false),
-        view : formBuilder(service, true),
+        create : formConstructor([
+            // { title : '', object : 'id' },
+            { title : 'profile', object : 'profile' },
+            { title : 'picture', object : 'picture' },
+            { title : 'cost', object : 'cost' },
+            // { title : 'state', object : 'state' },
+            // { title : 'create', object : 'create' },
+        ], false),
+        edit : formConstructor([
+            // { title : '', object : 'id' },
+            { title : 'profile', object : 'profile' },
+            { title : 'picture', object : 'picture' },
+            { title : 'cost', object : 'cost' },
+            { title : 'state', object : 'state' },
+            // { title : 'create', object : 'create' },
+        ], false),
+        view : formConstructor([
+            { title : '', object : 'id' },
+            { title : 'profile', object : 'profile' },
+            { title : 'picture', object : 'picture' },
+            { title : 'cost', object : 'cost' },
+            { title : 'state', object : 'state' },
+            { title : 'create', object : 'create' },
+        ], true),
     },
 };
 module.exports = {
     form : form,
     name : {
-        category : nameListBuilder(form['category']['view']),
-        event : nameListBuilder(form['event']['view']),
+        category : itemsListConstrucor(form['category']['view']),
+        event : itemsListConstrucor(form['event']['view']),
         order : [
             'id',
             ['fk_public', 'public'],
@@ -170,8 +241,15 @@ module.exports = {
             ['createdAt', 'created'],
             ['updatedAt', 'updated'],
         ],
-        product : nameListBuilder(form['product']['view']),
-        public : nameListBuilder(form['public']['view']),
-        service : nameListBuilder(form['service']['view']),
+        product : itemsListConstrucor(form['product']['view']),
+        public : itemsListConstrucor(form['public']['view']),
+        service : itemsListConstrucor(form['service']['view']),
     },
 };
+
+// var param = 'size';
+// var config = {
+//     [param] : 12,
+//     ['mobile' + param.charAt(0).toUpperCase() + param.slice(1)] : 4,
+// };
+// console.log(config);

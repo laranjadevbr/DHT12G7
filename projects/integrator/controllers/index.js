@@ -1,30 +1,22 @@
 const {
-    forEveryone,
+    everyoneView,
     getScript,
 } = require('../utils');
+const viewsAction = (pageName) => {
+    const Action = {
+        [pageName] : (req, res, next) => {
+            return res.render(pageName, {
+                pageTitle : pageName,
+                script : getScript(pageName),
+                ...everyoneView(),
+            });
+        },
+    };
+    return Action;
+};
 const Action = {
-    accordion : (req, res, next) => {
-        const allNames = 'accordion';
-        return res.render(allNames, {
-            pageTitle : allNames,
-            script : getScript(allNames),
-            ...forEveryone(),
-        });
-    },
-    index : (req, res, next) => {
-        const allNames = 'index';
-        return res.render(allNames, {
-            script : getScript(allNames),
-            ...forEveryone(),
-        });
-    },
-    maps : (req, res, next) => {
-        const allNames = 'maps';
-        return res.render(allNames, {
-            pageTitle : allNames,
-            script : getScript(allNames),
-            ...forEveryone(),
-        });
-    },
+    ...viewsAction('index'),
+    ...viewsAction('accordion'),
+    ...viewsAction('maps'),
 };
 module.exports = Action;

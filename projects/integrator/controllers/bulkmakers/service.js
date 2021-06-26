@@ -1,7 +1,7 @@
-const option = require('../database/options');
+const option = require('../../database/options');
 const {
     getRandomNumber,
-} = require('../utils');
+} = require('../../utils');
 const bulkMaker = [];
 for (let i = 0; i < 10; i++) {
     bulkMaker.push({

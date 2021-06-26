@@ -3,9 +3,6 @@ const {
     Event,
 } = require('../models');
 let {
-    isThere,
-} = require('../utils');
-let {
     everyoneItem,
 } = require('../utils/item');
 module.exports = {
@@ -15,8 +12,5 @@ module.exports = {
         includeAlias : 'event',
         includeName : Event,
         prefix : 'category-event',
-        // ...isThere(['bulkmakers', 'category.js']) ? {
-        //     bulkMaker : require('../bulkmakers/category'),
-        // } : { },
     }),
 };
