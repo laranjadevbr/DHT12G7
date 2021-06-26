@@ -7,6 +7,7 @@ let {
     getScript,
     getURLPath,
 } = require('..');
+
 const getIndex = (object) => {
     const Action = {
         index : async (req, res, next) => {
@@ -261,8 +262,6 @@ const getSearch = (object) => {
     return Action;
 };
 
-
-
 const getLogin = (object) => {
     const Action = {
         login : async (req, res, next) => {
@@ -284,7 +283,6 @@ const getLogin = (object) => {
     return Action;
 };
 
-
 const getLogout = (object) => {
     const Action = {
         logout : async (req, res, next) => {
@@ -294,7 +292,6 @@ const getLogout = (object) => {
     }
     return Action;
 };
-
 
 const getAuthenticate = (object) => {
     const Action = {
@@ -339,18 +336,19 @@ const getAuthenticate = (object) => {
     }
     return Action;
 };
+
 module.exports = {
-    getIndex,
     getAll,
-    getOne,
-    getCreate,
-    getStore,
-    getEdit,
-    getUpdate,
-    getDestroy,
-    getBulk,
-    getSearch,
-    getLogin,
     getAuthenticate,
+    getBulk,
+    getCreate,
+    getDestroy,
+    getEdit,
+    getIndex,
+    getLogin,
     getLogout,
+    getOne,
+    getSearch,
+    getStore,
+    getUpdate,
 };
