@@ -16,6 +16,10 @@ const root = [
 const getIndex = (object) => {
     const Action = {
         index : (req, res, next) => {
+            return res.redirect(getURLPath({
+                prefix : object['prefix'].split('-').join('/'),
+                suffix : 'all',
+            }));
         },
     }
     return Action;
@@ -159,12 +163,12 @@ const getStore = (object) => {
             };
             database.push(index);
             JSONModify({
-                name : 'clients',
+                name : object['title'],
                 content : database,
                 path : [
                     ...root,
                     'json',
-                    'clients.js',
+                    object['title'] + '.js',
                 ],
             });
             return res.send(index);
@@ -176,26 +180,38 @@ const getStore = (object) => {
 const getUpdate = (object) => {
     const Action = {
         update : (req, res, next) => {
-        //     const { id } = req['params'];
-        //     const {
-        //         name,
-        //         ingredient,
-        //         mode,
-        //         cost,
-        //         time,
-        //     } = req['body'];
-        //     const index = currentList.find((index) => {
-        //         return index['id'] == id;
-        //     });
-        //     index.active = true;
-        //     index.id = id;
-        //     index.name = name;
-        //     index.ingredient = ingredient;
-        //     index.mode = mode;
-        //     index.cost = cost;
-        //     index.time = time;
-        //     saver(currentList, jsonVariable, jsonFolder, jsonArchive);
-        //     return res.redirect(urlPath(prefix, 'menu'));
+            const { id } = req['params'];
+            const database = object['database'];
+            const {
+                name,
+                ingredient,
+                mode,
+                cost,
+                time,
+            } = req['body'];
+            const index = database.find((index) => {
+                return index['id'] == id;
+            });
+            index.active = true;
+            index.id = id;
+            index.name = name;
+            index.ingredient = ingredient;
+            index.mode = mode;
+            index.cost = cost;
+            index.time = time;
+            JSONModify({
+                name : object['title'],
+                content : index,
+                path : [
+                    ...root,
+                    'json',
+                    object['title'] + '.js',
+                ],
+            });
+            return res.redirect(getURLPath({
+                prefix : object['prefix'].split('-').join('/'),
+                suffix : 'all',
+            }));
         },
     }
     return Action;
@@ -207,20 +223,20 @@ const getDestroy = (object) => {
             const { id } = req['params'];
             const database = object['database'];
             const index = database.filter((index) => {
-                return index['id'] !== id;
+                return index['id'] != id;
             });
             JSONModify({
-                name : 'clients',
+                name : object['title'],
                 content : index,
                 path : [
                     ...root,
                     'json',
-                    'clients.js',
+                    object['title'] + '.js',
                 ],
             });
             return res.redirect(getURLPath({
                 prefix : object['prefix'].split('-').join('/'),
-                suffix : 'view',
+                suffix : 'all',
             }));
         },
     }

@@ -19,10 +19,10 @@ module.exports = (sequelize, DataType) => {
             foreignKey : 'fk_category',
             as : 'product',
         });
-        // Category.hasMany(modelsList.Event, {
-        //     foreignKey : 'fk_category',
-        //     as : 'event',
-        // });
+        Category.hasMany(modelsList.Event, {
+            foreignKey : 'fk_category',
+            as : 'event',
+        });
         Category.hasMany(modelsList.Service, {
             foreignKey : 'fk_category',
             as : 'service',
