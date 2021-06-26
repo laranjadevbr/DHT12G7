@@ -6,8 +6,7 @@ let {
     getModelSearchParams,
     getScript,
     getURLPath,
-} = require('./');
-
+} = require('..');
 const getIndex = (object) => {
     const Action = {
         index : async (req, res, next) => {
@@ -43,8 +42,8 @@ const getAll = (object) => {
             });
             return res.render('menu', {
                 index : index,
-                item : require('../database/elements')['name'][object['title']],
-                inputType : require('../database/options')['inputType'],
+                item : require('../../database/elements')['name'][object['title']],
+                inputType : require('../../database/options')['inputType'],
                 key : key,
                 pageTitle : object['prefix'].split('-').join(' ') + ' all',
                 pathPrefix : object['prefix'].split('-').join('/'),
@@ -78,9 +77,9 @@ const getOne = (object) => {
             });
             return res.render('form', {
                 btnTitle : 'come back',
-                formElement : require('../database/elements')['form'][object['title']]['view'],
+                formElement : require('../../database/elements')['form'][object['title']]['view'],
                 index : index,
-                inputType : require('../database/options')['inputType'],
+                inputType : require('../../database/options')['inputType'],
                 pageTitle : object['prefix'].split('-').join(' ') + ' one',
                 script : getScript('one'),
                 ...everyoneView(),
@@ -100,8 +99,8 @@ const getCreate = (object) => {
         create : async (req, res, next) => {
             return res.render('form', {
                 btnTitle : 'create',
-                formElement : require('../database/elements')['form'][object['title']]['create'],
-                inputType : require('../database/options')['inputType'],
+                formElement : require('../../database/elements')['form'][object['title']]['create'],
+                inputType : require('../../database/options')['inputType'],
                 pageTitle : object['prefix'].split('-').join(' ') + ' create',
                 script : getScript('create'),
                 ...everyoneView(),
@@ -142,9 +141,9 @@ const getEdit = (object) => {
             });
             return res.render('form', {
                 btnTitle : 'update',
-                formElement : require('../database/elements')['form'][object['title']]['edit'],
+                formElement : require('../../database/elements')['form'][object['title']]['edit'],
                 index : index,
-                inputType : require('../database/options')['inputType'],
+                inputType : require('../../database/options')['inputType'],
                 pageTitle : object['prefix'].split('-').join(' ') + ' edit',
                 script : getScript('edit'),
                 ...everyoneView(),
@@ -240,8 +239,8 @@ const getSearch = (object) => {
             });
             return res.render('menu', {
                 index : index,
-                item : require('../database/elements')['name'][object['title']],
-                inputType : require('../database/options')['inputType'],
+                item : require('../../database/elements')['name'][object['title']],
+                inputType : require('../../database/options')['inputType'],
                 key : key,
                 pageTitle : object['prefix'].split('-').join(' ') + ' all',
                 pathPrefix : object['prefix'].split('-').join('/'),
@@ -262,6 +261,84 @@ const getSearch = (object) => {
     return Action;
 };
 
+
+
+const getLogin = (object) => {
+    const Action = {
+        login : async (req, res, next) => {
+            return res.render('form', {
+                btnTitle : 'login',
+                formElement : require('../../database/elements')['form'][object['title']]['login'],
+                inputType : require('../../database/options')['inputType'],
+                pageTitle : object['prefix'].split('-').join(' ') + ' login',
+                script : getScript('login'),
+                ...everyoneView(),
+                ...getFormHeader({
+                    prefix : object['prefix'],
+                    suffix : 'authenticate',
+                    method : 'POST',
+                }),
+            });
+        },
+    }
+    return Action;
+};
+
+
+const getLogout = (object) => {
+    const Action = {
+        logout : async (req, res, next) => {
+            req.session.destroy();
+            return res.redirect('/');
+        },
+    }
+    return Action;
+};
+
+
+const getAuthenticate = (object) => {
+    const Action = {
+        authenticate : async (req, res, next) => {
+            const {
+                email,
+                password,
+            } = req['body'];
+            const user = await object['modelName'].findOne({
+                ...getModelParams({
+                    param : email,
+                    column : 'email',
+                }),
+            });
+            let screen = (method, allNames) => {
+                return method.render('form', {
+                    btnTitle : allNames,
+                    formElement : require('../../database/elements')['form'][object['title']]['login'],
+                    inputType : require('../../database/options')['inputType'],
+                    pageTitle : object['prefix'].split('-').join(' ') + ' ' + allNames,
+                    script : getScript(allNames),
+                    ...everyoneView(),
+                    ...getFormHeader({
+                        prefix : object['prefix'],
+                        suffix : allNames,
+                        method : 'POST',
+                    }),
+                });
+            };
+            if (!user) screen(res, 'login');
+            if (!isEqual({
+                client : password,
+                dataBase : user['password'],
+            })) screen(res, 'login');
+            user['password'] = undefined;
+            req.session.user = user;
+            return res.redirect(getURLPath({
+                prefix : object['prefix'],
+                suffix : 'all',
+            }));
+        },
+    }
+    return Action;
+};
 module.exports = {
     getIndex,
     getAll,
@@ -273,4 +350,7 @@ module.exports = {
     getDestroy,
     getBulk,
     getSearch,
+    getLogin,
+    getAuthenticate,
+    getLogout,
 };

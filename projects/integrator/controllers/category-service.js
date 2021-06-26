@@ -3,14 +3,20 @@ const {
     Service,
 } = require('../models');
 let {
-    everyoneItem,
-} = require('../utils/item');
+    getControllers,
+} = require('../utils/controllers/database/item');
+let {
+    isThere,
+} = require('../utils');
 module.exports = {
-    ...everyoneItem({
+    ...getControllers({
         title : 'category',
         modelName : Category,
         includeAlias : 'service',
         includeName : Service,
         prefix : 'category-service',
+        // ...isThere(['bulkmakers', 'category.js']) ? {
+        //     bulkMaker : require('../bulkmakers/category'),
+        // } : { },
     }),
 };

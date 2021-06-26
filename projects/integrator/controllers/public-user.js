@@ -3,14 +3,20 @@ const {
     Order,
 } = require('../models');
 let {
-    everyonePublic,
-} = require('../utils/public');
+    getControllers,
+} = require('../utils/controllers/database/public');
+let {
+    isThere,
+} = require('../utils');
 module.exports = {
-    ...everyonePublic({
+    ...getControllers({
         title : 'public',
         modelName : Public,
         includeAlias : 'order',
         includeName : Order,
         prefix : 'public-user',
+        // ...isThere(['bulkmakers', 'public.js']) ? {
+        //     bulkMaker : require('../bulkmakers/public'),
+        // } : { },
     }),
 };

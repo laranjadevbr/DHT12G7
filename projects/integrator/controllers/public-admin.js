@@ -3,13 +3,13 @@ const {
     Order,
 } = require('../models');
 let {
+    getControllers,
+} = require('../utils/controllers/database/public');
+let {
     isThere,
 } = require('../utils');
-let {
-    everyonePublic,
-} = require('../utils/public');
 module.exports = {
-    ...everyonePublic({
+    ...getControllers({
         title : 'public',
         modelName : Public,
         includeAlias : 'order',

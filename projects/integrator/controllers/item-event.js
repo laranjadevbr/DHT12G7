@@ -3,13 +3,13 @@ const {
     Event,
 } = require('../models');
 let {
+    getControllers,
+} = require('../utils/controllers/database/item');
+let {
     isThere,
 } = require('../utils');
-let {
-    everyoneItem,
-} = require('../utils/item');
 module.exports = {
-    ...everyoneItem({
+    ...getControllers({
         title : 'event',
         modelName : Event,
         includeAlias : 'category',

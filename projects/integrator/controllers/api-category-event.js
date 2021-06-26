@@ -3,10 +3,10 @@ const {
     Event,
 } = require('../models');
 const {
-    everyoneApis,
-} = require('../utils/api');
+    getControllers,
+} = require('../utils/controllers/database/api');
 module.exports = {
-    ...everyoneApis({
+    ...getControllers({
         modelName : Category,
         includeAlias : 'event',
         includeName : Event,

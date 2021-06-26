@@ -2,8 +2,8 @@ const {
     getModelParams,
     getModelSearchParams,
     getURLPath,
-} = require('./');
-const everyoneApis = (object) => {
+} = require('../..');
+const getControllers = (object) => {
     const Action = {
         index : async (req, res, next) => {
             return res.redirect(getURLPath({
@@ -79,5 +79,5 @@ const everyoneApis = (object) => {
     return Action;
 };
 module.exports = {
-    everyoneApis,
+    getControllers,
 }

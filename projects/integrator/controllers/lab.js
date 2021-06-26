@@ -5,7 +5,7 @@ const {
     Public,
 } = require('../models');
 const {
-    forEveryone,
+    everyoneView,
     getScript,
     getURLPath,
 } = require('../utils');
@@ -117,56 +117,56 @@ module.exports = {
         const allNames = '_j';        
         return res.render(allNames, {
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
     k : async (req, res, next) => {
         const allNames = '_k';
         return res.render(allNames, {
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
     l : async (req, res, next) => {
         const allNames = '_l';
         return res.render(allNames, {
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
     m : async (req, res, next) => {
         const allNames = '_m';
         return res.render(allNames, {
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
     n : async (req, res, next) => {
         const allNames = '_n';
         return res.render(allNames, {
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
     o : async (req, res, next) => {
         const allNames = '_o';
         return res.render(allNames, {
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
     p : async (req, res, next) => {
         const allNames = '_p';
         return res.render(allNames, {
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
     q : async (req, res, next) => {
         const allNames = '_q';
         return res.render(allNames, {
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
     r : async (req, res, next) => {
@@ -180,63 +180,63 @@ module.exports = {
                 prefix : '/lab/',
                 suffix : 'r',
             }),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
     s : async (req, res, next) => {
         const allNames = '_s';
         return res.render(allNames, {
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
     t : async (req, res, next) => {
         const allNames = '_t';
         return res.render(allNames, {
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
     u : async (req, res, next) => {
         const allNames = '_u';
         return res.render(allNames, {
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
     v : async (req, res, next) => {
         const allNames = '_v';
         return res.render(allNames, {
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
     w : async (req, res, next) => {
         const allNames = '_w';
         return res.render(allNames, {
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
     x : async (req, res, next) => {
         const allNames = '_x';
         return res.render(allNames, {
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
     y : async (req, res, next) => {
         const allNames = '_y';
         return res.render(allNames, {
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
     z : async (req, res, next) => {
         const allNames = '_z';
         return res.render(allNames, {
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
         });
     },
 };

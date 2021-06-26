@@ -1,99 +1,71 @@
-const {
-    form : {
-        public : {
-            create,
-            edit,
-            view,
-            login,
-        },
-    },
-    name : {
-        public : item,
-    },
-} = require('../database/elements');
-const {
-    inputType : inputType,
-} = option = require('../database/options');
 const dataBase = require('../database/json/clients');
-const prefix = '/json/admin/';
 const {
-    forEveryone,
+    everyoneView,
     getFormHeader,
     getHash,
-    getPageTitle,
     getScript,
     getURLPath,
-    getViewName,
     JSONModify,
     JSONPagination,
 } = require('../utils');
+let {
+    getIndex,
+} = require('../utils/actions/json');
 module.exports = {
     index : (req, res, next) => {
     },
     all : (req, res, next) => {
-        const amount = 2;
-        const allNames = 'all';
         const { page = 1 } = req['query'];
         return res.render('menu', {
             index : JSONPagination({
                 array : dataBase,
-                limit : amount,
+                limit : 2,
                 offset : page,
             })['listPage'],
-            item : item,
-            pageTitle : getPageTitle({
-                prefix : prefix,
-                suffix : allNames,
-            }),
-            pathPrefix : getViewName(prefix),
-            script : getScript(allNames),
-            ...forEveryone(),
+            item : require('../database/elements')['name']['public'],
+            pageTitle : ('json-admin').split('-').join(' ') + ' all',
+            pathPrefix : ('json-admin').split('-').join('/'),
+            script : getScript('all'),
+            ...everyoneView(),
             ...JSONPagination({
                 array : dataBase,
-                limit : amount,
+                limit : 2,
                 offset : page,
             }),
         });
     },
     one : (req, res, next) => {
-        const allNames = 'one';
         const { id } = req['params'];
         const index = dataBase.find((index) => {
             return index['id'] == id;
         });
         return res.render('form', {
             btnTitle : 'come back',
-            formElement : view,
+            formElement : require('../database/elements')['form']['public']['view'],
             index : index,
-            inputType : inputType,
-            pageTitle : getPageTitle({
-                prefix : prefix,
-                suffix : allNames,
-            }),
-            script : getScript(allNames),
-            ...forEveryone(),
+            inputType : require('../database/options')['inputType'],
+            pageTitle : ('json-admin').split('-').join(' ') + ' one',
+            script : getScript('one'),
+            ...everyoneView(),
             ...getFormHeader({
-                prefix : prefix,
-                suffix : 'all',
+                prefix : 'json-admin',
+                suffix : 'one',
                 enctype : '',
                 method : 'POST',
             }),
         });
     },
+
     create : (req, res, next) => {
-        const allNames = 'create';
         return res.render('form', {
-            btnTitle : allNames,
-            formElement : create,
-            inputType : inputType,
-            pageTitle : getPageTitle({
-                prefix : prefix,
-                suffix : allNames,
-            }),
-            script : getScript(allNames),
-            ...forEveryone(),
+            btnTitle : 'create',
+            formElement : require('../database/elements')['form']['public']['create'],
+            inputType : require('../database/options')['inputType'],
+            pageTitle : ('json-admin').split('-').join(' ') + ' create',
+            script : getScript('create'),
+            ...everyoneView(),
             ...getFormHeader({
-                prefix : prefix,
+                prefix : 'create',
                 suffix : 'save',
                 enctype : '',
                 method : 'POST',
@@ -108,17 +80,14 @@ module.exports = {
         });
         return res.render('form', {
             btnTitle : 'update',
-            formElement : edit,
+            formElement : require('../database/elements')['form']['public']['edit'],
             index : index,
-            inputType : inputType,
-            pageTitle : getPageTitle({
-                prefix : prefix,
-                suffix : allNames,
-            }),
+            inputType : require('../database/options')['inputType'],
+            pageTitle : ('json-admin').split('-').join(' ') + ' edit',
             script : getScript(allNames),
-            ...forEveryone(),
+            ...everyoneView(),
             ...getFormHeader({
-                prefix : prefix,
+                prefix : ('json-admin').split('-').join('/'),
                 suffix : 'update' + '/' + id,
                 enctype : '',
                 method : 'POST',
@@ -153,7 +122,7 @@ module.exports = {
             path : 'database/json/clients.js',
         });
         return res.redirect(getURLPath({
-            prefix : prefix,
+            prefix : ('json-admin').split('-').join('/'),
             suffix : 'view',
         }));
     },
