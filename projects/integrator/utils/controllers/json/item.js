@@ -1,6 +1,5 @@
 let {
     getAll,
-    getBulk,
     getCreate,
     getDestroy,
     getEdit,
@@ -9,11 +8,10 @@ let {
     getSearch,
     getStore,
     getUpdate,
-} = require('../../actions/database');
+} = require('../../actions/json');
 const getControllers = (object) => {
     const Action = {
         ...getAll(object),
-        ...getBulk(object),
         ...getCreate(object),
         ...getDestroy(object),
         ...getEdit(object),

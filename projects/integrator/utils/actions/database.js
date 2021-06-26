@@ -313,25 +313,25 @@ const getSearch = (object) => {
 const getLogin = (object) => {
     const Action = {
         login : async (req, res, next) => {
-            return res.render('form', {
-                btnTitle : 'login',
-                formElement : require(urlJoin([
-                    ...root,
-                    'elements',
-                ]))['form'][object['element']]['login'],
-                inputType : require(urlJoin([
-                    ...root,
-                    'options',
-                ]))['inputType'],
-                pageTitle : object['prefix'].split('-').join(' ') + ' login',
-                script : getScript('login'),
-                ...everyoneView(),
-                ...getFormHeader({
-                    prefix : object['prefix'],
-                    suffix : 'authenticate',
-                    method : 'POST',
-                }),
-            });
+            // return res.render('form', {
+            //     btnTitle : 'login',
+            //     formElement : require(urlJoin([
+            //         ...root,
+            //         'elements',
+            //     ]))['form'][object['element']]['login'],
+            //     inputType : require(urlJoin([
+            //         ...root,
+            //         'options',
+            //     ]))['inputType'],
+            //     pageTitle : object['prefix'].split('-').join(' ') + ' login',
+            //     script : getScript('login'),
+            //     ...everyoneView(),
+            //     ...getFormHeader({
+            //         prefix : object['prefix'],
+            //         suffix : 'authenticate',
+            //         method : 'POST',
+            //     }),
+            // });
         },
     }
     return Action;
@@ -340,8 +340,8 @@ const getLogin = (object) => {
 const getLogout = (object) => {
     const Action = {
         logout : async (req, res, next) => {
-            req.session.destroy();
-            return res.redirect('/');
+            // req.session.destroy();
+            // return res.redirect('/');
         },
     }
     return Action;
@@ -350,50 +350,50 @@ const getLogout = (object) => {
 const getAuthenticate = (object) => {
     const Action = {
         authenticate : async (req, res, next) => {
-            const {
-                email,
-                password,
-            } = req['body'];
-            const user = await object['modelName'].findOne({
-                ...getModelParams({
-                    param : email,
-                    column : 'email',
-                }),
-            });
-            let screen = (method, allNames) => {
-                return method.render('form', {
-                    btnTitle : allNames,
-                    formElement : require(urlJoin([
-                        ...root,
-                        'elements',
-                    ]))['form'][object['element']]['login'],
-                    inputType : require(urlJoin([
-                        ...root,
-                        'options',
-                    ]))['inputType'],
-                    pageTitle : object['prefix'].split('-').join(' ') + ' ' + allNames,
-                    script : getScript(allNames),
-                    ...everyoneView(),
-                    ...getFormHeader({
-                        prefix : object['prefix'],
-                        suffix : allNames,
-                        method : 'POST',
-                    }),
-                });
-            };
-            if (!user) screen(res, 'login');
-            if (!isEqual({
-                client : password,
-                dataBase : user['password'],
-            })) screen(res, 'login');
-            user['password'] = undefined;
-            req.session.user = user;
-            return res.redirect(getURLPath({
-                ...object['prefix'] ? {
-                    prefix : object['prefix'],
-                    suffix : 'all',
-                } : { },
-            }));
+            // const {
+            //     email,
+            //     password,
+            // } = req['body'];
+            // const user = await object['modelName'].findOne({
+            //     ...getModelParams({
+            //         param : email,
+            //         column : 'email',
+            //     }),
+            // });
+            // let screen = (method, allNames) => {
+            //     return method.render('form', {
+            //         btnTitle : allNames,
+            //         formElement : require(urlJoin([
+            //             ...root,
+            //             'elements',
+            //         ]))['form'][object['element']]['login'],
+            //         inputType : require(urlJoin([
+            //             ...root,
+            //             'options',
+            //         ]))['inputType'],
+            //         pageTitle : object['prefix'].split('-').join(' ') + ' ' + allNames,
+            //         script : getScript(allNames),
+            //         ...everyoneView(),
+            //         ...getFormHeader({
+            //             prefix : object['prefix'],
+            //             suffix : allNames,
+            //             method : 'POST',
+            //         }),
+            //     });
+            // };
+            // if (!user) screen(res, 'login');
+            // if (!isEqual({
+            //     client : password,
+            //     dataBase : user['password'],
+            // })) screen(res, 'login');
+            // user['password'] = undefined;
+            // req.session.user = user;
+            // return res.redirect(getURLPath({
+            //     ...object['prefix'] ? {
+            //         prefix : object['prefix'],
+            //         suffix : 'all',
+            //     } : { },
+            // }));
         },
     }
     return Action;

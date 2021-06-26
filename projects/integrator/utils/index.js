@@ -215,21 +215,7 @@ const getModelSearchParams = (object) => {
     };
 };
 const getFirstUpperCase = (string) => {
-    let result = '', array = string.split(' ');
-    for (let i = 0; i < array['length']; i++) {
-        if (array[i] == 'cep' || array[i] == 'cnpj' || array[i] == 'cpf' || array[i] == 'rg' || array[i] == 'uf') {
-            result += array[i].toUpperCase();
-        } else if (array[i] == 'à' || array[i] == 'e' || array[i] == 'da' || array[i] == 'de' || array[i] == 'do' || array[i] == 'em') {
-            result += array[i].toLowerCase();
-        } else if (array[i] == 'AC' || array[i] == 'AL' || array[i] == 'AP' || array[i] == 'AM' || array[i] == 'BA' || array[i] == 'CE' || array[i] == 'DF' || array[i] == 'ES' || array[i] == 'GO' || array[i] == 'MA' || array[i] == 'MT' || array[i] == 'MS' || array[i] == 'MG' || array[i] == 'PA' || array[i] == 'PB' || array[i] == 'PR' || array[i] == 'PE' || array[i] == 'PI' || array[i] == 'RJ' || array[i] == 'RN' || array[i] == 'RS' || array[i] == 'RO' || array[i] == 'RR' || array[i] == 'SC' || array[i] == 'SP' || array[i] == 'SE' || array[i] == 'TO') {
-            result += array[i].toUpperCase();
-        } else {
-            result += array[i].substr(0, 1).toUpperCase();
-            result += array[i].substr(1, array[i]['length']).toLowerCase();
-        }
-        result += i < array['length'] - 1 ? ' ' : '';
-    }
-    return result;
+    return string.charAt(0).toUpperCase() + string.slice(1);
 };
 const toClean = (result) => {
     let array = [
