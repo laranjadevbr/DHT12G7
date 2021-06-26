@@ -6,14 +6,22 @@ let {
     getModelSearchParams,
     getScript,
     getURLPath,
+    urlJoin,
 } = require('..');
+
+const root = [
+    '../..',
+    'database',
+];
 
 const getIndex = (object) => {
     const Action = {
         index : async (req, res, next) => {
             return res.redirect(getURLPath({
-                prefix : object['prefix'],
-                suffix : 'all',
+                ...object['prefix'] ? {
+                    prefix : object['prefix'],
+                    suffix : 'all',
+                } : { },
             }));
         },
     }
@@ -43,15 +51,23 @@ const getAll = (object) => {
             });
             return res.render('menu', {
                 index : index,
-                item : require('../../database/elements')['name'][object['title']],
-                inputType : require('../../database/options')['inputType'],
+                item : require(urlJoin([
+                    ...root,
+                    'elements',
+                ]))['name'][object['element']],
+                inputType : require(urlJoin([
+                    ...root,
+                    'options',
+                ]))['inputType'],
                 key : key,
                 pageTitle : object['prefix'].split('-').join(' ') + ' all',
                 pathPrefix : object['prefix'].split('-').join('/'),
                 script : getScript('all'),
                 searchAction : getURLPath({
-                    prefix : object['prefix'],
-                    suffix : 'search',
+                    ...object['prefix'] ? {
+                        prefix : object['prefix'],
+                        suffix : 'search',
+                    } : { },
                 }),
                 ...everyoneView(),
                 ...getModelPagination({
@@ -78,9 +94,15 @@ const getOne = (object) => {
             });
             return res.render('form', {
                 btnTitle : 'come back',
-                formElement : require('../../database/elements')['form'][object['title']]['view'],
+                formElement : require(urlJoin([
+                    ...root,
+                    'elements',
+                ]))['form'][object['element']]['view'],
                 index : index,
-                inputType : require('../../database/options')['inputType'],
+                inputType : require(urlJoin([
+                    ...root,
+                    'options',
+                ]))['inputType'],
                 pageTitle : object['prefix'].split('-').join(' ') + ' one',
                 script : getScript('one'),
                 ...everyoneView(),
@@ -100,8 +122,14 @@ const getCreate = (object) => {
         create : async (req, res, next) => {
             return res.render('form', {
                 btnTitle : 'create',
-                formElement : require('../../database/elements')['form'][object['title']]['create'],
-                inputType : require('../../database/options')['inputType'],
+                formElement : require(urlJoin([
+                    ...root,
+                    'elements',
+                ]))['form'][object['element']]['create'],
+                inputType : require(urlJoin([
+                    ...root,
+                    'options',
+                ]))['inputType'],
                 pageTitle : object['prefix'].split('-').join(' ') + ' create',
                 script : getScript('create'),
                 ...everyoneView(),
@@ -123,8 +151,10 @@ const getStore = (object) => {
                 ...req['body'],
             });
             return res.redirect(getURLPath({
-                prefix : object['prefix'],
-                suffix : 'all',
+                ...object['prefix'] ? {
+                    prefix : object['prefix'],
+                    suffix : 'all',
+                } : { },
             }));
         },
     }
@@ -142,9 +172,15 @@ const getEdit = (object) => {
             });
             return res.render('form', {
                 btnTitle : 'update',
-                formElement : require('../../database/elements')['form'][object['title']]['edit'],
+                formElement : require(urlJoin([
+                    ...root,
+                    'elements',
+                ]))['form'][object['element']]['edit'],
                 index : index,
-                inputType : require('../../database/options')['inputType'],
+                inputType : require(urlJoin([
+                    ...root,
+                    'options',
+                ]))['inputType'],
                 pageTitle : object['prefix'].split('-').join(' ') + ' edit',
                 script : getScript('edit'),
                 ...everyoneView(),
@@ -172,8 +208,10 @@ const getUpdate = (object) => {
                 }),
             });
             return res.redirect(getURLPath({
-                prefix : object['prefix'],
-                suffix : 'all',
+                ...object['prefix'] ? {
+                    prefix : object['prefix'],
+                    suffix : 'all',
+                } : { },
             }));
         },
     }
@@ -190,8 +228,10 @@ const getDestroy = (object) => {
                 }),
             });
             return res.redirect(getURLPath({
-                prefix : object['prefix'],
-                suffix : 'all',
+                ...object['prefix'] ? {
+                    prefix : object['prefix'],
+                    suffix : 'all',
+                } : { },
             }));
         },
     }
@@ -240,15 +280,23 @@ const getSearch = (object) => {
             });
             return res.render('menu', {
                 index : index,
-                item : require('../../database/elements')['name'][object['title']],
-                inputType : require('../../database/options')['inputType'],
+                item : require(urlJoin([
+                    ...root,
+                    'elements',
+                ]))['name'][object['element']],
+                inputType : require(urlJoin([
+                    ...root,
+                    'options',
+                ]))['inputType'],
                 key : key,
                 pageTitle : object['prefix'].split('-').join(' ') + ' all',
                 pathPrefix : object['prefix'].split('-').join('/'),
                 script : getScript('all'),
                 searchAction : getURLPath({
-                    prefix : object['prefix'],
-                    suffix : 'search',
+                    ...object['prefix'] ? {
+                        prefix : object['prefix'],
+                        suffix : 'search',
+                    } : { },
                 }),
                 ...everyoneView(),
                 ...getModelPagination({
@@ -267,8 +315,14 @@ const getLogin = (object) => {
         login : async (req, res, next) => {
             return res.render('form', {
                 btnTitle : 'login',
-                formElement : require('../../database/elements')['form'][object['title']]['login'],
-                inputType : require('../../database/options')['inputType'],
+                formElement : require(urlJoin([
+                    ...root,
+                    'elements',
+                ]))['form'][object['element']]['login'],
+                inputType : require(urlJoin([
+                    ...root,
+                    'options',
+                ]))['inputType'],
                 pageTitle : object['prefix'].split('-').join(' ') + ' login',
                 script : getScript('login'),
                 ...everyoneView(),
@@ -309,8 +363,14 @@ const getAuthenticate = (object) => {
             let screen = (method, allNames) => {
                 return method.render('form', {
                     btnTitle : allNames,
-                    formElement : require('../../database/elements')['form'][object['title']]['login'],
-                    inputType : require('../../database/options')['inputType'],
+                    formElement : require(urlJoin([
+                        ...root,
+                        'elements',
+                    ]))['form'][object['element']]['login'],
+                    inputType : require(urlJoin([
+                        ...root,
+                        'options',
+                    ]))['inputType'],
                     pageTitle : object['prefix'].split('-').join(' ') + ' ' + allNames,
                     script : getScript(allNames),
                     ...everyoneView(),
@@ -329,8 +389,10 @@ const getAuthenticate = (object) => {
             user['password'] = undefined;
             req.session.user = user;
             return res.redirect(getURLPath({
-                prefix : object['prefix'],
-                suffix : 'all',
+                ...object['prefix'] ? {
+                    prefix : object['prefix'],
+                    suffix : 'all',
+                } : { },
             }));
         },
     }

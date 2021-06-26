@@ -5,18 +5,12 @@ const {
 let {
     getControllers,
 } = require('../utils/controllers/database/public');
-let {
-    isThere,
-} = require('../utils');
 module.exports = {
     ...getControllers({
-        title : 'public',
+        element : 'public',
         modelName : Public,
         includeAlias : 'order',
         includeName : Order,
         prefix : 'public-user',
-        // ...isThere(['bulkmakers', 'public.js']) ? {
-        //     bulkMaker : require('../bulkmakers/public'),
-        // } : { },
     }),
 };

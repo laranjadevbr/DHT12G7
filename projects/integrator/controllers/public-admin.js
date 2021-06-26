@@ -10,7 +10,7 @@ let {
 } = require('../utils');
 module.exports = {
     ...getControllers({
-        title : 'public',
+        element : 'public',
         modelName : Public,
         includeAlias : 'order',
         includeName : Order,

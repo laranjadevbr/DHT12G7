@@ -1,5 +1,5 @@
 const fs = require('fs');
-const path = require('path');
+// const path = require('path');
 const urlJoin = require('url-join');
 const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
@@ -44,12 +44,24 @@ const getScript = (string) => {
         string + '.js',
     ]) ? '<script type=\"module\" src=\"/javascripts/' + string + '.js\"></script>' : '';
 };
+
+// urlJoin(['../..', 'database', 'elements'])
+
+// const JSONModify = (object) => {
+//      fs.writeFileSync(path.join('.', object['path']), 'const ' + object['name'] + ' = ');
+//     fs.appendFileSync(path.join('.', object['path']), JSON.stringify(object['content']));
+//     fs.appendFileSync(path.join('.', object['path']), ';');
+//     fs.appendFileSync(path.join('.', object['path']), 'module.exports = ' + object['name'] + ';');
+// };
+
+
 const JSONModify = (object) => {
-     fs.writeFileSync(path.join('.', object['path']), 'const ' + object['name'] + ' = ');
-    fs.appendFileSync(path.join('.', object['path']), JSON.stringify(object['content']));
-    fs.appendFileSync(path.join('.', object['path']), ';');
-    fs.appendFileSync(path.join('.', object['path']), 'module.exports = ' + object['name'] + ';');
+    fs.writeFileSync(urlJoin(object['path']), 'const ' + object['name'] + ' = ');
+   fs.appendFileSync(urlJoin(object['path']), JSON.stringify(object['content']));
+   fs.appendFileSync(urlJoin(object['path']), ';');
+   fs.appendFileSync(urlJoin(object['path']), 'module.exports = ' + object['name'] + ';');
 };
+
 const getRomanNumber = (number) => {
     let r = '';
     let division = 0;
@@ -408,5 +420,6 @@ module.exports = {
     isThis,
     JSONModify,
     JSONPagination,
+    urlJoin,
     objectCreator,
 };

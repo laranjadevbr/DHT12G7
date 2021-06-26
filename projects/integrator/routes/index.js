@@ -40,7 +40,7 @@ const controls = [
     { control : public, path : 'public-client', },
     { control : public, path : 'public-user', },
 
-    { control : recipe, path : 'json-recipe', },
+    // { control : recipe, path : 'json-recipe', },
     { control : json, path : 'json-admin', },
     { control : json, path : 'json-client', },
 ];

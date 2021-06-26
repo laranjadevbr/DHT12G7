@@ -10,7 +10,7 @@ let {
 } = require('../utils');
 module.exports = {
     ...getControllers({
-        title : 'service',
+        element : 'service',
         modelName : Service,
         includeAlias : 'category',
         includeName : Category,

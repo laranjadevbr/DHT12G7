@@ -3,7 +3,8 @@ let {
 } = require('../utils/controllers/json/public');
 module.exports = {
     ...getControllers({
-        title : 'public',
+        element : 'public',
         prefix : 'json-admin',
+        database : require('../database/json/clients'),
     }),
 };
