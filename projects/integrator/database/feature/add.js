@@ -1,7 +1,6 @@
-const {
-    generous,
-    status,
-} = option = require('../options');
+const option = require('../option');
+const generous = option['generous'];
+const status = option['status'];
 const active = true, label = true, placeholder = false, required = false;
 module.exports = (disabled) => {
     return [

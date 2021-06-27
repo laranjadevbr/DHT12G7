@@ -9,7 +9,8 @@ let {
 } = require('..');
 
 const root = [
-    '../..',
+    '..',
+    '..',
     'database',
 ];
 
@@ -28,17 +29,18 @@ const getIndex = (object) => {
 const getAll = (object) => {
     const Action = {
         all : (req, res, next) => {
+            const amount = 2;
             const { page = 1 } = req['query'];
             const database = object['database'];
             return res.render('menu', {
                 index : JSONPagination({
                     array : database,
-                    limit : 2,
+                    limit : amount,
                     offset : page,
                 })['listPage'],
                 item : require(urlJoin([
                     ...root,
-                    'elements',
+                    'element'
                 ]))['name'][object['element']],
                 pageTitle : object['prefix'].split('-').join(' ') + ' all',
                 pathPrefix : object['prefix'].split('-').join('/'),
@@ -46,7 +48,7 @@ const getAll = (object) => {
                 ...everyoneView(),
                 ...JSONPagination({
                     array : database,
-                    limit : 2,
+                    limit : amount,
                     offset : page,
                 }),
             });
@@ -67,12 +69,12 @@ const getOne = (object) => {
                 btnTitle : 'come back',
                 formElement : require(urlJoin([
                     ...root,
-                    'elements',
+                    'element'
                 ]))['form'][object['element']]['view'],
                 index : index,
                 inputType : require(urlJoin([
                     ...root,
-                    'options',
+                    'option'
                 ]))['inputType'],
                 pageTitle : object['prefix'].split('-').join(' ') + ' one',
                 script : getScript('one'),
@@ -101,12 +103,12 @@ const getEdit = (object) => {
                 btnTitle : 'update',
                 formElement : require(urlJoin([
                     ...root,
-                    'elements',
+                    'element'
                 ]))['form'][object['element']]['edit'],
                 index : index,
                 inputType : require(urlJoin([
                     ...root,
-                    'options',
+                    'option'
                 ]))['inputType'],
                 pageTitle : object['prefix'].split('-').join(' ') + ' edit',
                 script : getScript('edit'),
@@ -130,12 +132,9 @@ const getCreate = (object) => {
                 btnTitle : 'create',
                 formElement : require(urlJoin([
                     ...root,
-                    'elements',
+                    'element'
                 ]))['form'][object['element']]['create'],
-                inputType : require(urlJoin([
-                    ...root,
-                    'options',
-                ]))['inputType'],
+                inputType : require(urlJoin([ ...root, 'option' ]))['inputType'],
                 pageTitle : object['prefix'].split('-').join(' ') + ' create',
                 script : getScript('create'),
                 ...everyoneView(),
@@ -165,11 +164,7 @@ const getStore = (object) => {
             JSONModify({
                 name : object['title'],
                 content : database,
-                path : [
-                    ...root,
-                    'json',
-                    object['title'] + '.js',
-                ],
+                path : [ ...root, 'json', object['title'] + '.js' ],
             });
             return res.send(index);
         },
@@ -181,24 +176,12 @@ const getUpdate = (object) => {
     const Action = {
         update : (req, res, next) => {
             const { id } = req['params'];
-            const database = object['database'];
-            const {
-                name,
-                ingredient,
-                mode,
-                cost,
-                time,
-            } = req['body'];
-            const index = database.find((index) => {
+            const index = object['database'].find((index) => {
                 return index['id'] == id;
             });
-            index.active = true;
-            index.id = id;
-            index.name = name;
-            index.ingredient = ingredient;
-            index.mode = mode;
-            index.cost = cost;
-            index.time = time;
+            index = {
+                ...req['body'],
+            };
             JSONModify({
                 name : object['title'],
                 content : index,
@@ -221,8 +204,7 @@ const getDestroy = (object) => {
     const Action = {
         destroy : (req, res, next) => {
             const { id } = req['params'];
-            const database = object['database'];
-            const index = database.filter((index) => {
+            const index = object['database'].filter((index) => {
                 return index['id'] != id;
             });
             JSONModify({

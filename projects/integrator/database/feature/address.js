@@ -1,9 +1,6 @@
-const {
-    lengths : {
-        cep,
-        uf,
-    },
-} = option = require('../options');
+const option = require('../option');
+const cep = option['lengths']['cep'];
+const uf = option['lengths']['uf'];
 const active = true, label = true, placeholder = false, required = false;
 module.exports = (disabled) => {
     return [

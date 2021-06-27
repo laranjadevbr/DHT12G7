@@ -1,7 +1,6 @@
-const {
-    profession,
-    salary,
-} = option = require('../options');
+const option = require('../option');
+const profession = option['profession'];
+const salary = option['salary'];
 const active = true, label = true, placeholder = false, required = false;
 module.exports = (disabled) => {
     return [

@@ -1,4 +1,4 @@
-const option = require('../database/options');
+const option = require('../database/option');
 let {
     getCNPJNumber,
     getCPFNumber,

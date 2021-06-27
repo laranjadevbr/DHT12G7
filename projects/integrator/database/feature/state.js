@@ -1,13 +1,12 @@
-const {
-    boolean,
-} = option = require('../options');
+const option = require('../option');
+const boolean = option['boolean'];
+const name = [
+    'approved',
+    'deleted',
+    'disable',
+];
 const active = true, label = true, placeholder = false, required = false;
 module.exports = (disabled) => {
-    const name = [
-        'approved',
-        'deleted',
-        'disable',
-    ];
     const result = [];
     for (let i = 0; i < name['length']; i++) {
         result.push(

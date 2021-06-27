@@ -1,6 +1,5 @@
-const {
-    level,
-} = option = require('../options');
+const option = require('../option');
+const level = option['level'];
 const active = true, label = true, placeholder = false, required = false;
 module.exports = (disabled) => {
     return [

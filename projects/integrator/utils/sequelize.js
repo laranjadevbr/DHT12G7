@@ -1,4 +1,4 @@
-const option = require('../database/options');
+const option = require('../database/option');
 const { cep, cnh, cnpj, cpf, passport, phone, rg, uf } = option['lengths'];
 const { description } = option['lorem'];
 const getIDColumns = (Sequelize) => {

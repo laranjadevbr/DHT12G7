@@ -1,4 +1,4 @@
-const clients = [
+const client = [
     {
         "active": true,
         "id": 12,
@@ -498,4 +498,4 @@ const clients = [
         "password": "$2b$10$vdsUtu5Bf7QpI0n2PGqWVePDKKeMHFkyAMzkotH2OJDBi5Cnz4c4a",
         "passagain": ""
     }
-];module.exports = clients;
+];module.exports = client;

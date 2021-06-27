@@ -1,46 +1,35 @@
-const router = require('express').Router();
 const {
     isThere,
 } = require('../utils');
-const {
-    api,
-    index,
-    json,
-    lab,
-    product,
-    public,
-    recipe,
-} = obj = require('./routes');
+const router = require('express').Router();
+const routes = require('./routes');
+const api = routes['api'];
+const index = routes['index'];
+const json = routes['json'];
+const lab = routes['lab'];
+const product = routes['product'];
+const public = routes['public'];
 const controls = [
     { control : api, path : 'api-admin', },
-
     { control : api, path : 'api-category-event', },
     { control : api, path : 'api-category-product', },
     { control : api, path : 'api-category-service', },
-
     { control : api, path : 'api-event', },
     { control : api, path : 'api-product', },
     { control : api, path : 'api-service', },
-
     { control : index, path : 'index', },
-
     { control : lab, path : 'lab', },
-
     { control : product, path : 'category-event', },
     { control : product, path : 'category-product', },
     { control : product, path : 'category-service', },
-
     { control : product, path : 'order', },
-
     { control : product, path : 'item-event', },
     { control : product, path : 'item-product', },
     { control : product, path : 'item-service', },
-
     { control : public, path : 'public-admin', },
     { control : public, path : 'public-client', },
     { control : public, path : 'public-user', },
-
-    // { control : recipe, path : 'json-recipe', },
+    { control : json, path : 'json-recipe', },
     { control : json, path : 'json-admin', },
     { control : json, path : 'json-client', },
 ];

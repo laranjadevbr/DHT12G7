@@ -1,6 +1,5 @@
-const {
-    hobbies,
-} = option = require('../options');
+const option = require('../option')
+const hobbies = option['hobbies'];
 const active = true, label = true, placeholder = false, required = false;
 module.exports = (disabled) => {
     return [

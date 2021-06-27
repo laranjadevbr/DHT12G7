@@ -89,14 +89,6 @@ module.exports = {
         ...change,
         ...view,
     ],
-    recipe : [
-        ...change,
-        ...view,
-        ...getRoute([
-            'menu',
-            'success',
-        ], 'get'),
-    ],
     lab : [
         ...getRoute([
             'a',

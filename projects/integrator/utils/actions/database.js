@@ -1,5 +1,6 @@
 let {
     everyoneView,
+    getFirstUpperCase,
     getFormHeader,
     getModelPagination,
     getModelParams,
@@ -10,7 +11,8 @@ let {
 } = require('..');
 
 const root = [
-    '../..',
+    '..',
+    '..',
     'database',
 ];
 
@@ -53,11 +55,11 @@ const getAll = (object) => {
                 index : index,
                 item : require(urlJoin([
                     ...root,
-                    'elements',
+                    'element',
                 ]))['name'][object['element']],
                 inputType : require(urlJoin([
                     ...root,
-                    'options',
+                    'option',
                 ]))['inputType'],
                 key : key,
                 pageTitle : object['prefix'].split('-').join(' ') + ' all',
@@ -96,12 +98,12 @@ const getOne = (object) => {
                 btnTitle : 'come back',
                 formElement : require(urlJoin([
                     ...root,
-                    'elements',
+                    'element',
                 ]))['form'][object['element']]['view'],
                 index : index,
                 inputType : require(urlJoin([
                     ...root,
-                    'options',
+                    'option',
                 ]))['inputType'],
                 pageTitle : object['prefix'].split('-').join(' ') + ' one',
                 script : getScript('one'),
@@ -124,11 +126,11 @@ const getCreate = (object) => {
                 btnTitle : 'create',
                 formElement : require(urlJoin([
                     ...root,
-                    'elements',
+                    'element',
                 ]))['form'][object['element']]['create'],
                 inputType : require(urlJoin([
                     ...root,
-                    'options',
+                    'option',
                 ]))['inputType'],
                 pageTitle : object['prefix'].split('-').join(' ') + ' create',
                 script : getScript('create'),
@@ -151,10 +153,8 @@ const getStore = (object) => {
                 ...req['body'],
             });
             return res.redirect(getURLPath({
-                ...object['prefix'] ? {
-                    prefix : object['prefix'],
-                    suffix : 'all',
-                } : { },
+                prefix : object['prefix'],
+                suffix : 'all',
             }));
         },
     }
@@ -174,12 +174,12 @@ const getEdit = (object) => {
                 btnTitle : 'update',
                 formElement : require(urlJoin([
                     ...root,
-                    'elements',
+                    'element',
                 ]))['form'][object['element']]['edit'],
                 index : index,
                 inputType : require(urlJoin([
                     ...root,
-                    'options',
+                    'option',
                 ]))['inputType'],
                 pageTitle : object['prefix'].split('-').join(' ') + ' edit',
                 script : getScript('edit'),
@@ -208,10 +208,8 @@ const getUpdate = (object) => {
                 }),
             });
             return res.redirect(getURLPath({
-                ...object['prefix'] ? {
-                    prefix : object['prefix'],
-                    suffix : 'all',
-                } : { },
+                prefix : object['prefix'],
+                suffix : 'all',
             }));
         },
     }
@@ -228,10 +226,8 @@ const getDestroy = (object) => {
                 }),
             });
             return res.redirect(getURLPath({
-                ...object['prefix'] ? {
-                    prefix : object['prefix'],
-                    suffix : 'all',
-                } : { },
+                prefix : object['prefix'],
+                suffix : 'all',
             }));
         },
     }
@@ -243,7 +239,7 @@ const getBulk = (object) => {
         bulk : async (req, res, next) => {
             const index = object['bulkMaker']
             ? await object['modelName'].bulkCreate(object['bulkMaker'])
-            : 'File not found!';
+            : getFirstUpperCase('File not found!');
             return res.send(index);
         },
     }
@@ -282,11 +278,11 @@ const getSearch = (object) => {
                 index : index,
                 item : require(urlJoin([
                     ...root,
-                    'elements',
+                    'element',
                 ]))['name'][object['element']],
                 inputType : require(urlJoin([
                     ...root,
-                    'options',
+                    'option',
                 ]))['inputType'],
                 key : key,
                 pageTitle : object['prefix'].split('-').join(' ') + ' all',
@@ -313,15 +309,17 @@ const getSearch = (object) => {
 const getLogin = (object) => {
     const Action = {
         login : async (req, res, next) => {
+            return res.send('fabio');
+
             // return res.render('form', {
             //     btnTitle : 'login',
             //     formElement : require(urlJoin([
             //         ...root,
-            //         'elements',
+            //         'element',
             //     ]))['form'][object['element']]['login'],
             //     inputType : require(urlJoin([
             //         ...root,
-            //         'options',
+            //         'option',
             //     ]))['inputType'],
             //     pageTitle : object['prefix'].split('-').join(' ') + ' login',
             //     script : getScript('login'),
@@ -365,11 +363,11 @@ const getAuthenticate = (object) => {
             //         btnTitle : allNames,
             //         formElement : require(urlJoin([
             //             ...root,
-            //             'elements',
+            //             'element',
             //         ]))['form'][object['element']]['login'],
             //         inputType : require(urlJoin([
             //             ...root,
-            //             'options',
+            //             'option',
             //         ]))['inputType'],
             //         pageTitle : object['prefix'].split('-').join(' ') + ' ' + allNames,
             //         script : getScript(allNames),

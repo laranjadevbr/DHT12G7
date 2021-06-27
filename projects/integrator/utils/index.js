@@ -1,5 +1,4 @@
 const fs = require('fs');
-// const path = require('path');
 const urlJoin = require('url-join');
 const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
@@ -130,15 +129,18 @@ const isEqual = (object) => {
     return bcrypt.compareSync(object['client'], object['dataBase']) ? true : false;
 };
 const JSONPagination = (object) => {
+    let offset = Number(object['offset']);
+    let limit = object['limit'];
+    let array = object['array'];
     const listPage = [];
-    for (let i = object['offset'] * object['limit']; i < object['offset'] * object['limit'] + object['limit']; i++)
-        listPage.push(object['array'][i]);
-    const fullPage = Math.round((object['array']['length'] - 1) / object['limit'] - 1);
+    const gap = limit * (offset - 1);
+    for (let i = gap; i < ((gap + limit) <= array['length'] ? (gap + limit) : array['length']); i++)
+        listPage.push(array[i]);
     return {
-        fullPage : fullPage,
+        fullPage : Math.round(array['length'] / limit),
         listPage : listPage,
-        nextPage : object['offset'] < fullPage ? object['offset'] + 1 : fullPage,
-        prevPage : object['offset'] <= 1 ? 1 : object['offset'] - 1,
+        nextPage : offset < Math.round(array['length'] / limit) ? offset + 1 : Math.round(array['length'] / limit),
+        prevPage : offset <= 1 ? 1 : offset - 1,
     };
 };
 const getModelPagination = (object) => {

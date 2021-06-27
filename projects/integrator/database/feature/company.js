@@ -1,8 +1,5 @@
-const {
-    lengths : {
-        cnpj,
-    },
-} = option = require('../options');
+const option = require('../option');
+const cnpj = option['lengths']['cnpj'];
 const active = true, label = true, placeholder = false, required = false;
 module.exports = (disabled) => {
     return [
