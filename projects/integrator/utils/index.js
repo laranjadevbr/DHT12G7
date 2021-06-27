@@ -134,7 +134,7 @@ const JSONPagination = (object) => {
     let array = object['array'];
     const listPage = [];
     const gap = limit * (offset - 1);
-    for (let i = gap; i < ((gap + limit) <= array['length'] ? (gap + limit) : array['length']); i++)
+    for (let i = gap; i < (gap + limit <= array['length'] ? gap + limit : array['length']); i++)
         listPage.push(array[i]);
     return {
         fullPage : Math.round(array['length'] / limit),
