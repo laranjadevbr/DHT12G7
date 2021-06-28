@@ -85,9 +85,14 @@ module.exports = {
         ...search,
         ...view,
     ],
-    json : [
+    jsonItem : [
         ...change,
         ...view,
+    ],
+    jsonPublic : [
+        ...change,
+        ...view,
+        ...log,
     ],
     lab : [
         ...getRoute([

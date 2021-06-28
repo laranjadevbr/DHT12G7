@@ -1,11 +1,8 @@
-const {
-    isThere,
-} = require('../utils');
-const router = require('express').Router();
 const routes = require('./routes');
 const api = routes['api'];
 const index = routes['index'];
-const json = routes['json'];
+const jsonItem = routes['jsonItem'];
+const jsonPublic = routes['jsonPublic'];
 const lab = routes['lab'];
 const product = routes['product'];
 const public = routes['public'];
@@ -29,10 +26,11 @@ const controls = [
     { control : public, path : 'public-admin', },
     { control : public, path : 'public-client', },
     { control : public, path : 'public-user', },
-    { control : json, path : 'json-recipe', },
-    { control : json, path : 'json-admin', },
-    { control : json, path : 'json-client', },
+    { control : jsonItem, path : 'json-recipe', },
+    { control : jsonPublic, path : 'json-admin', },
+    { control : jsonPublic, path : 'json-client', },
 ];
+const router = require('express').Router();
 let getRouter = (controller, URLPath, object) => {
     for (let i = 0; i < object['length']; i++) {
         router[object[i]['method']](
@@ -41,6 +39,9 @@ let getRouter = (controller, URLPath, object) => {
         );
     }
 };
+const {
+    isThere,
+} = require('../utils');
 for (let i = 0; i < controls['length']; i++) {
     if (isThere(['controllers', controls[i]['path'] + '.js'])) {
         const controller = require('../controllers/' + controls[i]['path']);

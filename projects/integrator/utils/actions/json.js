@@ -190,24 +190,20 @@ const getSearch = (object) => {
 const getLogin = (object) => {
     const Action = {
         login : (req, res, next) => {
-            // const allNames = 'login';
-            // return res.render(viewName(prefix, allNames), {
-            //     form : {
-            //         action : urlPath(prefix, 'authenticate'),
-            //         enctype : '',
-            //         method : 'POST',
-            //     },            
-            //     btnTitle : allNames,
-            //     formElement : login,
-            //     inputType : inputType,
-            //     pageTitle : pageTitle(prefix, allNames),
-            //     capitalize,
-            //     cleaner,
-            //     currency,
-            //     roman,
-            //     session,
-            //     validate,
-            // });
+            return res.render('form', {
+                btnTitle : 'login',
+                ...everyoneView(),
+                ...getFormElement({ element : object['element'], type : 'login' }),
+                ...getInputType(),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'login' }),
+                ...getScriptModule('login'),
+                ...getFormHeader({
+                    prefix : 'login',
+                    suffix : 'authenticate',
+                    enctype : '',
+                    method : 'POST',
+                }),
+            });
         },
     }
     return Action;
