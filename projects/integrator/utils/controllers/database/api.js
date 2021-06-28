@@ -6,10 +6,7 @@ const {
 const getControllers = (object) => {
     const Action = {
         index : async (req, res, next) => {
-            return res.redirect(getURLPath({
-                prefix : object['prefix'],
-                suffix : 'all',
-            }));
+            return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'all' }));
         },
         all : async (req, res, next) => {
             const { key } = req['query'];
@@ -19,7 +16,7 @@ const getControllers = (object) => {
             } = await object['modelName'].findAndCountAll({
                 ...getModelParams({
                     param : key,
-                    column : 'title',
+                    column : 'id',
                     ...object['includeAlias'] && object['includeName'] ? {
                         alias : object['includeAlias'],
                         model : object['includeName'],
@@ -47,10 +44,7 @@ const getControllers = (object) => {
         one : async (req, res, next) => {
             const { id } = req['params'];
             if (!id) {
-                return res.redirect(getURLPath({
-                    prefix : object['prefix'],
-                    suffix : 'all',
-                }));
+                return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'all' }));
             } else {
                 const index = await object['modelName'].findOne({
                     ...getModelParams({

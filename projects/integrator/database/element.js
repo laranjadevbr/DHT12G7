@@ -74,7 +74,7 @@ const form = {
             { title : 'contact', object : 'contact' },
             { title : 'curriculum', object : 'curriculum' },
             { title : 'company', object : 'company' },
-            { title : 'access', object : 'access' },
+            { title : 'access data', object : 'access' },
             // { title : 'state', object : 'state' },
             // { title : '', object : 'level' },
             // { title : 'create', object : 'create' },
@@ -90,13 +90,13 @@ const form = {
             { title : 'contact', object : 'contact' },
             { title : 'curriculum', object : 'curriculum' },
             { title : 'company', object : 'company' },
-            { title : 'access', object : 'access' },
+            { title : 'access data', object : 'access' },
             { title : 'state', object : 'state' },
             { title : '', object : 'level' },
             // { title : 'create', object : 'create' },
         ], false),
         login : formConstructor([
-            { title : 'access data', object : 'access' }
+            { title : 'access data', object : 'login' },
         ], false),
         view : formConstructor([
             { title : '', object : 'id' },
@@ -109,7 +109,7 @@ const form = {
             { title : 'contact', object : 'contact' },
             { title : 'curriculum', object : 'curriculum' },
             { title : 'company', object : 'company' },
-            { title : 'access', object : 'access' },
+            { title : 'access data', object : 'access' },
             { title : 'state', object : 'state' },
             { title : '', object : 'level' },
             { title : 'create', object : 'create' },
