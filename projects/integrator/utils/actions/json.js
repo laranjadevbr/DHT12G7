@@ -1,11 +1,15 @@
 let {
     everyoneView,
+    getFormElement,
     getFormHeader,
-    getScript,
+    getInputType,
+    getItem,
+    getPageTitle,
+    getPathPrefix,
+    getScriptModule,
     getURLPath,
     JSONModify,
     JSONPagination,
-    urlJoin,
 } = require('..');
 
 const root = [
@@ -17,10 +21,7 @@ const root = [
 const getIndex = (object) => {
     const Action = {
         index : (req, res, next) => {
-            return res.redirect(getURLPath({
-                prefix : object['prefix'].split('-').join('/'),
-                suffix : 'all',
-            }));
+            return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'all' }));
         },
     }
     return Action;
@@ -38,14 +39,11 @@ const getAll = (object) => {
                     limit : amount,
                     offset : page,
                 })['listPage'],
-                item : require(urlJoin([
-                    ...root,
-                    'element'
-                ]))['name'][object['element']],
-                pageTitle : object['prefix'].split('-').join(' ') + ' all',
-                pathPrefix : object['prefix'].split('-').join('/'),
-                script : getScript('all'),
                 ...everyoneView(),
+                ...getItem(object['element']),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'all' }),
+                ...getPathPrefix(object['prefix']),
+                ...getScriptModule('all'),
                 ...JSONPagination({
                     array : database,
                     limit : amount,
@@ -61,24 +59,15 @@ const getOne = (object) => {
     const Action = {
         one : (req, res, next) => {
             const { id } = req['params'];
-            const database = object['database'];
-            const index = database.find((index) => {
-                return index['id'] == id;
-            });
+            const index = object['database'].find((index) => { return index['id'] == id; });
             return res.render('form', {
-                btnTitle : 'come back',
-                formElement : require(urlJoin([
-                    ...root,
-                    'element'
-                ]))['form'][object['element']]['view'],
                 index : index,
-                inputType : require(urlJoin([
-                    ...root,
-                    'option'
-                ]))['inputType'],
-                pageTitle : object['prefix'].split('-').join(' ') + ' one',
-                script : getScript('one'),
+                btnTitle : 'come back',
                 ...everyoneView(),
+                ...getFormElement({ element : object['element'], type : 'view' }),
+                ...getInputType(),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'one' }),
+                ...getScriptModule('one'),
                 ...getFormHeader({
                     prefix : object['prefix'],
                     suffix : 'one',
@@ -95,26 +84,17 @@ const getEdit = (object) => {
     const Action = {
         edit : (req, res, next) => {
             const { id } = req['params'];
-            const database = object['database'];
-            const index = database.find((index) => {
-                return index['id'] == id;
-            });
+            const index = object['database'].find((index) => { return index['id'] == id; });
             return res.render('form', {
-                btnTitle : 'update',
-                formElement : require(urlJoin([
-                    ...root,
-                    'element'
-                ]))['form'][object['element']]['edit'],
                 index : index,
-                inputType : require(urlJoin([
-                    ...root,
-                    'option'
-                ]))['inputType'],
-                pageTitle : object['prefix'].split('-').join(' ') + ' edit',
-                script : getScript('edit'),
+                btnTitle : 'update',
                 ...everyoneView(),
+                ...getFormElement({ element : object['element'], type : 'edit' }),
+                ...getInputType(),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'edit' }),
+                ...getScriptModule('edit'),
                 ...getFormHeader({
-                    prefix : object['prefix'].split('-').join('/'),
+                    prefix : object['prefix'],
                     suffix : 'update' + '/' + id,
                     enctype : '',
                     method : 'POST',
@@ -130,14 +110,11 @@ const getCreate = (object) => {
         create : (req, res, next) => {
             return res.render('form', {
                 btnTitle : 'create',
-                formElement : require(urlJoin([
-                    ...root,
-                    'element'
-                ]))['form'][object['element']]['create'],
-                inputType : require(urlJoin([ ...root, 'option' ]))['inputType'],
-                pageTitle : object['prefix'].split('-').join(' ') + ' create',
-                script : getScript('create'),
                 ...everyoneView(),
+                ...getFormElement({ element : object['element'], type : 'create' }),
+                ...getInputType(),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'create' }),
+                ...getScriptModule('create'),
                 ...getFormHeader({
                     prefix : 'create',
                     suffix : 'save',
@@ -164,7 +141,6 @@ const getStore = (object) => {
             JSONModify({
                 name : object['title'],
                 content : database,
-                path : [ ...root, 'json', object['title'] + '.js' ],
             });
             return res.send(index);
         },
@@ -176,25 +152,13 @@ const getUpdate = (object) => {
     const Action = {
         update : (req, res, next) => {
             const { id } = req['params'];
-            const index = object['database'].find((index) => {
-                return index['id'] == id;
-            });
-            index = {
-                ...req['body'],
-            };
+            const index = object['database'].find((index) => { return index['id'] == id; });
+            index = { ...req['body'], };
             JSONModify({
                 name : object['title'],
                 content : index,
-                path : [
-                    ...root,
-                    'json',
-                    object['title'] + '.js',
-                ],
             });
-            return res.redirect(getURLPath({
-                prefix : object['prefix'].split('-').join('/'),
-                suffix : 'all',
-            }));
+            return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'all' }));
         },
     }
     return Action;
@@ -204,22 +168,12 @@ const getDestroy = (object) => {
     const Action = {
         destroy : (req, res, next) => {
             const { id } = req['params'];
-            const index = object['database'].filter((index) => {
-                return index['id'] != id;
-            });
+            const index = object['database'].filter((index) => { return index['id'] != id; });
             JSONModify({
                 name : object['title'],
                 content : index,
-                path : [
-                    ...root,
-                    'json',
-                    object['title'] + '.js',
-                ],
             });
-            return res.redirect(getURLPath({
-                prefix : object['prefix'].split('-').join('/'),
-                suffix : 'all',
-            }));
+            return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'all' }));
         },
     }
     return Action;

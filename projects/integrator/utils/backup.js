@@ -3,11 +3,21 @@ const urlJoin = require('url-join');
 const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
 
+
+
+const getURLPath = (object) => {
+    const result = '';
+    result += object['prefix'] ? '/' + object['prefix'].trim().split('-').join('/') : '';
+    result += object['suffix'] ? '/' + object['suffix'].trim() : '';
+    return result.toLowerCase();
+};
+
 const getPathPrefix = (strign) => {
     return {
         pathPrefix : strign ? strign.split('-').join('/').trim().toLowerCase() : '',
     }
 };
+
 
 const getPageTitle = (object) => {
     let result = '';
@@ -21,32 +31,26 @@ const getPageTitle = (object) => {
 const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min);
 };
-
 const isThere = (array) => {
     return fs.existsSync(urlJoin(array)) ? true : false;
 };
-
 const getValidation = (variable) => {
     if (!variable) return false;
     else if (isThis(variable, 'undefined')) return false;
     else return true;
 };
-
 const isTheLast = (string, character) => {
     return string.substr(string['length'] - 1, string['length']) === character ? true : false;
 };
-
 const getCurrency = (string) => {
     return (string).toLocaleString('pt-br', {
         style : 'currency',
         currency : 'USD',
     });
 };
-
 const isThis = (string, type) => {
     return typeof string === type ? true : false;
 };
-
 const getDOCNumber = (array) => {
     let num = '', result = '';
     for (let x = 0; x < array['length']; x++) {    
@@ -58,7 +62,6 @@ const getDOCNumber = (array) => {
     }
     return result;
 };
-
 const getScript = (string) => {
     return isThere([
         'public',
@@ -66,23 +69,36 @@ const getScript = (string) => {
         string + '.js',
     ]) ? '<script type=\"module\" src=\"/javascripts/' + string + '.js\"></script>' : '';
 };
+const getInputType = () => {
+    return {
+        inputType : require(urlJoin([
+            'database',
+            'option'
+        ]))['inputType'],
+    };
+};
 
 const getScriptModule = (string) => {
     return {
-        script : isThere([
-            'public',
-            'javascripts',
-            string + '.js'
-        ]) ? '<script type=\"module\" src=\"/javascripts/' + string + '.js\"></script>' : '',
+        script : isThere([ 'public', 'javascripts', string + '.js' ]) ? '<script type=\"module\" src=\"/javascripts/' + string + '.js\"></script>' : '',
     }
 };
 
+// urlJoin(['../..', 'database', 'elements'])
+
+// const JSONModify = (object) => {
+//      fs.writeFileSync(path.join('.', object['path']), 'const ' + object['name'] + ' = ');
+//     fs.appendFileSync(path.join('.', object['path']), JSON.stringify(object['content']));
+//     fs.appendFileSync(path.join('.', object['path']), ';');
+//     fs.appendFileSync(path.join('.', object['path']), 'module.exports = ' + object['name'] + ';');
+// };
+
+
 const JSONModify = (object) => {
-    const URLpath = [ '..', 'database', 'json', object['name'] + '.js' ];
-     fs.writeFileSync(urlJoin(URLpath), 'const ' + object['name'] + ' = ');
-    fs.appendFileSync(urlJoin(URLpath), JSON.stringify(object['content']));
-    fs.appendFileSync(urlJoin(URLpath), ';');
-    fs.appendFileSync(urlJoin(URLpath), 'module.exports = ' + object['name'] + ';');
+    fs.writeFileSync(urlJoin(object['path']), 'const ' + object['name'] + ' = ');
+   fs.appendFileSync(urlJoin(object['path']), JSON.stringify(object['content']));
+   fs.appendFileSync(urlJoin(object['path']), ';');
+   fs.appendFileSync(urlJoin(object['path']), 'module.exports = ' + object['name'] + ';');
 };
 
 const getRomanNumber = (number) => {
@@ -107,7 +123,6 @@ const getRomanNumber = (number) => {
     }
     return r;
 };
-
 const getCNPJNumber = (array) => {
     let num = '', result = '';
     for (let x = 0; x < array['length']; x++) {    
@@ -120,7 +135,6 @@ const getCNPJNumber = (array) => {
     }
     return result;
 };
-
 const getCPFNumber = () => {
     let getDOCDigit = (num1, num2, num3, num4) => {
         let num = num1.split('').concat(num2.split(''), num3.split('')), x = 0;    
@@ -131,13 +145,11 @@ const getCPFNumber = () => {
     const num1 = getDOCNumber([3]), num2 = getDOCNumber([3]), num3 = getDOCNumber([3]), dig = getDOCDigit(num1, num2, num3);
     return `${ num1 }.${ num2 }.${ num3 }-${ dig }${ getDOCDigit(num1, num2, num3, dig) }`;
 };
-
 const getRandomDate = (start, end) => {
     start = new Date(start).getTime();
     end = new Date(end).getTime();
     return start > end ? new Date(getRandomNumber(end, start)) : new Date(getRandomNumber(start, end));
 };
-
 const getPhoneNumber = (array) => {
     let num = '', result = '(';
     for (let x = 0; x < array['length']; x++) {    
@@ -150,15 +162,12 @@ const getPhoneNumber = (array) => {
     }
     return result;
 };
-
 const getHash = (password) => {
     return bcrypt.hashSync(String(password), bcrypt.genSaltSync(10));
 };
-
 const isEqual = (object) => {
     return bcrypt.compareSync(object['client'], object['dataBase']) ? true : false;
 };
-
 const JSONPagination = (object) => {
     const listPage = [];
     let offset = Number(object['offset']), limit = object['limit'], array = object['array'];
@@ -172,7 +181,6 @@ const JSONPagination = (object) => {
         prevPage : offset <= 1 ? 1 : offset - 1,
     };
 };
-
 const getModelPagination = (object) => {
     const fullPage = Math.round(object['count'] / object['amount']);
     return {
@@ -181,7 +189,6 @@ const getModelPagination = (object) => {
         prevPage : Number(object['offset']) <= 1 ? 1 : Number(object['offset']) - 1,
     };
 };
-
 const getFormHeader = (object) => {
     return {
         form : {
@@ -200,7 +207,6 @@ const getFormHeader = (object) => {
         },
     };
 };
-
 const getModelParams = (object) => {
     return {
         ...object['model'] && object['alias'] ? {
@@ -228,7 +234,6 @@ const getModelParams = (object) => {
         } : { },
     };
 };
-
 const getModelSearchParams = (object) => {
     const result = [];
     if (!object['array'] || !object['key']) { } else {
@@ -249,50 +254,9 @@ const getModelSearchParams = (object) => {
         } : { },
     };
 };
-
-const getInputType = () => {
-    return {
-        inputType : require(urlJoin([
-            '..',
-            'database',
-            'option'
-        ]))['inputType'],
-    };
-};
-
-const getSearchAction = (object) => {
-    return {
-        searchAction : getURLPath({
-            prefix : object['prefix'],
-            suffix : object['suffix'],
-        }),
-    };
-};
-
-const getItem = (string) => {
-    return {
-        item : require(urlJoin([
-            '..',
-            'database',
-            'element',
-        ]))['name'][string],
-    };
-};
-
-const getFormElement = (object) => {
-    return {
-        formElement : require(urlJoin([
-            '..',
-            'database',
-            'element',
-        ]))['form'][object['element']][object['type']],
-    }
-}
-
 const getFirstUpperCase = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
-
 const toClean = (result) => {
     let array = [
         ['&nbsp;', ' '],
@@ -386,7 +350,6 @@ const toClean = (result) => {
         result = result.split(array[i][0]).join(array[i][1]);
     return result.trim();
 };
-
 const getPlural = (result) => {
     if (isTheLast(result, 'y')) result = result.substr(0, result['length'] - 1) + 'ies';
     else if (isTheLast(result, 's')) result += 'es';
@@ -394,24 +357,15 @@ const getPlural = (result) => {
     return result.trim().toLowerCase();
 };
 
-const getURLPath = (object) => {
-    let result = '';
-    result += object['prefix'] ? '/' + object['prefix'].split('-').join('/') : '';
-    result += object['suffix'] ? '/' + object['suffix'] : '';
-    return result.trim().toLowerCase();
-};
-
 const session = (req, res, next) => {
     return req.session.user;
 };
-
 const arrayUnifier = (array, param) => {
     const result = [];
     for (let i = 0; i < param['length']; i++)
         typeof array[param[i]] !== 'undefined' ? result.push(...array[param[i]]) : undefined;
     return result;
 };
-
 const objectCreator = (array) => {
     const result = [];
     result.push({
@@ -425,7 +379,6 @@ const objectCreator = (array) => {
         });
     return result;
 };
-
 const getSalaryRange = (gap, end) => {
     const result = [];
     result.push({
@@ -446,14 +399,12 @@ const getSalaryRange = (gap, end) => {
     }
     return result;
 };
-
 let getDateFormat = (string) => {
     const day = new Date(string).getDate().toString().padStart(2, '0'),
     month = (new Date(string).getMonth() + 1).toString().padStart(2, '0'),
     year = new Date(string).getFullYear();
     return day + '/' + month + '/' + year;
 }
-
 const everyoneView = () => {
     return {
         getCurrency,
@@ -465,7 +416,6 @@ const everyoneView = () => {
         toClean,
     };
 };
-
 module.exports = {
     arrayUnifier,
     everyoneView,
@@ -473,16 +423,11 @@ module.exports = {
     getCPFNumber,
     getDOCNumber,
     getFirstUpperCase,
-    getFormElement,
     getFormHeader,
     getHash,
-    getInputType,
-    getItem,
     getModelPagination,
     getModelParams,
     getModelSearchParams,
-    getPageTitle,
-    getPathPrefix,
     getPhoneNumber,
     getPlural,
     getRandomDate,
@@ -490,7 +435,6 @@ module.exports = {
     getSalaryRange,
     getScript,
     getScriptModule,
-    getSearchAction,
     getURLPath,
     isEqual,
     isTheLast,
@@ -498,5 +442,9 @@ module.exports = {
     isThis,
     JSONModify,
     JSONPagination,
+    urlJoin,
     objectCreator,
+    getPageTitle,
+    getPathPrefix,
+    getInputType,
 };

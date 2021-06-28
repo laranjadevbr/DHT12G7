@@ -7,10 +7,8 @@ const getControllers = (object) => {
     const Action = {
         index : async (req, res, next) => {
             return res.redirect(getURLPath({
-                ...object['prefix'] ? {
-                    prefix : object['prefix'],
-                    suffix : 'all',
-                } : { },
+                prefix : object['prefix'],
+                suffix : 'all',
             }));
         },
         all : async (req, res, next) => {
@@ -50,10 +48,8 @@ const getControllers = (object) => {
             const { id } = req['params'];
             if (!id) {
                 return res.redirect(getURLPath({
-                    ...object['prefix'] ? {
-                        prefix : object['prefix'],
-                        suffix : 'all',
-                    } : { },
+                    prefix : object['prefix'],
+                    suffix : 'all',
                 }));
             } else {
                 const index = await object['modelName'].findOne({

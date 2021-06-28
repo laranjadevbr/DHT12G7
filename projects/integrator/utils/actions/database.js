@@ -1,30 +1,24 @@
 let {
     everyoneView,
     getFirstUpperCase,
+    getFormElement,
     getFormHeader,
+    getInputType,
+    getItem,
     getModelPagination,
     getModelParams,
     getModelSearchParams,
-    getScript,
+    getPageTitle,
+    getPathPrefix,
+    getScriptModule,
+    getSearchAction,
     getURLPath,
-    urlJoin,
 } = require('..');
-
-const root = [
-    '..',
-    '..',
-    'database',
-];
 
 const getIndex = (object) => {
     const Action = {
         index : async (req, res, next) => {
-            return res.redirect(getURLPath({
-                ...object['prefix'] ? {
-                    prefix : object['prefix'],
-                    suffix : 'all',
-                } : { },
-            }));
+            return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'all' }));
         },
     }
     return Action;
@@ -52,26 +46,15 @@ const getAll = (object) => {
                 }),
             });
             return res.render('menu', {
-                index : index,
-                item : require(urlJoin([
-                    ...root,
-                    'element',
-                ]))['name'][object['element']],
-                inputType : require(urlJoin([
-                    ...root,
-                    'option',
-                ]))['inputType'],
                 key : key,
-                pageTitle : object['prefix'].split('-').join(' ') + ' all',
-                pathPrefix : object['prefix'].split('-').join('/'),
-                script : getScript('all'),
-                searchAction : getURLPath({
-                    ...object['prefix'] ? {
-                        prefix : object['prefix'],
-                        suffix : 'search',
-                    } : { },
-                }),
+                index : index,
                 ...everyoneView(),
+                ...getInputType(),
+                ...getItem(object['element']),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'all' }),
+                ...getPathPrefix(object['prefix']),
+                ...getScriptModule('all'),
+                ...getSearchAction({ prefix : object['prefix'], suffix : 'search' }),
                 ...getModelPagination({
                     count : count,
                     amount : amount,
@@ -95,19 +78,13 @@ const getOne = (object) => {
                 }),
             });
             return res.render('form', {
-                btnTitle : 'come back',
-                formElement : require(urlJoin([
-                    ...root,
-                    'element',
-                ]))['form'][object['element']]['view'],
                 index : index,
-                inputType : require(urlJoin([
-                    ...root,
-                    'option',
-                ]))['inputType'],
-                pageTitle : object['prefix'].split('-').join(' ') + ' one',
-                script : getScript('one'),
+                btnTitle : 'come back',
                 ...everyoneView(),
+                ...getFormElement({ element : object['element'], type : 'view' }),
+                ...getInputType(),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'one' }),
+                ...getScriptModule('one'),                
                 ...getFormHeader({
                     prefix : object['prefix'],
                     suffix : 'all',
@@ -124,17 +101,11 @@ const getCreate = (object) => {
         create : async (req, res, next) => {
             return res.render('form', {
                 btnTitle : 'create',
-                formElement : require(urlJoin([
-                    ...root,
-                    'element',
-                ]))['form'][object['element']]['create'],
-                inputType : require(urlJoin([
-                    ...root,
-                    'option',
-                ]))['inputType'],
-                pageTitle : object['prefix'].split('-').join(' ') + ' create',
-                script : getScript('create'),
                 ...everyoneView(),
+                ...getFormElement({ element : object['element'], type : 'create' }),
+                ...getInputType(),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'create' }),
+                ...getScriptModule('create'),
                 ...getFormHeader({
                     prefix : object['prefix'],
                     suffix : 'create',
@@ -149,9 +120,7 @@ const getCreate = (object) => {
 const getStore = (object) => {
     const Action = {
         store : async (req, res, next) => {
-            const index = await object['modelName'].create({
-                ...req['body'],
-            });
+            const index = await object['modelName'].create({ ...req['body'] });
             return res.redirect(getURLPath({
                 prefix : object['prefix'],
                 suffix : 'all',
@@ -171,19 +140,13 @@ const getEdit = (object) => {
                 }),
             });
             return res.render('form', {
-                btnTitle : 'update',
-                formElement : require(urlJoin([
-                    ...root,
-                    'element',
-                ]))['form'][object['element']]['edit'],
                 index : index,
-                inputType : require(urlJoin([
-                    ...root,
-                    'option',
-                ]))['inputType'],
-                pageTitle : object['prefix'].split('-').join(' ') + ' edit',
-                script : getScript('edit'),
+                btnTitle : 'update',
                 ...everyoneView(),
+                ...getFormElement({ element : object['element'], type : 'edit' }),
+                ...getInputType(),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'edit' }),
+                ...getScriptModule('edit'),
                 ...getFormHeader({
                     prefix : object['prefix'],
                     suffix : 'edit' + '/' + id + '?_method=PUT',
@@ -237,9 +200,7 @@ const getDestroy = (object) => {
 const getBulk = (object) => {
     const Action = {
         bulk : async (req, res, next) => {
-            const index = object['bulkMaker']
-            ? await object['modelName'].bulkCreate(object['bulkMaker'])
-            : getFirstUpperCase('File not found!');
+            const index = object['bulkMaker'] ? await object['modelName'].bulkCreate(object['bulkMaker']) : getFirstUpperCase('File not found!');
             return res.send(index);
         },
     }
@@ -275,26 +236,15 @@ const getSearch = (object) => {
                 }),
             });
             return res.render('menu', {
-                index : index,
-                item : require(urlJoin([
-                    ...root,
-                    'element',
-                ]))['name'][object['element']],
-                inputType : require(urlJoin([
-                    ...root,
-                    'option',
-                ]))['inputType'],
                 key : key,
-                pageTitle : object['prefix'].split('-').join(' ') + ' all',
-                pathPrefix : object['prefix'].split('-').join('/'),
-                script : getScript('all'),
-                searchAction : getURLPath({
-                    ...object['prefix'] ? {
-                        prefix : object['prefix'],
-                        suffix : 'search',
-                    } : { },
-                }),
+                index : index,
                 ...everyoneView(),
+                ...getInputType(),
+                ...getItem(object['element']),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'all' }),
+                ...getPathPrefix(object['prefix']),
+                ...getScriptModule('all'),
+                ...getSearchAction({ prefix : object['prefix'], suffix : 'search' }),
                 ...getModelPagination({
                     count : count,
                     amount : amount,
@@ -309,27 +259,19 @@ const getSearch = (object) => {
 const getLogin = (object) => {
     const Action = {
         login : async (req, res, next) => {
-            return res.send('fabio');
-
-            // return res.render('form', {
-            //     btnTitle : 'login',
-            //     formElement : require(urlJoin([
-            //         ...root,
-            //         'element',
-            //     ]))['form'][object['element']]['login'],
-            //     inputType : require(urlJoin([
-            //         ...root,
-            //         'option',
-            //     ]))['inputType'],
-            //     pageTitle : object['prefix'].split('-').join(' ') + ' login',
-            //     script : getScript('login'),
-            //     ...everyoneView(),
-            //     ...getFormHeader({
-            //         prefix : object['prefix'],
-            //         suffix : 'authenticate',
-            //         method : 'POST',
-            //     }),
-            // });
+            return res.render('form', {
+                btnTitle : 'login',
+                ...everyoneView(),
+                ...getFormElement({ element : object['element'], type : 'login' }),
+                ...getInputType(),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'login' }),
+                ...getScriptModule('login'),
+                ...getFormHeader({
+                    prefix : object['prefix'],
+                    suffix : 'authenticate',
+                    method : 'POST',
+                }),
+            });
         },
     }
     return Action;
