@@ -15,8 +15,6 @@ module.exports = {
         includeAlias : 'order',
         includeName : Order,
         prefix : 'public-admin',
-        ...isThere(['bulkmakers', 'public.js']) ? {
-            bulkMaker : require('../bulkmakers/public'),
-        } : { },
+        ...isThere(['bulkmakers', 'public.js']) ? { bulkMaker : require('../bulkmakers/public') } : { },
     }),
 };

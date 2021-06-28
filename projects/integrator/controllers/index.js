@@ -1,13 +1,13 @@
 const {
     everyoneView,
-    getScript,
+    getScriptModule,
 } = require('../utils');
-const viewsAction = (pageName) => {
+const getViewsAction = (pageName) => {
     const Action = {
         [pageName] : (req, res, next) => {
             return res.render(pageName, {
                 pageTitle : pageName,
-                script : getScript(pageName),
+                ...getScriptModule(pageName),
                 ...everyoneView(),
             });
         },
@@ -15,8 +15,8 @@ const viewsAction = (pageName) => {
     return Action;
 };
 const Action = {
-    ...viewsAction('index'),
-    ...viewsAction('accordion'),
-    ...viewsAction('maps'),
+    ...getViewsAction('index'),
+    ...getViewsAction('accordion'),
+    ...getViewsAction('maps'),
 };
 module.exports = Action;

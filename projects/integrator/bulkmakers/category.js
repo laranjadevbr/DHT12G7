@@ -1,8 +1,13 @@
-const bulkMaker = [];
-for (let i = 0; i < 10; i++) {
-    bulkMaker.push({
-        title : require('../database/option')['lorem']['title'],
-        description : require('../database/option')['lorem']['description'],
-    });
-};
-module.exports = bulkMaker;
+const {
+    getLorem,
+} = require('../utils');
+const bulkmaker = (number) => {
+    const result = [];
+    for (let i = 0; i < number; i++) {
+        result.push({
+            ...getLorem(),
+        });
+    };
+    return result;
+}
+module.exports = bulkmaker(10);

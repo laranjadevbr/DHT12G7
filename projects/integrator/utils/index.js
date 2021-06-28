@@ -85,6 +85,65 @@ const JSONModify = (object) => {
     fs.appendFileSync(urlJoin(URLpath), 'module.exports = ' + object['name'] + ';');
 };
 
+
+const getIndexList = () => {
+    const option = require('../database/option');
+    let pushIndex = (index) => {
+        const result = [];
+        for (let i = 0; i < option['name']['first'][index]['length']; i++) {
+            result.push({
+                first : option['name']['first'][index][i].toLowerCase(),
+                last : option['name']['last'][Math.floor(Math.random() * option['name']['last']['length'])].toLowerCase(),
+                gender : index.toLowerCase(),
+            });
+        };
+        return result;
+    };
+    const result = [];
+    for (let i = 0; i < option['generous']['length']; i++)
+        option['generous'][i]['option'] !== '' ? result.push(...pushIndex(option['generous'][i]['option'])) : undefined;
+    return result;
+}
+
+const getIndexListRecord = (array, index) => {
+    let title = '';
+    title += array[index]['first'] + ' ';
+    title += array[index]['last'];
+    return {
+        title : title,
+        gender : array[index]['gender'],
+    }
+};
+
+const getRandomEmail = (array, index) => {
+    let email = array[index]['first'].substr(0, 1);
+    email += array[index]['last'].substr(0, 1);
+    let password = getRandomNumber(100000, 999999);
+    email += password;
+    email += '@';
+    email += getRandomIndex({ array : 'emails' });
+    email += '.com';
+    return {
+        email : email,
+        password : password,
+    };
+}
+
+const getLorem = () => {
+    return {
+        title : require('../database/option')['lorem']['title'],
+        description : require('../database/option')['lorem']['description'],
+    }
+}
+
+let getRandomIndex = (object) => {
+    const result = [];
+    const option = require('../database/option');
+    for (let i = 0; i < option[object['array']]['length']; i++)
+        option[object['array']][i]['option'] !== '' ? result.push(option[object['array']][i]['option']) : undefined;
+    return result[Math.floor(Math.random() * result['length'])];
+};
+
 const getRomanNumber = (number) => {
     let r = '';
     let division = 0;
@@ -499,4 +558,9 @@ module.exports = {
     JSONModify,
     JSONPagination,
     objectCreator,
+    getRandomIndex,
+    getIndexList,
+    getRandomEmail,
+    getIndexListRecord,
+    getLorem,
 };

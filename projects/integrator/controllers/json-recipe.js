@@ -6,11 +6,7 @@ let {
 } = require('../utils');
 module.exports = {
     ...getControllers({
-        database : isThere([
-            'database',
-            'json',
-            'recipe.js'
-        ]) ? require('../database/json/recipe') : [],
+        database : isThere([ 'database', 'json', 'recipe.js' ]) ? require('../database/json/recipe') : [],
         element : 'service',
         prefix : 'json-recipe',
         title : 'recipe',

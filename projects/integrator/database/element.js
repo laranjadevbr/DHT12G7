@@ -95,10 +95,9 @@ const form = {
             { title : '', object : 'level' },
             // { title : 'create', object : 'create' },
         ], false),
-        login : formConstructor([{
-            title : 'access data',
-            object : 'access',
-        }], false),
+        login : formConstructor([
+            { title : 'access data', object : 'access' }
+        ], false),
         view : formConstructor([
             { title : '', object : 'id' },
             { title : 'profile', object : 'profile' },
