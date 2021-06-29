@@ -3,10 +3,10 @@ let {
     getCPFNumber,
     getDOCNumber,
     getHash,
-    getIndexList,
-    getIndexListRecord,
-    getLorem,
+    getLoremIpsum,
     getPhoneNumber,
+    getPublicList,
+    getPublicListRecord,
     getRandomDate,
     getRandomEmail,
     getRandomIndex,
@@ -16,21 +16,23 @@ const bulkmaker = (array) => {
     for (let i = 0; i < array['length']; i++) {
         const email = getRandomEmail(array, i)['email'];
         const password = getHash(getRandomEmail(array, i)['password']);
+        const birthDate = getRandomDate(
+            new Date(
+                new Date().getFullYear(new Date().setFullYear(new Date().setFullYear() - 100)),
+                new Date().getMonth(),
+                new Date().getDate()
+                ),
+            new Date(
+                new Date().getFullYear(),
+                new Date().getMonth(),
+                new Date().getDate()
+                ),
+        );
+        birthDate.toLocaleString("en-US", { timeZone : 'America/Sao_Paulo' });
         result.push({
-            ...getIndexListRecord(array, i),
-            description : getLorem()['description'],
-            birthdate : getRandomDate(
-                new Date(
-                    new Date().getFullYear(),
-                    new Date().getMonth(),
-                    new Date().getDate()
-                ),
-                new Date(
-                    new Date().getFullYear() + 100,
-                    new Date().getMonth(),
-                    new Date().getDate()
-                ),
-            ),
+            ...getPublicListRecord(array, i),
+            description : getLoremIpsum()['description'],
+            birthdate : birthDate,
             status : getRandomIndex({ array : 'status' }),
             cpf : getCPFNumber(),
             rg : getDOCNumber([2, 3, 3, 1]),
@@ -40,7 +42,7 @@ const bulkmaker = (array) => {
             phone : getPhoneNumber([2, 1, 4, 4]),
             cnpj : getCNPJNumber([2, 3, 3, 4, 2]),
             profession : getRandomIndex({ array : 'profession' }),
-            curriculum : getLorem()['description'],
+            curriculum : getLoremIpsum()['description'],
             salary : getRandomIndex({ array : 'salary' }),
             accesskey : email,
             password : password,
@@ -49,4 +51,4 @@ const bulkmaker = (array) => {
     };
     return result;
 }
-module.exports = bulkmaker(getIndexList());
+module.exports = bulkmaker(getPublicList());

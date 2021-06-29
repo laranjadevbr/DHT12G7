@@ -19,6 +19,10 @@ module.exports = (sequelize, DataType) => {
             foreignKey : 'fk_public',
             as : 'order',
         });
+        Public.hasMany(modelsList.Event, {
+            foreignKey : 'fk_public',
+            as : 'event',
+        });
     };
 	return Public;
 };

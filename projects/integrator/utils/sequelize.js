@@ -164,32 +164,22 @@ const getLevelColumns = (Sequelize) => {
     };
 };
 
+// -----
+
 const getModelCategory = (Sequelize) => {
     return {
         ...getIDColumns(Sequelize),
-        ...getProfileColumns(Sequelize),
-        ...getPictureColumns(Sequelize),
-        ...getCreateColumns(Sequelize),
-        ...getStateColumns(Sequelize),
-    };
-};
-const getModelEvent = (Sequelize) => {
-    return {
-        ...getIDColumns(Sequelize),
-        fk_category : {
+        fk_public : {
             allowNull : false,
             type : Sequelize.INTEGER,
         },
         ...getProfileColumns(Sequelize),
         ...getPictureColumns(Sequelize),
-        ...getCostColumns(Sequelize),
-        ...getDateColumns(Sequelize),
-        ...getAddressColumns(Sequelize),
-        ...getContactColumns(Sequelize),
         ...getCreateColumns(Sequelize),
         ...getStateColumns(Sequelize),
     };
 };
+
 const getModelItem = (Sequelize) => {
     return {
         ...getIDColumns(Sequelize),
@@ -224,20 +214,7 @@ const getModelOrder = (Sequelize) => {
         ...getCreateColumns(Sequelize),
     };
 };
-const getModelProduct = (Sequelize) => {
-    return {
-        ...getIDColumns(Sequelize),
-        fk_category : {
-            allowNull : false,
-            type : Sequelize.INTEGER,
-        },
-        ...getProfileColumns(Sequelize),
-        ...getPictureColumns(Sequelize),
-        ...getCostColumns(Sequelize),
-        ...getStateColumns(Sequelize),
-        ...getCreateColumns(Sequelize),
-    };
-};
+
 const getModelPublic = (Sequelize) => {
     return {
         ...getIDColumns(Sequelize),
@@ -255,13 +232,53 @@ const getModelPublic = (Sequelize) => {
         ...getCreateColumns(Sequelize),
     };
 };
-const getModelService = (Sequelize) => {
+const getItemsForeignKey = (Sequelize) => {
+    const array = [
+        'category',
+        'public',
+    ];
+    const result = {};
+    for (let i = 0; i < array['length']; i++) {
+    }
     return {
-        ...getIDColumns(Sequelize), 
         fk_category : {
             allowNull : false,
             type : Sequelize.INTEGER,
         },
+        fk_public : {
+            allowNull : false,
+            type : Sequelize.INTEGER,
+        },
+    };
+}
+const getModelEvent = (Sequelize) => {
+    return {
+        ...getIDColumns(Sequelize),
+        ...getItemsForeignKey(Sequelize),
+        ...getProfileColumns(Sequelize),
+        ...getPictureColumns(Sequelize),
+        ...getCostColumns(Sequelize),
+        ...getDateColumns(Sequelize),
+        ...getAddressColumns(Sequelize),
+        ...getCreateColumns(Sequelize),
+        ...getStateColumns(Sequelize),
+    };
+};
+const getModelProduct = (Sequelize) => {
+    return {
+        ...getIDColumns(Sequelize),
+        ...getItemsForeignKey(Sequelize),
+        ...getProfileColumns(Sequelize),
+        ...getPictureColumns(Sequelize),
+        ...getCostColumns(Sequelize),
+        ...getStateColumns(Sequelize),
+        ...getCreateColumns(Sequelize),
+    };
+};
+const getModelService = (Sequelize) => {
+    return {
+        ...getIDColumns(Sequelize),
+        ...getItemsForeignKey(Sequelize),
         ...getProfileColumns(Sequelize),
         ...getPictureColumns(Sequelize),
         ...getCostColumns(Sequelize),
@@ -270,11 +287,13 @@ const getModelService = (Sequelize) => {
     };
 };
 module.exports = {
-    getModelCategory,
-    getModelEvent,
-    getModelItem,
     getModelOrder,
-    getModelProduct,
+    getModelItem,
+    
+    getModelCategory,
     getModelPublic,
+
+    getModelEvent,
+    getModelProduct,
     getModelService,
 };

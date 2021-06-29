@@ -22,9 +22,7 @@ const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min);
 };
 
-const isThere = (array) => {
-    return fs.existsSync(urlJoin(array)) ? true : false;
-};
+
 
 const getValidation = (variable) => {
     if (!variable) return false;
@@ -59,14 +57,6 @@ const getDOCNumber = (array) => {
     return result;
 };
 
-const getScript = (string) => {
-    return isThere([
-        'public',
-        'javascripts',
-        string + '.js',
-    ]) ? '<script type=\"module\" src=\"/javascripts/' + string + '.js\"></script>' : '';
-};
-
 const getScriptModule = (string) => {
     return {
         script : isThere([
@@ -77,16 +67,7 @@ const getScriptModule = (string) => {
     }
 };
 
-const JSONModify = (object) => {
-    const URLpath = [ '..', 'database', 'json', object['name'] + '.js' ];
-     fs.writeFileSync(urlJoin(URLpath), 'const ' + object['name'] + ' = ');
-    fs.appendFileSync(urlJoin(URLpath), JSON.stringify(object['content']));
-    fs.appendFileSync(urlJoin(URLpath), ';');
-    fs.appendFileSync(urlJoin(URLpath), 'module.exports = ' + object['name'] + ';');
-};
-
-
-const getIndexList = () => {
+const getPublicList = () => {
     const option = require('../database/option');
     let pushIndex = (index) => {
         const result = [];
@@ -105,7 +86,14 @@ const getIndexList = () => {
     return result;
 }
 
-const getIndexListRecord = (array, index) => {
+const getForeignKey = (table) => {
+    return {
+        ...table !== 'category' ? { fk_category : getRandomNumber(1, 9), } : { },
+        fk_public : getRandomNumber(1, getPublicList()['length']),
+    };
+};
+
+const getPublicListRecord = (array, index) => {
     let title = '';
     title += array[index]['first'] + ' ';
     title += array[index]['last'];
@@ -129,12 +117,34 @@ const getRandomEmail = (array, index) => {
     };
 }
 
-const getLorem = () => {
+const isThere = (array) => {
+    return fs.existsSync(urlJoin(array)) ? true : false;
+};
+
+const JSONModify = (object) => {
+    const URLpath = [
+        'database',
+        'json',
+        object['name'] + '.js'
+    ];
+     fs.writeFileSync(urlJoin(URLpath), 'const ' + object['name'] + ' = ');
+    fs.appendFileSync(urlJoin(URLpath), JSON.stringify(object['content']));
+    fs.appendFileSync(urlJoin(URLpath), ';');
+    fs.appendFileSync(urlJoin(URLpath), 'module.exports = ' + object['name'] + ';');
+};
+
+const getLoremIpsum = () => {
     return {
-        title : require('../database/option')['lorem']['title'],
-        description : require('../database/option')['lorem']['description'],
-    }
-}
+        title : isThere([
+            'database',
+            'option.js',
+        ]) ? require('../database/option')['lorem']['title'] : '',
+        description : isThere([
+            'database',
+            'option.js',
+        ]) ? require('../database/option')['lorem']['description'] : '',
+    };
+};
 
 let getRandomIndex = (object) => {
     const result = [];
@@ -309,11 +319,14 @@ const getModelSearchParams = (object) => {
     };
 };
 
+const root = [
+    '..',
+    'database',
+]
 const getInputType = () => {
     return {
         inputType : require(urlJoin([
-            '..',
-            'database',
+            ...root,
             'option'
         ]))['inputType'],
     };
@@ -331,8 +344,7 @@ const getSearchAction = (object) => {
 const getItem = (string) => {
     return {
         item : require(urlJoin([
-            '..',
-            'database',
+            ...root,
             'element',
         ]))['name'][string],
     };
@@ -341,8 +353,7 @@ const getItem = (string) => {
 const getFormElement = (object) => {
     return {
         formElement : require(urlJoin([
-            '..',
-            'database',
+            ...root,
             'element',
         ]))['form'][object['element']][object['type']],
     }
@@ -547,7 +558,6 @@ module.exports = {
     getRandomDate,
     getRandomNumber,
     getSalaryRange,
-    getScript,
     getScriptModule,
     getSearchAction,
     getURLPath,
@@ -559,8 +569,9 @@ module.exports = {
     JSONPagination,
     objectCreator,
     getRandomIndex,
-    getIndexList,
+    getPublicList,
     getRandomEmail,
-    getIndexListRecord,
-    getLorem,
+    getPublicListRecord,
+    getLoremIpsum,
+    getForeignKey,
 };

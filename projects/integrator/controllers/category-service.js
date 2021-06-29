@@ -5,6 +5,9 @@ const {
 let {
     getControllers,
 } = require('../utils/controllers/database/item');
+let {
+    isThere,
+} = require('../utils');
 module.exports = {
     ...getControllers({
         element : 'category',
@@ -12,5 +15,8 @@ module.exports = {
         includeAlias : 'service',
         includeName : Service,
         prefix : 'category-service',
+        ...isThere(['bulkmakers', 'category-service.js']) ? {
+            bulkMaker : require('../bulkmakers/category-service')
+        } : { },
     }),
 };

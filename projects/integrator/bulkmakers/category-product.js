@@ -1,11 +1,13 @@
 const {
-    getLorem,
+    getForeignKey,
+    getLoremIpsum,
 } = require('../utils');
 const bulkmaker = (number) => {
     const result = [];
     for (let i = 0; i < number; i++) {
         result.push({
-            ...getLorem(),
+            ...getForeignKey('category'),
+            ...getLoremIpsum(),
         });
     };
     return result;
