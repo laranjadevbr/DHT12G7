@@ -9,25 +9,22 @@ const {
 } = require('../utils');
 const bulkmaker = (array) => {
     const result = [];
+    const currentDate = new Date();
     for (let i = 0; i < 10; i++) {
         const startDate = getRandomDate(
+            currentDate,
             new Date(
-                new Date().getFullYear(),
-                new Date().getMonth(),
-                new Date().getDate()
-                ),
-            new Date(
-                new Date().getFullYear(),
-                new Date().getMonth(new Date().setMonth(getRandomNumber(new Date().getMonth(), 10))),
-                new Date().getDate()
+                currentDate.getFullYear(),
+                currentDate.getMonth(currentDate.setMonth(getRandomNumber(currentDate.getMonth(), 11))),
+                currentDate.getDate(currentDate.setDate(getRandomNumber(1, 31))),
                 ),
         );
         startDate.toLocaleString("en-US", { timeZone : 'America/Sao_Paulo' });
         startDate.setHours(0, 0, 0);
         const endDate = new Date(
             startDate.getFullYear(),
-            startDate.getMonth(),
-            startDate.getDate(startDate.setDate(getRandomNumber(startDate.getDate(), 31)))
+            startDate.getMonth(startDate.setMonth(getRandomNumber(startDate.getMonth() + 1, 11))),
+            startDate.getDate(startDate.setDate(getRandomNumber(1, 31))),
             );
         endDate.toLocaleString("en-US", { timeZone : 'America/Sao_Paulo' });
         endDate.setHours(0, 0, 0);

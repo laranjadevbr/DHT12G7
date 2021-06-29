@@ -115,7 +115,7 @@ const getRandomEmail = (array, index) => {
         email : email,
         password : password,
     };
-}
+};
 
 const isThere = (array) => {
     return fs.existsSync(urlJoin(array)) ? true : false;

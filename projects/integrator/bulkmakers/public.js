@@ -18,7 +18,7 @@ const bulkmaker = (array) => {
         const password = getHash(getRandomEmail(array, i)['password']);
         const birthDate = getRandomDate(
             new Date(
-                new Date().getFullYear(new Date().setFullYear(new Date().setFullYear() - 100)),
+                new Date().getFullYear(new Date().setFullYear(new Date().getFullYear() - 100)),
                 new Date().getMonth(),
                 new Date().getDate()
                 ),

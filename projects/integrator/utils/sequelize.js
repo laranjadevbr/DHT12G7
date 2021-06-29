@@ -233,13 +233,6 @@ const getModelPublic = (Sequelize) => {
     };
 };
 const getItemsForeignKey = (Sequelize) => {
-    const array = [
-        'category',
-        'public',
-    ];
-    const result = {};
-    for (let i = 0; i < array['length']; i++) {
-    }
     return {
         fk_category : {
             allowNull : false,
