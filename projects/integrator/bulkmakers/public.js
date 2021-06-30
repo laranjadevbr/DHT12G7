@@ -16,19 +16,9 @@ const bulkmaker = (array) => {
     for (let i = 0; i < array['length']; i++) {
         const email = getRandomEmail(array, i)['email'];
         const password = getHash(getRandomEmail(array, i)['password']);
-        const birthDate = getRandomDate(
-            new Date(
-                new Date().getFullYear(new Date().setFullYear(new Date().getFullYear() - 100)),
-                new Date().getMonth(),
-                new Date().getDate()
-                ),
-            new Date(
-                new Date().getFullYear(),
-                new Date().getMonth(),
-                new Date().getDate()
-                ),
-        );
+        const birthDate = getRandomDate(new Date().setFullYear(new Date().getFullYear() - 100), new Date());
         birthDate.toLocaleString("en-US", { timeZone : 'America/Sao_Paulo' });
+        birthDate.setHours(0, 0, 0);
         result.push({
             ...getPublicListRecord(array, i),
             description : getLoremIpsum()['description'],

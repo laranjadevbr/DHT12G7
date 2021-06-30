@@ -232,7 +232,7 @@ const getModelPublic = (Sequelize) => {
         ...getCreateColumns(Sequelize),
     };
 };
-const getItemsForeignKey = (Sequelize) => {
+const getForeignKey = (Sequelize) => {
     return {
         fk_category : {
             allowNull : false,
@@ -247,7 +247,7 @@ const getItemsForeignKey = (Sequelize) => {
 const getModelEvent = (Sequelize) => {
     return {
         ...getIDColumns(Sequelize),
-        ...getItemsForeignKey(Sequelize),
+        ...getForeignKey(Sequelize),
         ...getProfileColumns(Sequelize),
         ...getPictureColumns(Sequelize),
         ...getCostColumns(Sequelize),
@@ -260,7 +260,7 @@ const getModelEvent = (Sequelize) => {
 const getModelProduct = (Sequelize) => {
     return {
         ...getIDColumns(Sequelize),
-        ...getItemsForeignKey(Sequelize),
+        ...getForeignKey(Sequelize),
         ...getProfileColumns(Sequelize),
         ...getPictureColumns(Sequelize),
         ...getCostColumns(Sequelize),
@@ -271,7 +271,7 @@ const getModelProduct = (Sequelize) => {
 const getModelService = (Sequelize) => {
     return {
         ...getIDColumns(Sequelize),
-        ...getItemsForeignKey(Sequelize),
+        ...getForeignKey(Sequelize),
         ...getProfileColumns(Sequelize),
         ...getPictureColumns(Sequelize),
         ...getCostColumns(Sequelize),

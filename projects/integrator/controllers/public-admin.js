@@ -12,9 +12,12 @@ module.exports = {
     ...getControllers({
         element : 'public',
         modelName : Public,
-        includeAlias : 'order',
-        includeName : Order,
+        // includeAlias : 'order',
+        // includeName : Order,
         prefix : 'public-admin',
-        ...isThere(['bulkmakers', 'public.js']) ? { bulkMaker : require('../bulkmakers/public') } : { },
+        ...isThere(['bulkmakers', 'public.js']) ? {
+            bulkMaker : require('../bulkmakers/public')
+        } : {
+        },
     }),
 };

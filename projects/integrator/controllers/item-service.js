@@ -15,6 +15,9 @@ module.exports = {
         includeAlias : 'category',
         includeName : Category,
         prefix : 'item-service',
-        ...isThere(['bulkmakers', 'service.js']) ? { bulkMaker : require('../bulkmakers/service') } : { },
+        ...isThere(['bulkmakers', 'item-service.js']) ? { 
+            bulkMaker : require('../bulkmakers/item-service')
+        } : {
+        },
     }),
 };

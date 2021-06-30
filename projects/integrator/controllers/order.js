@@ -15,6 +15,9 @@ module.exports = {
         includeAlias : 'product',
         includeName : Product,
         prefix : 'order',
-        ...isThere(['bulkmakers', 'order.js']) ? { bulkMaker : require('../bulkmakers/order') } : { },
+        ...isThere(['bulkmakers', 'order.js']) ? {
+            bulkMaker : require('../bulkmakers/order')
+        } : {
+        },
     }),
 };

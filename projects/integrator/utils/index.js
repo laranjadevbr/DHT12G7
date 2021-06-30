@@ -276,7 +276,7 @@ const getModelParams = (object) => {
             include : {
                 model : object['model'],
                 as : object['alias'],
-                required : false,
+                required : true,
             },
         } : { },
         ...object['limit'] ? {

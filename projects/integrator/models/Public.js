@@ -15,13 +15,21 @@ module.exports = (sequelize, DataType) => {
         timestamps : false,
     });
     Public.associate = (modelsList) => {
-        Public.hasMany(modelsList.Order, {
-            foreignKey : 'fk_public',
-            as : 'order',
-        });
         Public.hasMany(modelsList.Event, {
             foreignKey : 'fk_public',
             as : 'event',
+        });
+        Public.hasMany(modelsList.Product, {
+            foreignKey : 'fk_public',
+            as : 'product',
+        });
+        Public.hasMany(modelsList.Service, {
+            foreignKey : 'fk_public',
+            as : 'service',
+        });
+        Public.hasMany(modelsList.Order, {
+            foreignKey : 'fk_public',
+            as : 'order',
         });
     };
 	return Public;

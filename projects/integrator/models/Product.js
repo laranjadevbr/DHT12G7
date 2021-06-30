@@ -19,6 +19,10 @@ module.exports = (sequelize, DataType) => {
             foreignKey : 'fk_category',
             as : 'category',
         });
+        Product.belongsTo(modelsList.Public, {
+            foreignKey : 'fk_public',
+            as : 'public',
+        });
         Product.belongsToMany(modelsList.Order, {
             foreignKey : 'fk_order',
             as : 'order',

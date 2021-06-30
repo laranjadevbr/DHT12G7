@@ -40,7 +40,7 @@ const getAll = (object) => {
                     model : object['includeName'],
                     alias : object['includeAlias'],
                     param : key,
-                    column : 'title',
+                    column : 'id',
                     limit : amount,
                     offset : (page - 1) * amount,
                 }),
@@ -66,6 +66,46 @@ const getAll = (object) => {
     return Action;
 };
 
+const getInside = (object) => {
+    const Action = {
+        inside : async (req, res, next) => {
+            const amount = 1;
+            const {
+                page = 1,
+                key = '',
+            } = req['query'];
+            const { id } = req['params'];
+            const index = await object['modelName'].findOne({
+                ...getModelParams({
+                    model : object['includeName'],
+                    alias : object['includeAlias'],
+                    param : id,
+                    column : 'id',
+                    limit : amount,
+                    offset : (page - 1) * amount,
+                }),
+            });
+            return res.render('menu', {
+                key : key,
+                index : index[object['includeAlias']],
+                ...everyoneView(),
+                ...getInputType(),
+                ...getItem(object['element']),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'all' }),
+                ...getPathPrefix(object['prefix'].replace('category', 'item')),
+                ...getScriptModule('all'),
+                ...getSearchAction({ prefix : object['prefix'], suffix : 'search' }),
+                ...getModelPagination({
+                    count : index['length'],
+                    amount : amount,
+                    offset : page,
+                }),
+            });
+        },
+    }
+    return Action;
+};
+
 const getOne = (object) => {
     const Action = {
         one : async (req, res, next) => {
@@ -75,6 +115,7 @@ const getOne = (object) => {
                     model : object['includeName'],
                     alias : object['includeAlias'],
                     param : id,
+                    column : 'id',
                 }),
             });
             return res.render('form', {
@@ -121,10 +162,7 @@ const getStore = (object) => {
     const Action = {
         store : async (req, res, next) => {
             const index = await object['modelName'].create({ ...req['body'] });
-            return res.redirect(getURLPath({
-                prefix : object['prefix'],
-                suffix : 'all',
-            }));
+            return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'all' }));
         },
     }
     return Action;
@@ -137,6 +175,7 @@ const getEdit = (object) => {
             const index = await object['modelName'].findOne({
                 ...getModelParams({
                     param : id,
+                    column : 'id',
                 }),
             });
             return res.render('form', {
@@ -168,6 +207,7 @@ const getUpdate = (object) => {
             {
                 ...getModelParams({
                     param : id,
+                    column : 'id',
                 }),
             });
             return res.redirect(getURLPath({
@@ -186,6 +226,7 @@ const getDestroy = (object) => {
             const index = await object['modelName'].destroy({
                 ...getModelParams({
                     param : id,
+                    column : 'id',
                 }),
             });
             return res.redirect(getURLPath({
@@ -347,6 +388,7 @@ module.exports = {
     getDestroy,
     getEdit,
     getIndex,
+    getInside,
     getLogin,
     getLogout,
     getOne,

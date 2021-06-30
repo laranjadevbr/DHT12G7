@@ -4,7 +4,8 @@ const index = routes['index'];
 const jsonItem = routes['jsonItem'];
 const jsonPublic = routes['jsonPublic'];
 const lab = routes['lab'];
-const product = routes['product'];
+const category = routes['category'];
+const item = routes['item'];
 const public = routes['public'];
 const controls = [
     { control : api, path : 'api-admin', },
@@ -16,13 +17,16 @@ const controls = [
     { control : api, path : 'api-service', },
     { control : index, path : 'index', },
     { control : lab, path : 'lab', },
-    { control : product, path : 'category-event', },
-    { control : product, path : 'category-product', },
-    { control : product, path : 'category-service', },
-    { control : product, path : 'order', },
-    { control : product, path : 'item-event', },
-    { control : product, path : 'item-product', },
-    { control : product, path : 'item-service', },
+    
+    { control : category, path : 'category-event', },
+    { control : category, path : 'category-product', },
+    { control : category, path : 'category-service', },
+
+    { control : item, path : 'order', },
+    { control : item, path : 'item-event', },
+    { control : item, path : 'item-product', },
+    { control : item, path : 'item-service', },
+    
     { control : public, path : 'public-admin', },
     { control : public, path : 'public-client', },
     { control : public, path : 'public-user', },

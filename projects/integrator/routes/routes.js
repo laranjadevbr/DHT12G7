@@ -79,11 +79,20 @@ module.exports = {
         ...search,
         ...view,
     ],
-    product : [
+    item : [
         ...bulk,
         ...change,
         ...search,
         ...view,
+    ],
+    category : [
+        ...bulk,
+        ...change,
+        ...search,
+        ...view,
+        ...getRoute([
+            'inside?',
+        ], 'get'),
     ],
     jsonItem : [
         ...change,

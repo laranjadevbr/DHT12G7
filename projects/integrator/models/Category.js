@@ -15,13 +15,13 @@ module.exports = (sequelize, DataType) => {
         timestamps : false,
     });
     Category.associate = (modelsList) => {
-        Category.hasMany(modelsList.Product, {
-            foreignKey : 'fk_category',
-            as : 'product',
-        });
         Category.hasMany(modelsList.Event, {
             foreignKey : 'fk_category',
             as : 'event',
+        });
+        Category.hasMany(modelsList.Product, {
+            foreignKey : 'fk_category',
+            as : 'product',
         });
         Category.hasMany(modelsList.Service, {
             foreignKey : 'fk_category',

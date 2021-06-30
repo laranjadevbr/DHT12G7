@@ -19,6 +19,10 @@ module.exports = (sequelize, DataType) => {
             foreignKey : 'fk_category',
             as : 'category',
         });
+        Service.belongsTo(modelsList.Public, {
+            foreignKey : 'fk_public',
+            as : 'public',
+        });
         Service.belongsToMany(modelsList.Order, {
             foreignKey : 'fk_order',
             as : 'order',

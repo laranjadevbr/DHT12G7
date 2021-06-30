@@ -1,7 +1,9 @@
 const {
     Public,
-    Order,
     Event,
+    Product,
+    Service,
+    Order,
 } = require('../models');
 const {
     getControllers,

@@ -9,8 +9,8 @@ module.exports = {
     ...getControllers({
         element : 'public',
         modelName : Public,
-        includeAlias : 'order',
-        includeName : Order,
+        // includeAlias : 'order',
+        // includeName : Order,
         prefix : 'public-user',
     }),
 };
