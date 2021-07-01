@@ -12,6 +12,7 @@ let {
     getPathPrefix,
     getScriptModule,
     getSearchAction,
+    getMenuSetup,
     getURLPath,
 } = require('..');
 
@@ -51,6 +52,7 @@ const getAll = (object) => {
                 ...everyoneView(),
                 ...getInputType(),
                 ...getItem(object['element']),
+                ...getMenuSetup(object['prefix']),
                 ...getPageTitle({ prefix : object['prefix'], suffix : 'all' }),
                 ...getPathPrefix(object['prefix']),
                 ...getScriptModule('all'),
@@ -66,9 +68,9 @@ const getAll = (object) => {
     return Action;
 };
 
-const getInside = (object) => {
+const getIn = (object) => {
     const Action = {
-        inside : async (req, res, next) => {
+        in : async (req, res, next) => {
             const amount = 1;
             const {
                 page = 1,
@@ -91,6 +93,7 @@ const getInside = (object) => {
                 ...everyoneView(),
                 ...getInputType(),
                 ...getItem(object['element']),
+                ...getMenuSetup(object['prefix']),
                 ...getPageTitle({ prefix : object['prefix'], suffix : 'all' }),
                 ...getPathPrefix(object['prefix'].replace('category', 'item')),
                 ...getScriptModule('all'),
@@ -106,9 +109,9 @@ const getInside = (object) => {
     return Action;
 };
 
-const getOne = (object) => {
+const getOn = (object) => {
     const Action = {
-        one : async (req, res, next) => {
+        on : async (req, res, next) => {
             const { id } = req['params'];
             const index = await object['modelName'].findOne({
                 ...getModelParams({
@@ -122,6 +125,7 @@ const getOne = (object) => {
                 index : index,
                 btnTitle : 'come back',
                 ...everyoneView(),
+                ...getMenuSetup(object['prefix']),
                 ...getFormElement({ element : object['element'], type : 'view' }),
                 ...getInputType(),
                 ...getPageTitle({ prefix : object['prefix'], suffix : 'one' }),
@@ -282,6 +286,7 @@ const getSearch = (object) => {
                 ...everyoneView(),
                 ...getInputType(),
                 ...getItem(object['element']),
+                ...getMenuSetup(object['prefix']),
                 ...getPageTitle({ prefix : object['prefix'], suffix : 'all' }),
                 ...getPathPrefix(object['prefix']),
                 ...getScriptModule('all'),
@@ -388,10 +393,10 @@ module.exports = {
     getDestroy,
     getEdit,
     getIndex,
-    getInside,
+    getIn,
     getLogin,
     getLogout,
-    getOne,
+    getOn,
     getSearch,
     getStore,
     getUpdate,

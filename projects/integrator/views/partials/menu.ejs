@@ -1,45 +1,60 @@
     <%
-        let btns = [
-            {
+        let btn = [
+            !setup['delete'] ? { } : {
                 path : false,
                 target : true,
-                title : 'delete',
+                title : ['delete', 'delete me'],
                 toggle : true,
             },
-            {
+            !setup['edit'] ? { } : {
                 path : true,
                 target : false,
-                title : 'edit',
+                title : ['edit', 'edit me'],
                 toggle : false,
             },
-            {
+            !setup['on'] ? { } : {
                 path : true,
                 target : false,
-                title : 'one',
+                title : ['on', 'see me'],
+                toggle : false,
+            },
+            !setup['in'] ? { } : {
+                path : true,
+                target : false,
+                title : ['in', 'see what inside me'],
                 toggle : false,
             },
         ];
         let getBottomMenu = (array, index) => {
             let html = '';
             html += '<div class=\"on-the-right\" id=\"bottom-menu\">';
-                for (let x = 0; x < btns['length']; x++) {
-                    let currentPath = '/' + pathPrefix + '/' + btns[x]['title'] + '/' + array[index]['id'];
-                    currentPath = getValidation(btns[x]['path']) ? currentPath : '#';
-                    html += '<a href=\"' + currentPath.toLowerCase() + '\"';
-                    html += getValidation(btns[x]['target']) ? ' data-bs-toggle=\"modal\"' : '';
-                    html += getValidation(btns[x]['toggle']) ? ' data-bs-target=\"#modal-' + array[index]['id'] + '\"' : '';
-                    html += '>';
-                        html += '<button type=\"submit\"';
-                        btnClass = btnClass.substr(btnClass.indexOf(btnString), btnString['length']);
-                        if (!getValidation(array[index]['active'])) {
-                            btnClass += index % 2 === 0 ? btnColorI : btnColorI;
-                        } else { btnClass += btnColorIII; }
-                        html += ' class=\"' + btnClass.trim() + '\"';
-                        html += ' style=\"margin: 0 0 0 1rem;\"';
+                for (let x = 0; x < btn['length']; x++) {
+                    if (isThis(btn[x]['title'], 'undefined')) { } else {
+                        let currentPath = '/';
+                        currentPath += pathPrefix;
+                        currentPath += '/';
+                        currentPath += isThis(btn[x]['title'], 'string')
+                            ? btn[x]['title'] : btn[x]['title'][0];
+                        currentPath += '/';
+                        currentPath += array[index]['id'];
+                        currentPath = getValidation(btn[x]['path']) ? currentPath : '#';
+                        html += '<a href=\"' + currentPath.toLowerCase() + '\"';
+                        html += getValidation(btn[x]['target']) ? ' data-bs-toggle=\"modal\"' : '';
+                        html += getValidation(btn[x]['toggle']) ? ' data-bs-target=\"#modal-' + array[index]['id'] + '\"' : '';
                         html += '>';
-                        html += getFirstUpperCase(btns[x]['title'] === 'one' ? 'view' : btns[x]['title']);
-                        html += '</button>';
-                    html += '</a>';
+                            html += '<button type=\"submit\"';
+                            btnClass = btnClass.substr(btnClass.indexOf(btnString), btnString['length']);
+                            if (!getValidation(array[index]['active'])) {
+                                btnClass += index % 2 === 0 ? btnColorI : btnColorI;
+                            } else { btnClass += btnColorIII; }
+                            html += ' class=\"' + btnClass.trim() + '\"';
+                            html += ' style=\"margin: 0 0 0 1rem;\"';
+                            html += '>';
+                            html += isThis(btn[x]['title'], 'string')
+                                ? getFirstUpperCase(btn[x]['title']) : getFirstUpperCase(btn[x]['title'][1]);
+                            html += '</button>';
+                        html += '</a>';
+                    }
                 }
             html += '</div>';
             return html;
@@ -56,7 +71,7 @@
                             html += contents.toLowerCase();
                         html += '</a>';
                     html += '</p>';
-                } else if (title === 'birth date' || title === 'created' || title === 'updated') {
+                } else if (title === 'birth date' || title === 'created' || title === 'end date' || title === 'start date' || title === 'updated') {
                     html += '<p>' + getDateFormat(contents) + '</p>';
                 } else {
                     html += '<p>' + contents + '</p>';

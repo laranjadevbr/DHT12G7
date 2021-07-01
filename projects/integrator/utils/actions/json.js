@@ -4,6 +4,7 @@ let {
     getFormHeader,
     getInputType,
     getItem,
+    getMenuSetup,
     getPageTitle,
     getPathPrefix,
     getScriptModule,
@@ -11,12 +12,6 @@ let {
     JSONModify,
     JSONPagination,
 } = require('..');
-
-const root = [
-    '..',
-    '..',
-    'database',
-];
 
 const getIndex = (object) => {
     const Action = {
@@ -41,6 +36,7 @@ const getAll = (object) => {
                 })['listPage'],
                 ...everyoneView(),
                 ...getItem(object['element']),
+                ...getMenuSetup(object['prefix']),
                 ...getPageTitle({ prefix : object['prefix'], suffix : 'all' }),
                 ...getPathPrefix(object['prefix']),
                 ...getScriptModule('all'),
@@ -55,9 +51,9 @@ const getAll = (object) => {
     return Action;
 };
 
-const getOne = (object) => {
+const getOn = (object) => {
     const Action = {
-        one : (req, res, next) => {
+        on : (req, res, next) => {
             const { id } = req['params'];
             const index = object['database'].find((index) => { return index['id'] == id; });
             return res.render('form', {
@@ -292,7 +288,7 @@ module.exports = {
     getIndex,
     getLogin,
     getLogout,
-    getOne,
+    getOn,
     getSearch,
     getStore,
     getUpdate,

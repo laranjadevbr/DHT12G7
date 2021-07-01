@@ -23,7 +23,7 @@ const view = [
     ...getRoute([
         ['', 'index'],
         'all',
-        'one?',
+        'on?',
     ], 'get'),
 ];
 const change = [
@@ -91,7 +91,7 @@ module.exports = {
         ...search,
         ...view,
         ...getRoute([
-            'inside?',
+            'in?',
         ], 'get'),
     ],
     jsonItem : [

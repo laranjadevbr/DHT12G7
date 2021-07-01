@@ -14,7 +14,7 @@ const getPageTitle = (object) => {
     result += object['prefix'] ? object['prefix'].trim().split('-').join(' ') : '';
     result += object['suffix'] ? ' ' + object['suffix'].trim() : '';
     return {
-        pageTitle : result.toLowerCase(),
+        pageTitle : result.toLowerCase(), 
     }
 };
 
@@ -22,7 +22,16 @@ const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min);
 };
 
-
+const getMenuSetup = (string) => {
+    return {
+        setup : {
+            delete : true,
+            edit : true,
+            in : string.substr(0, 'category'['length']) === 'category' ? true : false,
+            on : true,
+        },
+    };
+};
 
 const getValidation = (variable) => {
     if (!variable) return false;
@@ -259,13 +268,16 @@ const getFormHeader = (object) => {
                     prefix : object['prefix'],
                     suffix : object['suffix'],
                 }),
-            } : { },
+            } : {
+            },
             ...object['enctype'] ? {
                 enctype : object['enctype'],
-            } : { },
+            } : {
+            },
             ...object['method'] ? {
                 method : object['method'],
-            } : { },
+            } : {
+            },
         },
     };
 };
@@ -278,23 +290,28 @@ const getModelParams = (object) => {
                 as : object['alias'],
                 required : true,
             },
-        } : { },
+        } : {
+        },
         ...object['limit'] ? {
             limit : object['limit'],
-        } : { },
+        } : {
+        },
         ...object['offset'] ? {
             offset : object['offset'],
-        } : { },
+        } : {
+        },
         ...object['column'] ? {
             order : [
                 [object['column'], 'ASC'],
             ],
-        } : { },
+        } : {
+        },
         ...object['column'] && object['param'] ? {
             where : {
                 [object['column']] : object['param'],
             },
-        } : { },
+        } : {
+        },
     };
 };
 
@@ -531,6 +548,7 @@ const everyoneView = () => {
         getFirstUpperCase,
         getRomanNumber,
         getValidation,
+        isThis,
         session,
         toClean,
     };
@@ -543,11 +561,14 @@ module.exports = {
     getCPFNumber,
     getDOCNumber,
     getFirstUpperCase,
+    getForeignKey,
     getFormElement,
     getFormHeader,
     getHash,
     getInputType,
     getItem,
+    getLoremIpsum,
+    getMenuSetup,
     getModelPagination,
     getModelParams,
     getModelSearchParams,
@@ -555,7 +576,11 @@ module.exports = {
     getPathPrefix,
     getPhoneNumber,
     getPlural,
+    getPublicList,
+    getPublicListRecord,
     getRandomDate,
+    getRandomEmail,
+    getRandomIndex,
     getRandomNumber,
     getSalaryRange,
     getScriptModule,
@@ -568,10 +593,4 @@ module.exports = {
     JSONModify,
     JSONPagination,
     objectCreator,
-    getRandomIndex,
-    getPublicList,
-    getRandomEmail,
-    getPublicListRecord,
-    getLoremIpsum,
-    getForeignKey,
 };

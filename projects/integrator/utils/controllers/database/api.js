@@ -41,7 +41,7 @@ const getControllers = (object) => {
                 });
             });
         },
-        one : async (req, res, next) => {
+        on : async (req, res, next) => {
             const { id } = req['params'];
             if (!id) {
                 return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'all' }));
