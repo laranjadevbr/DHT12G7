@@ -17,22 +17,20 @@ const formConstructor = (array, disabled) => {
     ];
     for (let i = 0; i < array['length']; i++) {
         if (array[i]['title'])
-            result.push(
-                {
-                    active : true,
-                    disabled : disabled,
-                    label : true,
-                    maxlength : '',
-                    name : array[i]['title'],
-                    note : 'deleted',
-                    option : '',
-                    placeholder : false,
-                    required : false,
-                    rows : 0,
-                    type : 'h6',
-                    value : '',
-                },
-            );
+            result.push({
+                active : true,
+                disabled : disabled,
+                label : true,
+                maxlength : '',
+                name : array[i]['title'],
+                note : 'deleted',
+                option : '',
+                placeholder : false,
+                required : false,
+                rows : 0,
+                type : 'h6',
+                value : '',
+            });
         result.push(
             ...require('./feature/' + array[i]['object'])(disabled),
             {
@@ -53,14 +51,7 @@ const formConstructor = (array, disabled) => {
     };
     return result;
 };
-let itemsListConstrucor = (index) => {
-    const result = [];
-    for (let i = 0; i < index['length']; i++)
-        index[i]['note'] !== 'deleted' ?
-        result.push(index[i]['name']) :
-        undefined;
-    return result;
-}
+
 const form = {
     public : {
         create : formConstructor([
@@ -131,11 +122,11 @@ const form = {
             // { title : 'create', object : 'create' },
         ], false),
         view : formConstructor([
-            { title : '', object : 'id' },
+            // { title : '', object : 'id' },
             { title : 'profile', object : 'profile' },
             { title : 'picture', object : 'picture' },
-            { title : 'state', object : 'state' },
-            { title : 'create', object : 'create' },
+            // { title : 'state', object : 'state' },
+            // { title : 'create', object : 'create' },
         ], true),
     },
     event : {
@@ -223,11 +214,20 @@ const form = {
         ], true),
     },
 };
+
+let getList = (index) => {
+    const result = [];
+    for (let i = 0; i < form[index]['view']['length']; i++)
+        form[index]['view'][i]['note'] !== 'deleted'
+        ? result.push(form[index]['view'][i]['name'])
+        : undefined;
+    return result;
+}
+
 module.exports = {
     form : form,
     name : {
-        category : itemsListConstrucor(form['category']['view']),
-        event : itemsListConstrucor(form['event']['view']),
+        public : getList('public'),
         order : [
             'id',
             ['fk_public', 'public'],
@@ -237,8 +237,9 @@ module.exports = {
             ['createdAt', 'created'],
             ['updatedAt', 'updated'],
         ],
-        product : itemsListConstrucor(form['product']['view']),
-        public : itemsListConstrucor(form['public']['view']),
-        service : itemsListConstrucor(form['service']['view']),
+        category : getList('category'),
+        event : getList('event'),
+        product : getList('product'),
+        service : getList('service'),
     },
 };

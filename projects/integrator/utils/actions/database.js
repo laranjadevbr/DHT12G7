@@ -92,7 +92,7 @@ const getIn = (object) => {
                 index : index[object['includeAlias']],
                 ...everyoneView(),
                 ...getInputType(),
-                ...getItem(object['element']),
+                ...object['includeAlias'] ? getItem(object['includeAlias']) : undefined,
                 ...getMenuSetup(object['prefix']),
                 ...getPageTitle({ prefix : object['prefix'], suffix : 'all' }),
                 ...getPathPrefix(object['prefix'].replace('category', 'item')),
