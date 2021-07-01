@@ -1,0 +1,1 @@
+/category/event/in/6; /api/category/event/all; /lab/a; /json/admin/all; 

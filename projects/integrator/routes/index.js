@@ -1,4 +1,5 @@
 const routes = require('./routes');
+
 const api = routes['api'];
 const index = routes['index'];
 const jsonItem = routes['jsonItem'];
@@ -7,6 +8,7 @@ const lab = routes['lab'];
 const category = routes['category'];
 const item = routes['item'];
 const public = routes['public'];
+
 const controls = [
     { control : api, path : 'api-admin', },
     { control : api, path : 'api-category-event', },
@@ -35,10 +37,13 @@ const controls = [
     { control : jsonPublic, path : 'json-client', },
 ];
 const router = require('express').Router();
+const database = require('../middlewares')['database'];
+const url = require('../middlewares')['url'];
 let getRouter = (controller, URLPath, object) => {
     for (let i = 0; i < object['length']; i++) {
         router[object[i]['method']](
             String(URLPath + object[i]['title'] + object[i]['param']),
+            database,
             controller[object[i]['control']],
         );
     }
