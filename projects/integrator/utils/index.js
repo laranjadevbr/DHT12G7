@@ -1,7 +1,8 @@
-const fs = require('fs');
-const urlJoin = require('url-join');
-const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
+const bcrypt = require('bcrypt');
+const fs = require('fs');
+const path = require('path');
+const urlJoin = require('url-join');
 
 const getPathPrefix = (strign) => {
     return {

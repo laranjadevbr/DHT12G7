@@ -1,14 +1,19 @@
 const fs = require('fs');
-const path = require('path');
+const urlJoin = require('url-join');
 const middlewares = {
-    url : (req, res, next) => {
-        let string = req['url'] + '; ';
-        fs.appendFileSync(path.join('logs', 'url.txt'), string);
-        next();
-    },
-    database : (req, res, next) => {
-        let string = req['url'] + '; ';
-        fs.appendFileSync(path.join('logs', 'database.txt'), string);
+    report : (req, res, next) => {        
+        // JSO : JSON.stringify()
+        // VAR : JSON.parse()
+        const contentString = require('../logs/report');
+        contentString.push({
+            date : new Date().toISOString(),
+            url : req['url'],
+        });
+        const contentFilePath = urlJoin([ 'logs', 'report.js', ]);
+        fs.writeFileSync(contentFilePath, 'const report = ');
+        fs.appendFileSync(contentFilePath, JSON.stringify(contentString));
+        fs.appendFileSync(contentFilePath, ';');
+        fs.appendFileSync(contentFilePath, 'module.exports = report;');
         next();
     },
 };

@@ -37,13 +37,12 @@ const controls = [
     { control : jsonPublic, path : 'json-client', },
 ];
 const router = require('express').Router();
-const database = require('../middlewares')['database'];
-const url = require('../middlewares')['url'];
+const report = require('../middlewares')['report'];
 let getRouter = (controller, URLPath, object) => {
     for (let i = 0; i < object['length']; i++) {
         router[object[i]['method']](
             String(URLPath + object[i]['title'] + object[i]['param']),
-            database,
+            report,
             controller[object[i]['control']],
         );
     }
