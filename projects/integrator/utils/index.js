@@ -1,7 +1,6 @@
 const { Op } = require('sequelize');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
-const path = require('path');
 const urlJoin = require('url-join');
 
 const getPathPrefix = (strign) => {
@@ -141,6 +140,31 @@ const JSONModify = (object) => {
     fs.appendFileSync(urlJoin(URLpath), JSON.stringify(object['content']));
     fs.appendFileSync(urlJoin(URLpath), ';');
     fs.appendFileSync(urlJoin(URLpath), 'module.exports = ' + object['name'] + ';');
+};
+
+let getJsonModify = (object) => {
+    const contentFilePath = urlJoin(object['array']);
+    const contentString = isThere(contentFilePath) ? JSON.parse(fs.readFileSync(contentFilePath, {
+        encoding : 'utf-8',
+    })) : [];
+    contentString.push({
+        date : new Date().toISOString(),
+        url : object['url'],
+    });
+    fs.writeFileSync(contentFilePath, JSON.stringify(contentString));
+};
+
+let getJsModify = (object) => {
+    const contentFilePath = urlJoin(object['array']);
+    const contentString = isThere(contentFilePath) ? require(object['require']) : [];
+    contentString.push({
+        date : new Date().toISOString(),
+        url : object['url'],
+    });
+     fs.writeFileSync(contentFilePath, 'const ' + object['variable'] + ' = ');
+    fs.appendFileSync(contentFilePath, JSON.stringify(contentString));
+    fs.appendFileSync(contentFilePath, ';');
+    fs.appendFileSync(contentFilePath, 'module.exports = ' + object['variable'] + ';');
 };
 
 const getLoremIpsum = () => {
@@ -341,6 +365,7 @@ const root = [
     '..',
     'database',
 ]
+
 const getInputType = () => {
     return {
         inputType : require(urlJoin([
@@ -568,6 +593,8 @@ module.exports = {
     getHash,
     getInputType,
     getItem,
+    getJsModify,
+    getJsonModify,
     getLoremIpsum,
     getMenuSetup,
     getModelPagination,

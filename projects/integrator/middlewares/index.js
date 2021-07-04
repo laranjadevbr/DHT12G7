@@ -1,19 +1,25 @@
-const fs = require('fs');
-const urlJoin = require('url-join');
+let {
+    getJsModify,
+    getJsonModify,
+} = require('../utils');
 const middlewares = {
-    report : (req, res, next) => {        
-        // JSO : JSON.stringify()
-        // VAR : JSON.parse()
-        const contentString = require('../logs/report');
-        contentString.push({
-            date : new Date().toISOString(),
+    report : (req, res, next) => {
+        getJsonModify({
+            array : [
+                'logs',
+                'report.json',
+            ],
             url : req['url'],
+        })
+        getJsModify({
+            array : [
+                'logs',
+                'report.js',
+            ],
+            require : '../logs/report',
+            url : req['url'],
+            variable : 'report',
         });
-        const contentFilePath = urlJoin([ 'logs', 'report.js', ]);
-        fs.writeFileSync(contentFilePath, 'const report = ');
-        fs.appendFileSync(contentFilePath, JSON.stringify(contentString));
-        fs.appendFileSync(contentFilePath, ';');
-        fs.appendFileSync(contentFilePath, 'module.exports = report;');
         next();
     },
 };
