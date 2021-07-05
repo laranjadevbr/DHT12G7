@@ -1,5 +1,5 @@
 let {
-    everyoneView,
+    forAllPages,
     getFirstUpperCase,
     getFormElement,
     getFormHeader,
@@ -49,7 +49,7 @@ const getAll = (object) => {
             return res.render('menu', {
                 key : key,
                 index : index,
-                ...everyoneView(),
+                ...forAllPages(),
                 ...getInputType(),
                 ...getItem(object['element']),
                 ...getMenuSetup(object['prefix']),
@@ -90,7 +90,7 @@ const getIn = (object) => {
             return res.render('menu', {
                 key : key,
                 index : index[object['includeAlias']],
-                ...everyoneView(),
+                ...forAllPages(),
                 ...getInputType(),
                 ...object['includeAlias'] ? getItem(object['includeAlias']) : undefined,
                 ...getMenuSetup(object['prefix']),
@@ -124,7 +124,7 @@ const getOn = (object) => {
             return res.render('form', {
                 index : index,
                 btnTitle : 'come back',
-                ...everyoneView(),
+                ...forAllPages(),
                 ...getMenuSetup(object['prefix']),
                 ...getFormElement({ element : object['element'], type : 'view' }),
                 ...getInputType(),
@@ -146,7 +146,7 @@ const getCreate = (object) => {
         create : async (req, res, next) => {
             return res.render('form', {
                 btnTitle : 'create',
-                ...everyoneView(),
+                ...forAllPages(),
                 ...getFormElement({ element : object['element'], type : 'create' }),
                 ...getInputType(),
                 ...getPageTitle({ prefix : object['prefix'], suffix : 'create' }),
@@ -185,7 +185,7 @@ const getEdit = (object) => {
             return res.render('form', {
                 index : index,
                 btnTitle : 'update',
-                ...everyoneView(),
+                ...forAllPages(),
                 ...getFormElement({ element : object['element'], type : 'edit' }),
                 ...getInputType(),
                 ...getPageTitle({ prefix : object['prefix'], suffix : 'edit' }),
@@ -283,7 +283,7 @@ const getSearch = (object) => {
             return res.render('menu', {
                 key : key,
                 index : index,
-                ...everyoneView(),
+                ...forAllPages(),
                 ...getInputType(),
                 ...getItem(object['element']),
                 ...getMenuSetup(object['prefix']),
@@ -307,7 +307,7 @@ const getLogin = (object) => {
         login : async (req, res, next) => {
             return res.render('form', {
                 btnTitle : 'login',
-                ...everyoneView(),
+                ...forAllPages(),
                 ...getFormElement({ element : object['element'], type : 'login' }),
                 ...getInputType(),
                 ...getPageTitle({ prefix : object['prefix'], suffix : 'login' }),
@@ -359,7 +359,7 @@ const getAuthenticate = (object) => {
             //         ]))['inputType'],
             //         pageTitle : object['prefix'].split('-').join(' ') + ' ' + allNames,
             //         script : getScript(allNames),
-            //         ...everyoneView(),
+            //         ...forAllPages(),
             //         ...getFormHeader({
             //             prefix : object['prefix'],
             //             suffix : allNames,

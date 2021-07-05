@@ -1,5 +1,5 @@
 let {
-    everyoneView,
+    forAllPages,
     getFormElement,
     getFormHeader,
     getInputType,
@@ -10,7 +10,8 @@ let {
     getScriptModule,
     getURLPath,
     JSONModify,
-    JSONPagination,
+    getJsPagination,
+    getJsDatabase,
 } = require('..');
 
 const getIndex = (object) => {
@@ -27,21 +28,20 @@ const getAll = (object) => {
         all : (req, res, next) => {
             const amount = 2;
             const { page = 1 } = req['query'];
-            const database = object['database'];
             return res.render('menu', {
-                index : JSONPagination({
-                    array : database,
+                index : getJsPagination({
+                    array : getJsDatabase(object),
                     limit : amount,
                     offset : page,
                 })['listPage'],
-                ...everyoneView(),
+                ...forAllPages(),
                 ...getItem(object['element']),
                 ...getMenuSetup(object['prefix']),
                 ...getPageTitle({ prefix : object['prefix'], suffix : 'all' }),
                 ...getPathPrefix(object['prefix']),
                 ...getScriptModule('all'),
-                ...JSONPagination({
-                    array : database,
+                ...getJsPagination({
+                    array : getJsDatabase(object),
                     limit : amount,
                     offset : page,
                 }),
@@ -55,11 +55,10 @@ const getOn = (object) => {
     const Action = {
         on : (req, res, next) => {
             const { id } = req['params'];
-            const index = object['database'].find((index) => { return index['id'] == id; });
             return res.render('form', {
-                index : index,
+                index : getJsDatabase(object).find((index) => { return index['id'] == id; }),
                 btnTitle : 'come back',
-                ...everyoneView(),
+                ...forAllPages(),
                 ...getFormElement({ element : object['element'], type : 'view' }),
                 ...getInputType(),
                 ...getPageTitle({ prefix : object['prefix'], suffix : 'one' }),
@@ -80,11 +79,10 @@ const getEdit = (object) => {
     const Action = {
         edit : (req, res, next) => {
             const { id } = req['params'];
-            const index = object['database'].find((index) => { return index['id'] == id; });
             return res.render('form', {
-                index : index,
+                index : getJsDatabase(object).find((index) => { return index['id'] == id; }),
                 btnTitle : 'update',
-                ...everyoneView(),
+                ...forAllPages(),
                 ...getFormElement({ element : object['element'], type : 'edit' }),
                 ...getInputType(),
                 ...getPageTitle({ prefix : object['prefix'], suffix : 'edit' }),
@@ -106,7 +104,7 @@ const getCreate = (object) => {
         create : (req, res, next) => {
             return res.render('form', {
                 btnTitle : 'create',
-                ...everyoneView(),
+                ...forAllPages(),
                 ...getFormElement({ element : object['element'], type : 'create' }),
                 ...getInputType(),
                 ...getPageTitle({ prefix : object['prefix'], suffix : 'create' }),
@@ -148,7 +146,7 @@ const getUpdate = (object) => {
     const Action = {
         update : (req, res, next) => {
             const { id } = req['params'];
-            const index = object['database'].find((index) => { return index['id'] == id; });
+            const index = getJsDatabase(object).find((index) => { return index['id'] == id; });
             index = { ...req['body'], };
             JSONModify({
                 name : object['title'],
@@ -164,7 +162,7 @@ const getDestroy = (object) => {
     const Action = {
         destroy : (req, res, next) => {
             const { id } = req['params'];
-            const index = object['database'].filter((index) => { return index['id'] != id; });
+            const index = getJsDatabase(object).filter((index) => { return index['id'] != id; });
             JSONModify({
                 name : object['title'],
                 content : index,
@@ -188,7 +186,7 @@ const getLogin = (object) => {
         login : (req, res, next) => {
             return res.render('form', {
                 btnTitle : 'login',
-                ...everyoneView(),
+                ...forAllPages(),
                 ...getFormElement({ element : object['element'], type : 'login' }),
                 ...getInputType(),
                 ...getPageTitle({ prefix : object['prefix'], suffix : 'login' }),

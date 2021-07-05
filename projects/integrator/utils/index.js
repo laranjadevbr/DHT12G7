@@ -131,20 +131,45 @@ const isThere = (array) => {
 };
 
 let getJsonModify = (object) => {
-    const contentFilePath = urlJoin(object['array']);
-    const contentString = isThere(contentFilePath) ? JSON.parse(fs.readFileSync(contentFilePath, { encoding : 'utf-8' })) : [];
-    contentString.push(object['push']);
-    fs.writeFileSync(contentFilePath, JSON.stringify(contentString));
+    const contentFilePath = [
+        ...object['require'],
+        object['title'] + '.json',
+    ];
+    const contentFile = isThere([
+        ...contentFilePath,
+    ]) ? JSON.parse(fs.readFileSync(urlJoin([
+        ...contentFilePath,
+    ]), { encoding : 'utf-8' })) : [];
+    object['attachment'] ? contentFile.push(object['attachment']) : undefined;
+    fs.writeFileSync(urlJoin([
+        ...contentFilePath,
+    ]), JSON.stringify(contentFile));
 };
 
 let getJsModify = (object) => {
-    const contentFilePath = urlJoin(object['array']);
-    const contentString = isThere(contentFilePath) ? require(object['require']) : [];
-    contentString.push(object['push']);
-    fs.writeFileSync(contentFilePath, 'const ' + object['variable'] + ' = ');
-    fs.appendFileSync(contentFilePath, JSON.stringify(contentString));
-    fs.appendFileSync(contentFilePath, ';');
-    fs.appendFileSync(contentFilePath, 'module.exports = ' + object['variable'] + ';');
+    const contentFilePath = [
+        ...object['require'],
+        object['title'] + '.js',
+    ];
+    const contentFile = isThere([
+        ...contentFilePath,
+    ]) ? require(urlJoin([
+        '..',
+        ...contentFilePath,
+    ])) : [];
+    object['attachment'] ? contentFile.push(object['attachment']) : undefined;
+    fs.writeFileSync(urlJoin([
+        ...contentFilePath,
+    ]), 'const ' + object['title'] + ' = ');
+    fs.appendFileSync(urlJoin([
+        ...contentFilePath,
+    ]), JSON.stringify(contentFile));
+    fs.appendFileSync(urlJoin([
+        ...contentFilePath,
+    ]), ';');
+    fs.appendFileSync(urlJoin([
+        ...contentFilePath,
+    ]), 'module.exports = ' + object['title'] + ';');
 };
 
 const JSONModify = (object) => {
@@ -159,16 +184,24 @@ const JSONModify = (object) => {
     fs.appendFileSync(urlJoin(URLpath), 'module.exports = ' + object['name'] + ';');
 };
 
-const getLoremIpsum = () => {
+const getLoremIpsum = (object) => {
+    const contentFilePath = [
+        'database',
+        'option.js',
+    ];
     return {
         title : isThere([
-            'database',
-            'option.js',
-        ]) ? require('../database/option')['lorem']['title'] : '',
+            ...contentFilePath,
+        ]) ? require(urlJoin([
+            '..',
+            ...contentFilePath,
+        ]))['lorem']['title'] : '',
         description : isThere([
-            'database',
-            'option.js',
-        ]) ? require('../database/option')['lorem']['description'] : '',
+            ...contentFilePath,
+        ]) ? require(urlJoin([
+            '..',
+            ...contentFilePath,
+        ]))['lorem']['description'] : '',
     };
 };
 
@@ -254,7 +287,7 @@ const isEqual = (object) => {
     return bcrypt.compareSync(object['client'], object['dataBase']) ? true : false;
 };
 
-const JSONPagination = (object) => {
+const getJsPagination = (object) => {
     const listPage = [];
     let offset = Number(object['offset']), limit = object['limit'], array = object['array'];
     const gap = limit * (offset - 1);
@@ -353,16 +386,12 @@ const getModelSearchParams = (object) => {
     };
 };
 
-const root = [
-    '..',
-    'database',
-]
-
 const getInputType = () => {
     return {
         inputType : require(urlJoin([
-            ...root,
-            'option'
+            '..',
+            'database',
+            'option',
         ]))['inputType'],
     };
 };
@@ -379,7 +408,8 @@ const getSearchAction = (object) => {
 const getItem = (string) => {
     return {
         item : require(urlJoin([
-            ...root,
+            '..',
+            'database',
             'element',
         ]))['name'][string],
     };
@@ -388,11 +418,12 @@ const getItem = (string) => {
 const getFormElement = (object) => {
     return {
         formElement : require(urlJoin([
-            ...root,
+            '..',
+            'database',
             'element',
         ]))['form'][object['element']][object['type']],
-    }
-}
+    };
+};
 
 const getFirstUpperCase = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -557,9 +588,24 @@ let getDateFormat = (string) => {
     month = (new Date(string).getMonth() + 1).toString().padStart(2, '0'),
     year = new Date(string).getFullYear();
     return day + '/' + month + '/' + year;
-}
+};
 
-const everyoneView = () => {
+
+const getJsDatabase = (object) => {
+    const contentFilePath = [
+        ...object['require'],
+        object['title'] + '.js',
+    ]
+    const result = isThere([
+        ...contentFilePath,
+    ]) ? require(urlJoin([
+        '..',
+        ...contentFilePath,
+    ])) : [];
+    return result;
+};
+
+const forAllPages = () => {
     return {
         getCurrency,
         getDateFormat,
@@ -573,8 +619,9 @@ const everyoneView = () => {
 };
 
 module.exports = {
+    forAllPages,
+    getJsDatabase,
     arrayUnifier,
-    everyoneView,
     getCNPJNumber,
     getCPFNumber,
     getDOCNumber,
@@ -611,6 +658,6 @@ module.exports = {
     isThere,
     isThis,
     JSONModify,
-    JSONPagination,
+    getJsPagination,
     objectCreator,
 };
