@@ -1,1 +1,1 @@
-const report = [{"date":"2021-07-04T03:25:53.344Z","url":"/public/admin/all"}];module.exports = report;
+const report = [{"date":"2021-07-04T03:25:53.344Z","url":"/public/admin/all"},{"date":"2021-07-04T03:31:00.878Z","url":"/public/admin/search?key=Lorem"},{"date":"2021-07-04T03:31:04.176Z","url":"/public/admin/search?key=Lorem"}];module.exports = report;

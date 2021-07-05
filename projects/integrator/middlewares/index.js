@@ -4,21 +4,28 @@ let {
 } = require('../utils');
 const middlewares = {
     report : (req, res, next) => {
-        getJsonModify({
-            array : [
-                'logs',
-                'report.json',
-            ],
+        const array = [
+            'logs',
+        ];
+        const push = {
+            date : new Date().toISOString(),
             url : req['url'],
-        })
+        };
         getJsModify({
             array : [
-                'logs',
+                ...array,
                 'report.js',
             ],
+            push : push,
             require : '../logs/report',
-            url : req['url'],
             variable : 'report',
+        });
+        getJsonModify({
+            array : [
+                ...array,
+                'report.json',
+            ],
+            push : push,
         });
         next();
     },

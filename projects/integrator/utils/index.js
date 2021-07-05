@@ -130,6 +130,23 @@ const isThere = (array) => {
     return fs.existsSync(urlJoin(array)) ? true : false;
 };
 
+let getJsonModify = (object) => {
+    const contentFilePath = urlJoin(object['array']);
+    const contentString = isThere(contentFilePath) ? JSON.parse(fs.readFileSync(contentFilePath, { encoding : 'utf-8' })) : [];
+    contentString.push(object['push']);
+    fs.writeFileSync(contentFilePath, JSON.stringify(contentString));
+};
+
+let getJsModify = (object) => {
+    const contentFilePath = urlJoin(object['array']);
+    const contentString = isThere(contentFilePath) ? require(object['require']) : [];
+    contentString.push(object['push']);
+    fs.writeFileSync(contentFilePath, 'const ' + object['variable'] + ' = ');
+    fs.appendFileSync(contentFilePath, JSON.stringify(contentString));
+    fs.appendFileSync(contentFilePath, ';');
+    fs.appendFileSync(contentFilePath, 'module.exports = ' + object['variable'] + ';');
+};
+
 const JSONModify = (object) => {
     const URLpath = [
         'database',
@@ -140,31 +157,6 @@ const JSONModify = (object) => {
     fs.appendFileSync(urlJoin(URLpath), JSON.stringify(object['content']));
     fs.appendFileSync(urlJoin(URLpath), ';');
     fs.appendFileSync(urlJoin(URLpath), 'module.exports = ' + object['name'] + ';');
-};
-
-let getJsonModify = (object) => {
-    const contentFilePath = urlJoin(object['array']);
-    const contentString = isThere(contentFilePath) ? JSON.parse(fs.readFileSync(contentFilePath, {
-        encoding : 'utf-8',
-    })) : [];
-    contentString.push({
-        date : new Date().toISOString(),
-        url : object['url'],
-    });
-    fs.writeFileSync(contentFilePath, JSON.stringify(contentString));
-};
-
-let getJsModify = (object) => {
-    const contentFilePath = urlJoin(object['array']);
-    const contentString = isThere(contentFilePath) ? require(object['require']) : [];
-    contentString.push({
-        date : new Date().toISOString(),
-        url : object['url'],
-    });
-     fs.writeFileSync(contentFilePath, 'const ' + object['variable'] + ' = ');
-    fs.appendFileSync(contentFilePath, JSON.stringify(contentString));
-    fs.appendFileSync(contentFilePath, ';');
-    fs.appendFileSync(contentFilePath, 'module.exports = ' + object['variable'] + ';');
 };
 
 const getLoremIpsum = () => {
