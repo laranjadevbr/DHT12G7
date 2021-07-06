@@ -1,6 +1,10 @@
 const {
     Category,
     Event,
+    Order,
+    Product,
+    Public,
+    Service,
 } = require('../models');
 let {
     getControllers,
@@ -15,7 +19,7 @@ module.exports = {
         includeAlias : 'category',
         includeName : Category,
         prefix : 'item-event',
-        ...isThere(['bulkmakers', 'item-event.js']) ? {
+        ...isThere([ 'bulkmakers', 'item-event.js' ]) ? {
             bulkMaker : require('../bulkmakers/item-event')
         } : {
         },

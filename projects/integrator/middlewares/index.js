@@ -1,31 +1,26 @@
 let {
-    getJsModify,
-    getJsonModify,
+    addJsDatabase,
+    addJsonDatabase,
 } = require('../utils');
 const middlewares = {
     report : (req, res, next) => {
-        getJsModify({
-            attachment : {
-                date : new Date().toISOString(),
-                url : req['url'],
-            },
-            require : [
-                'database',
-                'logs',
-            ],
-            title : 'report',
-        });
-        getJsonModify({
-            attachment : {
-                date : new Date().toISOString(),
-                url : req['url'],
-            },
-            require : [
-                'database',
-                'logs',
-            ],
-            title : 'report',
-        });
+        // const content = {
+        //     attachment : {
+        //         date : new Date().toISOString(),
+        //         url : req['url'],
+        //     },
+        //     require : [
+        //         'database',
+        //         'logs',
+        //     ],
+        //     title : 'report',
+        // }
+        // addJsDatabase({
+        //     ...content,
+        // });
+        // addJsonDatabase({
+        //     ...content,
+        // });
         next();
     },
 };

@@ -1,27 +1,37 @@
 let {
+    addJsDatabase,
     forAllPages,
     getFormElement,
     getFormHeader,
     getInputType,
     getItem,
+    getHash,
+    getJsDatabase,
+    getJsPagination,
     getMenuSetup,
     getPageTitle,
     getPathPrefix,
     getScriptModule,
     getURLPath,
-    JSONModify,
-    getJsPagination,
-    getJsDatabase,
+    isEmpty,
+    saveJsDatabase,
 } = require('..');
+
+// OK!
 
 const getIndex = (object) => {
     const Action = {
         index : (req, res, next) => {
-            return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'all' }));
+            return res.redirect(getURLPath({
+                prefix : object['prefix'],
+                suffix : 'all',
+            }));
         },
     }
     return Action;
 };
+
+// OK!
 
 const getAll = (object) => {
     const Action = {
@@ -37,7 +47,10 @@ const getAll = (object) => {
                 ...forAllPages(),
                 ...getItem(object['element']),
                 ...getMenuSetup(object['prefix']),
-                ...getPageTitle({ prefix : object['prefix'], suffix : 'all' }),
+                ...getPageTitle({
+                    prefix : object['prefix'],
+                    suffix : 'all',
+                }),
                 ...getPathPrefix(object['prefix']),
                 ...getScriptModule('all'),
                 ...getJsPagination({
@@ -51,22 +64,32 @@ const getAll = (object) => {
     return Action;
 };
 
+// OK!
+
 const getOn = (object) => {
     const Action = {
         on : (req, res, next) => {
             const { id } = req['params'];
             return res.render('form', {
-                index : getJsDatabase(object).find((index) => { return index['id'] == id; }),
+                index : getJsDatabase(object).find((index) => {
+                    return index['id'] == id;
+                }),
                 btnTitle : 'come back',
                 ...forAllPages(),
-                ...getFormElement({ element : object['element'], type : 'view' }),
+                ...getFormElement({
+                    element : object['element'],
+                    type : 'view',
+                }),
                 ...getInputType(),
-                ...getPageTitle({ prefix : object['prefix'], suffix : 'one' }),
-                ...getScriptModule('one'),
+                ...getPageTitle({
+                    prefix : object['prefix'],
+                    suffix : 'on',
+                }),
+                ...getScriptModule('on'),
                 ...getFormHeader({
                     prefix : object['prefix'],
-                    suffix : 'one',
-                    enctype : '',
+                    suffix : 'on',
+                    enctype : 'multipart/form-data',
                     method : 'POST',
                 }),
             });
@@ -80,17 +103,25 @@ const getEdit = (object) => {
         edit : (req, res, next) => {
             const { id } = req['params'];
             return res.render('form', {
-                index : getJsDatabase(object).find((index) => { return index['id'] == id; }),
-                btnTitle : 'update',
+                index : getJsDatabase(object).find((index) => {
+                    return index['id'] == id;
+                }),
+                btnTitle : 'edit',
                 ...forAllPages(),
-                ...getFormElement({ element : object['element'], type : 'edit' }),
+                ...getFormElement({
+                    element : object['element'],
+                    type : 'edit',
+                }),
                 ...getInputType(),
-                ...getPageTitle({ prefix : object['prefix'], suffix : 'edit' }),
+                ...getPageTitle({
+                    prefix : object['prefix'],
+                    suffix : 'edit',
+                }),
                 ...getScriptModule('edit'),
                 ...getFormHeader({
                     prefix : object['prefix'],
-                    suffix : 'update' + '/' + id,
-                    enctype : '',
+                    suffix : 'edit/' + id + '?_method=PUT',
+                    // enctype : 'multipart/form-data',
                     method : 'POST',
                 }),
             });
@@ -98,6 +129,8 @@ const getEdit = (object) => {
     }
     return Action;
 };
+
+// OK!
 
 const getCreate = (object) => {
     const Action = {
@@ -105,14 +138,20 @@ const getCreate = (object) => {
             return res.render('form', {
                 btnTitle : 'create',
                 ...forAllPages(),
-                ...getFormElement({ element : object['element'], type : 'create' }),
+                ...getFormElement({
+                    element : object['element'],
+                    type : 'create',
+                }),
                 ...getInputType(),
-                ...getPageTitle({ prefix : object['prefix'], suffix : 'create' }),
+                ...getPageTitle({
+                    prefix : object['prefix'],
+                    suffix : 'create',
+                }),
                 ...getScriptModule('create'),
                 ...getFormHeader({
-                    prefix : 'create',
-                    suffix : 'save',
-                    enctype : '',
+                    prefix : object['prefix'],
+                    suffix : 'create',
+                    // enctype : 'multipart/form-data',
                     method : 'POST',
                 }),
             });
@@ -121,24 +160,34 @@ const getCreate = (object) => {
     return Action;
 };
 
+// OK!
+
 const getStore = (object) => {
     const Action = {
         store : (req, res, next) => {
-            const database = object['database'];
-            req['body']['password'] = getHash(req['body']['password']);
-            const index = {
-                active : true,
-                id : database[database['length'] - 1]['id'] + 1,
-                ...req['body'],
-            };
-            database.push(index);
-            JSONModify({
-                name : object['title'],
-                content : database,
+            req['body']['password'] ? getHash(req['body']['password']) : undefined;
+            const id = !isEmpty(getJsDatabase(object))
+            ? getJsDatabase(object)[getJsDatabase(object)['length'] - 1]['id'] + 1
+            : 1;
+            addJsDatabase({
+                attachment : {
+                    id : id,
+                    approved : true,
+                    deleted : false,
+                    disable : false,
+                    ...req['body'],
+                },
+                require : [
+                    ...object['require'],
+                ],
+                title : object['title'],
             });
-            return res.send(index);
+            return res.redirect(getURLPath({
+                prefix : object['prefix'],
+                suffix : 'edit' + '/' + id,
+            }));
         },
-    }
+    };
     return Action;
 };
 
@@ -146,15 +195,24 @@ const getUpdate = (object) => {
     const Action = {
         update : (req, res, next) => {
             const { id } = req['params'];
-            const index = getJsDatabase(object).find((index) => { return index['id'] == id; });
-            index = { ...req['body'], };
-            JSONModify({
-                name : object['title'],
-                content : index,
+            let database = getJsDatabase(object);
+            let index = database.find((index) => { return index['id'] == id; });
+            for (let i = 0; i < Object.getOwnPropertyNames(req['body'])['length']; i++) {
+                index[Object.getOwnPropertyNames(req['body'])[i]] = Object.getOwnPropertyDescriptors(req['body'])[Object.getOwnPropertyNames(req['body'])[i]]['value'];
+            };
+            saveJsDatabase({
+                content : database,
+                require : [
+                    ...object['require'],
+                ],
+                title : object['title'],
             });
-            return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'all' }));
+            return res.redirect(getURLPath({
+                prefix : object['prefix'],
+                suffix : 'edit' + '/' + id,
+            }));
         },
-    }
+    };
     return Action;
 };
 
@@ -162,14 +220,22 @@ const getDestroy = (object) => {
     const Action = {
         destroy : (req, res, next) => {
             const { id } = req['params'];
-            const index = getJsDatabase(object).filter((index) => { return index['id'] != id; });
-            JSONModify({
-                name : object['title'],
-                content : index,
+            const index = getJsDatabase(object).filter((index) => {
+                return index['id'] != id;
             });
-            return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'all' }));
+            saveJsDatabase({
+                content : index,
+                require : [
+                    ...object['require'],
+                ],
+                title : object['title'],
+            });
+            return res.redirect(getURLPath({
+                prefix : object['prefix'],
+                suffix : 'all',
+            }));
         },
-    }
+    };
     return Action;
 };
 
@@ -187,14 +253,20 @@ const getLogin = (object) => {
             return res.render('form', {
                 btnTitle : 'login',
                 ...forAllPages(),
-                ...getFormElement({ element : object['element'], type : 'login' }),
+                ...getFormElement({
+                    element : object['element'],
+                    type : 'login',
+                }),
                 ...getInputType(),
-                ...getPageTitle({ prefix : object['prefix'], suffix : 'login' }),
+                ...getPageTitle({
+                    prefix : object['prefix'],
+                    suffix : 'login',
+                }),
                 ...getScriptModule('login'),
                 ...getFormHeader({
-                    prefix : 'login',
+                    prefix : object['prefix'],
                     suffix : 'authenticate',
-                    enctype : '',
+                    // enctype : 'multipart/form-data',
                     method : 'POST',
                 }),
             });

@@ -94,9 +94,9 @@ const getIn = (object) => {
                 ...getInputType(),
                 ...object['includeAlias'] ? getItem(object['includeAlias']) : undefined,
                 ...getMenuSetup(object['prefix']),
-                ...getPageTitle({ prefix : object['prefix'], suffix : 'all' }),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'in' }),
                 ...getPathPrefix(object['prefix'].replace('category', 'item')),
-                ...getScriptModule('all'),
+                ...getScriptModule('in'),
                 ...getSearchAction({ prefix : object['prefix'], suffix : 'search' }),
                 ...getModelPagination({
                     count : index['length'],
@@ -128,11 +128,12 @@ const getOn = (object) => {
                 ...getMenuSetup(object['prefix']),
                 ...getFormElement({ element : object['element'], type : 'view' }),
                 ...getInputType(),
-                ...getPageTitle({ prefix : object['prefix'], suffix : 'one' }),
-                ...getScriptModule('one'),                
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'on' }),
+                ...getScriptModule('on'),                
                 ...getFormHeader({
                     prefix : object['prefix'],
-                    suffix : 'all',
+                    suffix : 'on',
+                    enctype : 'multipart/form-data',
                     method : 'POST',
                 }),
             });
@@ -154,6 +155,7 @@ const getCreate = (object) => {
                 ...getFormHeader({
                     prefix : object['prefix'],
                     suffix : 'create',
+                    enctype : 'multipart/form-data',
                     method : 'POST',
                 }),
             });
@@ -165,7 +167,9 @@ const getCreate = (object) => {
 const getStore = (object) => {
     const Action = {
         store : async (req, res, next) => {
-            const index = await object['modelName'].create({ ...req['body'] });
+            const index = await object['modelName'].create({
+                ...req['body'],
+            });
             return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'all' }));
         },
     }
@@ -184,7 +188,7 @@ const getEdit = (object) => {
             });
             return res.render('form', {
                 index : index,
-                btnTitle : 'update',
+                btnTitle : 'edit',
                 ...forAllPages(),
                 ...getFormElement({ element : object['element'], type : 'edit' }),
                 ...getInputType(),
@@ -193,6 +197,7 @@ const getEdit = (object) => {
                 ...getFormHeader({
                     prefix : object['prefix'],
                     suffix : 'edit' + '/' + id + '?_method=PUT',
+                    enctype : 'multipart/form-data',
                     method : 'POST',
                 }),
             });
@@ -287,9 +292,9 @@ const getSearch = (object) => {
                 ...getInputType(),
                 ...getItem(object['element']),
                 ...getMenuSetup(object['prefix']),
-                ...getPageTitle({ prefix : object['prefix'], suffix : 'all' }),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'search' }),
                 ...getPathPrefix(object['prefix']),
-                ...getScriptModule('all'),
+                ...getScriptModule('search'),
                 ...getSearchAction({ prefix : object['prefix'], suffix : 'search' }),
                 ...getModelPagination({
                     count : count,
@@ -315,6 +320,7 @@ const getLogin = (object) => {
                 ...getFormHeader({
                     prefix : object['prefix'],
                     suffix : 'authenticate',
+                    enctype : 'multipart/form-data',
                     method : 'POST',
                 }),
             });

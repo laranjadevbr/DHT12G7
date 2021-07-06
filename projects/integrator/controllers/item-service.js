@@ -1,5 +1,9 @@
 const {
     Category,
+    Event,
+    Order,
+    Product,
+    Public,
     Service,
 } = require('../models');
 let {
@@ -15,7 +19,7 @@ module.exports = {
         includeAlias : 'category',
         includeName : Category,
         prefix : 'item-service',
-        ...isThere(['bulkmakers', 'item-service.js']) ? { 
+        ...isThere([ 'bulkmakers', 'item-service.js' ]) ? {
             bulkMaker : require('../bulkmakers/item-service')
         } : {
         },

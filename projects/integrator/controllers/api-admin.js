@@ -1,6 +1,10 @@
 const {
-    Public,
+    Category,
     Event,
+    Order,
+    Product,
+    Public,
+    Service,
 } = require('../models');
 const {
     getControllers,
@@ -8,8 +12,6 @@ const {
 module.exports = {
     ...getControllers({
         modelName : Public,
-        // includeAlias : 'order',
-        // includeName : Order,
         includeAlias : 'event',
         includeName : Event,
         prefix : 'api-admin',

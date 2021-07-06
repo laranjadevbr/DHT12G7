@@ -1,6 +1,7 @@
 const option = require('../database/option');
 const { cep, cnh, cnpj, cpf, passport, phone, rg, uf } = option['lengths'];
 const { description } = option['lorem'];
+
 const getIDColumns = (Sequelize) => {
     return {
         id : {
@@ -11,6 +12,7 @@ const getIDColumns = (Sequelize) => {
         },
     };
 };
+
 const getDateColumns = (Sequelize) => {
     return {
         startdate : {
@@ -31,6 +33,7 @@ const getDateColumns = (Sequelize) => {
         },
     };
 };
+
 const getAddressColumns = (Sequelize) => {
     return {
         cep : Sequelize.STRING(cep),
@@ -41,17 +44,20 @@ const getAddressColumns = (Sequelize) => {
         state : Sequelize.STRING(uf),
     };
 };
+
 const getContactColumns = (Sequelize) => {
     return {
         email : Sequelize.STRING,
         phone : Sequelize.STRING(phone),
     };
 };
+
 const getCostColumns = (Sequelize) => {
     return {
         cost : Sequelize.INTEGER,
     };
 };
+
 const getCreateColumns = (Sequelize) => {
     return {
         createdAt : {
@@ -66,11 +72,13 @@ const getCreateColumns = (Sequelize) => {
         },
     }
 };
+
 const getPictureColumns = (Sequelize) => {
     return {
         picture : Sequelize.STRING,
     };
 };
+
 const getProfileColumns = (Sequelize) => {
     return {
         title : {
@@ -84,6 +92,7 @@ const getProfileColumns = (Sequelize) => {
         },
     };
 };
+
 const getStateColumns = (Sequelize) => {
     return {
         approved : {
@@ -103,6 +112,7 @@ const getStateColumns = (Sequelize) => {
         },
     }
 };
+
 const getAccessColumns = (Sequelize) => {
     return {
         accesskey : {
@@ -119,6 +129,7 @@ const getAccessColumns = (Sequelize) => {
         },
     };
 };
+
 const getAddColumns = (Sequelize) => {
     return {
         gender : Sequelize.STRING,
@@ -126,6 +137,7 @@ const getAddColumns = (Sequelize) => {
         status : Sequelize.STRING,
     };
 };
+
 const getCompanyColumns = (Sequelize, Entity) => {
     return {
         cnpj : Sequelize.STRING(cnpj),
@@ -133,6 +145,7 @@ const getCompanyColumns = (Sequelize, Entity) => {
         company : Sequelize.STRING,
     };
 };
+
 const getCurriculumColumns = (Sequelize) => {
     return {
         profession : Sequelize.STRING,
@@ -143,6 +156,7 @@ const getCurriculumColumns = (Sequelize) => {
         salary : Sequelize.STRING,
     };
 };
+
 const getDocumentColumns = (Sequelize) => {
     return {
         cnh : Sequelize.STRING(cnh),
@@ -151,10 +165,12 @@ const getDocumentColumns = (Sequelize) => {
         rg : Sequelize.STRING(rg),
     };
 };
+
 const getHobbiesColumns = (Sequelize) => {
     return {
     };
 };
+
 const getLevelColumns = (Sequelize) => {
     return {
         level : {
@@ -203,6 +219,7 @@ const getModelItem = (Sequelize) => {
         ...getCreateColumns(Sequelize),
     };
 };
+
 const getModelOrder = (Sequelize) => {
     return {
         ...getIDColumns(Sequelize),
@@ -232,6 +249,7 @@ const getModelPublic = (Sequelize) => {
         ...getCreateColumns(Sequelize),
     };
 };
+
 const getForeignKey = (Sequelize) => {
     return {
         fk_category : {
@@ -243,7 +261,8 @@ const getForeignKey = (Sequelize) => {
             type : Sequelize.INTEGER,
         },
     };
-}
+};
+
 const getModelEvent = (Sequelize) => {
     return {
         ...getIDColumns(Sequelize),
@@ -257,6 +276,7 @@ const getModelEvent = (Sequelize) => {
         ...getStateColumns(Sequelize),
     };
 };
+
 const getModelProduct = (Sequelize) => {
     return {
         ...getIDColumns(Sequelize),
@@ -268,6 +288,7 @@ const getModelProduct = (Sequelize) => {
         ...getCreateColumns(Sequelize),
     };
 };
+
 const getModelService = (Sequelize) => {
     return {
         ...getIDColumns(Sequelize),
@@ -279,13 +300,12 @@ const getModelService = (Sequelize) => {
         ...getCreateColumns(Sequelize),
     };
 };
+
 module.exports = {
     getModelOrder,
     getModelItem,
-    
     getModelCategory,
     getModelPublic,
-
     getModelEvent,
     getModelProduct,
     getModelService,

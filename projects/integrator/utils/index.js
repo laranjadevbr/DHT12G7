@@ -3,6 +3,15 @@ const bcrypt = require('bcrypt');
 const fs = require('fs');
 const urlJoin = require('url-join');
 
+let isEmpty = (object) => {
+    var hasOwnProperty = Object.prototype.hasOwnProperty;
+    if (object == null) return true;
+    if (object['length'] > 0) return false;
+    if (object['length'] === 0) return true;
+    for (var key in object) if (hasOwnProperty.call(object, key)) return false;
+    return true;
+}
+
 const getPathPrefix = (strign) => {
     return {
         pathPrefix : strign ? strign.split('-').join('/').trim().toLowerCase() : '',
@@ -130,7 +139,7 @@ const isThere = (array) => {
     return fs.existsSync(urlJoin(array)) ? true : false;
 };
 
-let getJsonModify = (object) => {
+let addJsonDatabase = (object) => {
     const contentFilePath = [
         ...object['require'],
         object['title'] + '.json',
@@ -146,7 +155,7 @@ let getJsonModify = (object) => {
     ]), JSON.stringify(contentFile));
 };
 
-let getJsModify = (object) => {
+let addJsDatabase = (object) => {
     const contentFilePath = [
         ...object['require'],
         object['title'] + '.js',
@@ -172,16 +181,23 @@ let getJsModify = (object) => {
     ]), 'module.exports = ' + object['title'] + ';');
 };
 
-const JSONModify = (object) => {
-    const URLpath = [
-        'database',
-        'json',
-        object['name'] + '.js'
+let saveJsDatabase = (object) => {
+    const contentFilePath = [
+        ...object['require'],
+        object['title'] + '.js',
     ];
-     fs.writeFileSync(urlJoin(URLpath), 'const ' + object['name'] + ' = ');
-    fs.appendFileSync(urlJoin(URLpath), JSON.stringify(object['content']));
-    fs.appendFileSync(urlJoin(URLpath), ';');
-    fs.appendFileSync(urlJoin(URLpath), 'module.exports = ' + object['name'] + ';');
+    fs.writeFileSync(urlJoin([
+        ...contentFilePath,
+    ]), 'const ' + object['title'] + ' = ');
+    fs.appendFileSync(urlJoin([
+        ...contentFilePath,
+    ]), JSON.stringify(object['content']));
+    fs.appendFileSync(urlJoin([
+        ...contentFilePath,
+    ]), ';');
+    fs.appendFileSync(urlJoin([
+        ...contentFilePath,
+    ]), 'module.exports = ' + object['title'] + ';');
 };
 
 const getLoremIpsum = (object) => {
@@ -590,7 +606,6 @@ let getDateFormat = (string) => {
     return day + '/' + month + '/' + year;
 };
 
-
 const getJsDatabase = (object) => {
     const contentFilePath = [
         ...object['require'],
@@ -612,6 +627,7 @@ const forAllPages = () => {
         getFirstUpperCase,
         getRomanNumber,
         getValidation,
+        isEmpty,
         isThis,
         session,
         toClean,
@@ -621,6 +637,7 @@ const forAllPages = () => {
 module.exports = {
     forAllPages,
     getJsDatabase,
+    saveJsDatabase,
     arrayUnifier,
     getCNPJNumber,
     getCPFNumber,
@@ -632,8 +649,8 @@ module.exports = {
     getHash,
     getInputType,
     getItem,
-    getJsModify,
-    getJsonModify,
+    addJsDatabase,
+    addJsonDatabase,
     getLoremIpsum,
     getMenuSetup,
     getModelPagination,
@@ -653,11 +670,11 @@ module.exports = {
     getScriptModule,
     getSearchAction,
     getURLPath,
+    isEmpty,
     isEqual,
     isTheLast,
     isThere,
     isThis,
-    JSONModify,
     getJsPagination,
     objectCreator,
 };

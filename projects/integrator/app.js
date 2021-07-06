@@ -42,14 +42,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', require('./routes'));
 
 const {
-  forEveryone,
-  getScript,
+  forAllPages,
+  getScriptModule,
 } = require('./utils');
 app.use((req, res, next) => {
   return res.status(404).render('404', {
     pageMessage : 'this page is not found!',
-    script : getScript('404'),
-    ...forEveryone(),
+    script : getScriptModule('404'),
+    ...forAllPages(),
   });
 });
 

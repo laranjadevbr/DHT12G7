@@ -36,6 +36,10 @@ const controls = [
     { control : jsonPublic, path : 'json-admin', },
     { control : jsonPublic, path : 'json-client', },
 ];
+
+const multer = require('multer');
+
+
 const router = require('express').Router();
 const report = require('../middlewares')['report'];
 let getRouter = (controller, URLPath, object) => {

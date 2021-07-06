@@ -1,5 +1,5 @@
 const {
-    everyoneView,
+    forAllPages,
     getScriptModule,
 } = require('../utils');
 const getViewsAction = (pageName) => {
@@ -8,7 +8,7 @@ const getViewsAction = (pageName) => {
             return res.render(pageName, {
                 pageTitle : pageName,
                 ...getScriptModule(pageName),
-                ...everyoneView(),
+                ...forAllPages(),
             });
         },
     };

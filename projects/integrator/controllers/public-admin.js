@@ -1,6 +1,10 @@
 const {
-    Public,
+    Category,
+    Event,
     Order,
+    Product,
+    Public,
+    Service,
 } = require('../models');
 let {
     getControllers,
@@ -12,10 +16,10 @@ module.exports = {
     ...getControllers({
         element : 'public',
         modelName : Public,
-        // includeAlias : 'order',
-        // includeName : Order,
+        includeAlias : 'product',
+        includeName : Product,
         prefix : 'public-admin',
-        ...isThere(['bulkmakers', 'public.js']) ? {
+        ...isThere([ 'bulkmakers', 'public.js' ]) ? {
             bulkMaker : require('../bulkmakers/public')
         } : {
         },

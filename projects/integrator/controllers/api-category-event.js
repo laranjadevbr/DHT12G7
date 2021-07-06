@@ -1,6 +1,10 @@
 const {
     Category,
     Event,
+    Order,
+    Product,
+    Public,
+    Service,
 } = require('../models');
 const {
     getControllers,
