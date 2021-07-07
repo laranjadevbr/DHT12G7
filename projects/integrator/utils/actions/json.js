@@ -98,6 +98,8 @@ const getOn = (object) => {
     return Action;
 };
 
+// OK!
+
 const getEdit = (object) => {
     const Action = {
         edit : (req, res, next) => {
@@ -191,6 +193,8 @@ const getStore = (object) => {
     return Action;
 };
 
+// OK!
+
 const getUpdate = (object) => {
     const Action = {
         update : (req, res, next) => {
@@ -198,7 +202,8 @@ const getUpdate = (object) => {
             let database = getJsDatabase(object);
             let index = database.find((index) => { return index['id'] == id; });
             for (let i = 0; i < Object.getOwnPropertyNames(req['body'])['length']; i++) {
-                index[Object.getOwnPropertyNames(req['body'])[i]] = Object.getOwnPropertyDescriptors(req['body'])[Object.getOwnPropertyNames(req['body'])[i]]['value'];
+                let propertyName = Object.getOwnPropertyNames(req['body'])[i]; 
+                index[propertyName] = Object.getOwnPropertyDescriptors(req['body'])[propertyName]['value'];
             };
             saveJsDatabase({
                 content : database,
