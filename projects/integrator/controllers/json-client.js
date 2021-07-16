@@ -7,7 +7,7 @@ module.exports = {
         prefix : 'json-client',
         require : [
             'database',
-            'js',
+            'texts',
         ],
         title : 'client',
     }),

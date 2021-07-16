@@ -4,23 +4,27 @@ let {
 } = require('../utils');
 const middlewares = {
     report : (req, res, next) => {
-        // const content = {
-        //     attachment : {
-        //         date : new Date().toISOString(),
-        //         url : req['url'],
-        //     },
-        //     require : [
-        //         'database',
-        //         'logs',
-        //     ],
-        //     title : 'report',
-        // }
+
+        const newPush = {
+            attachment : {
+                date : new Date().toISOString(),
+                url : req['url'],
+            },
+            require : [
+                'database',
+                'logs',
+            ],
+            title : 'report',
+        };
+
         // addJsDatabase({
-        //     ...content,
+        //     ...newPush,
         // });
+
         // addJsonDatabase({
-        //     ...content,
+        //     ...newPush,
         // });
+
         next();
     },
 };

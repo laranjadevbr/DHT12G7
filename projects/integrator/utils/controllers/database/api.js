@@ -6,7 +6,10 @@ const {
 const getControllers = (object) => {
     const Action = {
         index : async (req, res, next) => {
-            return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'all' }));
+            return res.redirect(getURLPath({
+                prefix : object['prefix'],
+                suffix : 'all',
+            }));
         },
         all : async (req, res, next) => {
             const { key } = req['query'];
@@ -20,7 +23,8 @@ const getControllers = (object) => {
                     ...object['includeAlias'] && object['includeName'] ? {
                         alias : object['includeAlias'],
                         model : object['includeName'],
-                    } : { },
+                    } : {
+                    },
                 }),
                 ...key ? {
                     ...getModelSearchParams({
@@ -29,7 +33,8 @@ const getControllers = (object) => {
                             'title',
                         ],
                     }),
-                } : { },
+                } : {
+                },
             }).then(result => {
                 return res.status(200).json({
                     count : result['count'],
@@ -44,7 +49,10 @@ const getControllers = (object) => {
         on : async (req, res, next) => {
             const { id } = req['params'];
             if (!id) {
-                return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'all' }));
+                return res.redirect(getURLPath({
+                    prefix : object['prefix'],
+                    suffix : 'all',
+                }));
             } else {
                 const index = await object['modelName'].findOne({
                     ...getModelParams({
@@ -52,7 +60,8 @@ const getControllers = (object) => {
                         ...object['includeAlias'] && object['includeName'] ? {
                             alias : object['includeAlias'],
                             model : object['includeName'],
-                        } : { },
+                        } : {
+                        },
                     }),
                 }).then(result => {
                     return res.status(200).json({

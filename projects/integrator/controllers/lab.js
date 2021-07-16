@@ -5,8 +5,8 @@ const {
     Public,
 } = require('../models');
 const {
-    everyoneView,
-    getScript,
+    forAllPages,
+    getScriptModule,
     getURLPath,
 } = require('../utils');
 module.exports = {
@@ -116,57 +116,57 @@ module.exports = {
     j : async (req, res, next) => {
         const allNames = '_j';        
         return res.render(allNames, {
-            script : getScript(allNames),
-            ...everyoneView(),
+            script : getScriptModule(allNames),
+            ...forAllPages(),
         });
     },
     k : async (req, res, next) => {
         const allNames = '_k';
         return res.render(allNames, {
-            script : getScript(allNames),
-            ...everyoneView(),
+            script : getScriptModule(allNames),
+            ...forAllPages(),
         });
     },
     l : async (req, res, next) => {
         const allNames = '_l';
         return res.render(allNames, {
-            script : getScript(allNames),
-            ...everyoneView(),
+            script : getScriptModule(allNames),
+            ...forAllPages(),
         });
     },
     m : async (req, res, next) => {
         const allNames = '_m';
         return res.render(allNames, {
-            script : getScript(allNames),
-            ...everyoneView(),
+            script : getScriptModule(allNames),
+            ...forAllPages(),
         });
     },
     n : async (req, res, next) => {
         const allNames = '_n';
         return res.render(allNames, {
-            script : getScript(allNames),
-            ...everyoneView(),
+            script : getScriptModule(allNames),
+            ...forAllPages(),
         });
     },
     o : async (req, res, next) => {
         const allNames = '_o';
         return res.render(allNames, {
-            script : getScript(allNames),
-            ...everyoneView(),
+            script : getScriptModule(allNames),
+            ...forAllPages(),
         });
     },
     p : async (req, res, next) => {
         const allNames = '_p';
         return res.render(allNames, {
-            script : getScript(allNames),
-            ...everyoneView(),
+            script : getScriptModule(allNames),
+            ...forAllPages(),
         });
     },
     q : async (req, res, next) => {
         const allNames = '_q';
         return res.render(allNames, {
-            script : getScript(allNames),
-            ...everyoneView(),
+            script : getScriptModule(allNames),
+            ...forAllPages(),
         });
     },
     r : async (req, res, next) => {
@@ -175,68 +175,68 @@ module.exports = {
         } = req['query'];
         const allNames = '_r';
         return res.render(allNames, {
-            script : getScript(allNames),
+            script : getScriptModule(allNames),
             searchAction : getURLPath({
                 prefix : '/lab/',
                 suffix : 'r',
             }),
-            ...everyoneView(),
+            ...forAllPages(),
         });
     },
     s : async (req, res, next) => {
         const allNames = '_s';
         return res.render(allNames, {
-            script : getScript(allNames),
-            ...everyoneView(),
+            script : getScriptModule(allNames),
+            ...forAllPages(),
         });
     },
     t : async (req, res, next) => {
         const allNames = '_t';
         return res.render(allNames, {
-            script : getScript(allNames),
-            ...everyoneView(),
+            script : getScriptModule(allNames),
+            ...forAllPages(),
         });
     },
     u : async (req, res, next) => {
         const allNames = '_u';
         return res.render(allNames, {
-            script : getScript(allNames),
-            ...everyoneView(),
+            script : getScriptModule(allNames),
+            ...forAllPages(),
         });
     },
     v : async (req, res, next) => {
         const allNames = '_v';
         return res.render(allNames, {
-            script : getScript(allNames),
-            ...everyoneView(),
+            script : getScriptModule(allNames),
+            ...forAllPages(),
         });
     },
     w : async (req, res, next) => {
         const allNames = '_w';
         return res.render(allNames, {
-            script : getScript(allNames),
-            ...everyoneView(),
+            script : getScriptModule(allNames),
+            ...forAllPages(),
         });
     },
     x : async (req, res, next) => {
         const allNames = '_x';
         return res.render(allNames, {
-            script : getScript(allNames),
-            ...everyoneView(),
+            script : getScriptModule(allNames),
+            ...forAllPages(),
         });
     },
     y : async (req, res, next) => {
         const allNames = '_y';
         return res.render(allNames, {
-            script : getScript(allNames),
-            ...everyoneView(),
+            script : getScriptModule(allNames),
+            ...forAllPages(),
         });
     },
     z : async (req, res, next) => {
         const allNames = '_z';
         return res.render(allNames, {
-            script : getScript(allNames),
-            ...everyoneView(),
+            script : getScriptModule(allNames),
+            ...forAllPages(),
         });
     },
 };

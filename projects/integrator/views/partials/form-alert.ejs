@@ -1,5 +1,13 @@
-<% if (typeof added === 'undefined') { } else { %>
+<% if (typeof error === 'undefined') { %>
     <div class="form-group alert alert-success">
         <%- getFirstUpperCase('User successfully registered!'); %>
+    </div>
+<% } else { %>
+    <div class="form-group alert alert-danger">
+        <ul>
+            <% error.forEach((element) => { %>
+                <li><%- getFirstUpperCase(element['msg']); %></li>
+            <% }); %>
+        </ul>
     </div>
 <% } %>

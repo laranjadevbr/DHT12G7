@@ -1,5 +1,6 @@
 .env
 *.rar
+/database/uploads/*
 /node_modules
 /public/images
 /upload/archives

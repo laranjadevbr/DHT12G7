@@ -1,5 +1,6 @@
 let {
     addJsDatabase,
+    addJsonDatabase,
     forAllPages,
     getFormElement,
     getFormHeader,
@@ -132,30 +133,44 @@ const getEdit = (object) => {
     return Action;
 };
 
+const {
+    check,
+    validationResult,
+    body,
+} = require('express-validator');
+
 // OK!
+
+const formAttributes = (object, error) => {
+    return {
+        btnTitle : 'create',
+        ...forAllPages(),
+        ...getFormElement({
+            element : object['element'],
+            type : 'create',
+        }),
+        ...getInputType(),
+        ...getPageTitle({
+            prefix : object['prefix'],
+            suffix : 'create',
+        }),
+        ...getScriptModule('create'),
+        ...getFormHeader({
+            prefix : object['prefix'],
+            suffix : 'create',
+            enctype : 'multipart/form-data',
+            method : 'POST',
+        }),
+        error : error ? error['errors'] : undefined,
+    };
+};
 
 const getCreate = (object) => {
     const Action = {
         create : (req, res, next) => {
+            console.log(req);
             return res.render('form', {
-                btnTitle : 'create',
-                ...forAllPages(),
-                ...getFormElement({
-                    element : object['element'],
-                    type : 'create',
-                }),
-                ...getInputType(),
-                ...getPageTitle({
-                    prefix : object['prefix'],
-                    suffix : 'create',
-                }),
-                ...getScriptModule('create'),
-                ...getFormHeader({
-                    prefix : object['prefix'],
-                    suffix : 'create',
-                    // enctype : 'multipart/form-data',
-                    method : 'POST',
-                }),
+                ...formAttributes(object),
             });
         },
     }
@@ -167,27 +182,40 @@ const getCreate = (object) => {
 const getStore = (object) => {
     const Action = {
         store : (req, res, next) => {
-            req['body']['password'] ? getHash(req['body']['password']) : undefined;
-            const id = !isEmpty(getJsDatabase(object))
-            ? getJsDatabase(object)[getJsDatabase(object)['length'] - 1]['id'] + 1
-            : 1;
-            addJsDatabase({
-                attachment : {
-                    id : id,
-                    approved : true,
-                    deleted : false,
-                    disable : false,
-                    ...req['body'],
-                },
-                require : [
-                    ...object['require'],
-                ],
-                title : object['title'],
-            });
-            return res.redirect(getURLPath({
-                prefix : object['prefix'],
-                suffix : 'edit' + '/' + id,
-            }));
+            const error = validationResult(req);
+            if (error.isEmpty()) {
+                req['body']['password'] ? getHash(req['body']['password']) : undefined;
+                const id = !isEmpty(getJsDatabase(object))
+                ? getJsDatabase(object)[getJsDatabase(object)['length'] - 1]['id'] + 1
+                : 1;
+                const newPush = {
+                    attachment : {
+                        id : id,
+                        approved : true,
+                        deleted : false,
+                        disable : false,
+                        ...req['body'],
+                    },
+                    require : [
+                        ...object['require'],
+                    ],
+                    title : object['title'],
+                }
+                addJsDatabase({
+                    ...newPush,
+                });
+                addJsonDatabase({
+                    ...newPush,
+                });
+                return res.redirect(getURLPath({
+                    prefix : object['prefix'],
+                    suffix : 'edit' + '/' + id,
+                }));
+            } else {
+                return res.render('form', {
+                    ...formAttributes(object, error),
+                });
+            };
         },
     };
     return Action;
@@ -200,11 +228,13 @@ const getUpdate = (object) => {
         update : (req, res, next) => {
             const { id } = req['params'];
             let database = getJsDatabase(object);
-            let index = database.find((index) => { return index['id'] == id; });
+            let index = database.find((index) => {
+                return index['id'] == id;
+            });
             for (let i = 0; i < Object.getOwnPropertyNames(req['body'])['length']; i++) {
-                let propertyName = Object.getOwnPropertyNames(req['body'])[i]; 
+                let propertyName = Object.getOwnPropertyNames(req['body'])[i];
                 index[propertyName] = Object.getOwnPropertyDescriptors(req['body'])[propertyName]['value'];
-            };
+            }
             saveJsDatabase({
                 content : database,
                 require : [
@@ -221,15 +251,16 @@ const getUpdate = (object) => {
     return Action;
 };
 
+// OK!
+
 const getDestroy = (object) => {
     const Action = {
         destroy : (req, res, next) => {
             const { id } = req['params'];
-            const index = getJsDatabase(object).filter((index) => {
-                return index['id'] != id;
-            });
             saveJsDatabase({
-                content : index,
+                content : getJsDatabase(object).filter((index) => {
+                    return index['id'] != id;
+                }),
                 require : [
                     ...object['require'],
                 ],

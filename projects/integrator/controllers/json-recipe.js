@@ -7,7 +7,7 @@ module.exports = {
         prefix : 'json-recipe',
         require : [
             'database',
-            'js',
+            'texts',
         ],
         title : 'recipe',
     }),
