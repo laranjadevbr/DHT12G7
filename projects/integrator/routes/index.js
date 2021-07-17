@@ -1,3 +1,7 @@
+const urlJoin = require('url-join');
+const path = require('path');
+
+
 const { check, validationResult, body } = require('express-validator');
 const expressValidator = [
     check('name').isInt({
@@ -20,30 +24,40 @@ const expressValidator = [
     }).withMessage('password field error!'),
 ];
 
+
 const { isThere } = require('../utils');
 const fs = require('fs');
+
 
 const multer = require('multer');
 const storage = multer.diskStorage({
     destination : (req, file, cb) => {
-        cb(null, urlJoin([
-            'database',
-            'uploads',
-        ]));
+        let pathName = urlJoin([
+            // 'database',
+            // 'uploads',
+            'public',
+            'images',
+        ]);
+        cb(null, pathName);
     },
     filename : (req, file, cb) => {
-        // cb(null, file['fieldname'] + '-' + Date.now());
-        cb(null, file['originalname']);
+        let fileName = '';
+        // fileName += file['fieldname'];
+        // fileName += '-';
+        fileName += Date.now();
+        fileName += path.extname(file['originalname']);
+        cb(null, fileName);
     },
 });
 const upload = multer({
-    storage : storage
+    storage : storage,
 });
+
 
 const middlewareReport = require('../middlewares')['report'];
 const router = require('express').Router();
 const routes = require('./routes');
-const urlJoin = require('url-join');
+
 
 const api = routes['api'];
 const index = routes['index'];
@@ -53,6 +67,7 @@ const lab = routes['lab'];
 const category = routes['category'];
 const item = routes['item'];
 const public = routes['public'];
+
 
 const control = [
     { control : api, path : 'api-admin', },
@@ -84,17 +99,20 @@ const control = [
     { control : jsonPublic, path : 'json-client', },
 ];
 
+
 let getRouter = (control, URLPath, object) => {
     for (let i = 0; i < object['length']; i++) {
         router[object[i]['method']](
             String(URLPath + object[i]['title'] + object[i]['param']),
             middlewareReport,
-            expressValidator,
+            // expressValidator,
             upload.any(),
             control[object[i]['control']],
         );
     };
 };
+
+
 for (let i = 0; i < control['length']; i++) {
     if (isThere(['controllers', control[i]['path'] + '.js'])) {
         const controller = require('../controllers/' + control[i]['path']);
@@ -105,5 +123,6 @@ for (let i = 0; i < control['length']; i++) {
         getRouter(controller, URLPath, object);
     };
 };
+
 
 module.exports = router;

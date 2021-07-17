@@ -168,7 +168,6 @@ const formAttributes = (object, error) => {
 const getCreate = (object) => {
     const Action = {
         create : (req, res, next) => {
-            console.log(req);
             return res.render('form', {
                 ...formAttributes(object),
             });
@@ -184,16 +183,16 @@ const getStore = (object) => {
         store : (req, res, next) => {
             const error = validationResult(req);
             if (error.isEmpty()) {
-                req['body']['password'] ? getHash(req['body']['password']) : undefined;
-                const id = !isEmpty(getJsDatabase(object))
-                ? getJsDatabase(object)[getJsDatabase(object)['length'] - 1]['id'] + 1
-                : 1;
+                let { files } = req;
+                req['body']['password'] ? getHash(req['body']['password']) : '';
+                const id = !isEmpty(getJsDatabase(object)) ? getJsDatabase(object)[getJsDatabase(object)['length'] - 1]['id'] + 1 : 1;
                 const newPush = {
                     attachment : {
                         id : id,
                         approved : true,
                         deleted : false,
                         disable : false,
+                        picture : files['length'] ? files[0]['filename'] : '',
                         ...req['body'],
                     },
                     require : [

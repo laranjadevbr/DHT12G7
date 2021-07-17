@@ -32,7 +32,7 @@ const formConstructor = (array, disabled) => {
                 value : '',
             });
         result.push(
-            ...require('./feature/' + array[i]['object'])(disabled),
+            ...require('./features/' + array[i]['object'])(disabled),
             {
                 active : true,
                 disabled : disabled,

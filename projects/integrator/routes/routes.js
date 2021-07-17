@@ -60,7 +60,8 @@ const search = [
         'search',
     ], 'get'),
 ];
-module.exports = {
+
+const routes = {
     index : [
         ...getRoute([
             ['', 'index'],
@@ -134,3 +135,5 @@ module.exports = {
         ], 'get'),
     ],
 };
+
+module.exports = routes;

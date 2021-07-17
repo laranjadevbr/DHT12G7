@@ -2,6 +2,4 @@
 *.rar
 /database/uploads/*
 /node_modules
-/public/images
-/upload/archives
-/upload/images
+/public/images/*
