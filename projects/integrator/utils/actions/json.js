@@ -4,9 +4,9 @@ let {
     forAllPages,
     getFormElement,
     getFormHeader,
+    getHash,
     getInputType,
     getItem,
-    getHash,
     getJsDatabase,
     getJsPagination,
     getMenuSetup,
@@ -14,10 +14,11 @@ let {
     getPathPrefix,
     getScriptModule,
     getURLPath,
+    getUserSession,
     isEmpty,
-    saveJsDatabase,
-    jsonFileReader,
     isEqual,
+    jsonFileReader,
+    saveJsDatabase,
 } = require('..');
 
 // OK!
@@ -56,6 +57,7 @@ const getAll = (object) => {
                 }),
                 ...getPathPrefix(object['prefix']),
                 ...getScriptModule('all'),
+                ...getUserSession(req['session']['user']),
                 ...getJsPagination({
                     array : getJsDatabase(object),
                     limit : amount,
@@ -89,10 +91,10 @@ const getOn = (object) => {
                     suffix : 'on',
                 }),
                 ...getScriptModule('on'),
+                ...getUserSession(req['session']['user']),
                 ...getFormHeader({
                     prefix : object['prefix'],
                     suffix : 'on',
-                    enctype : 'multipart/form-data',
                     method : 'POST',
                 }),
             });
@@ -123,10 +125,11 @@ const getEdit = (object) => {
                     suffix : 'edit',
                 }),
                 ...getScriptModule('edit'),
+                ...getUserSession(req['session']['user']),
                 ...getFormHeader({
                     prefix : object['prefix'],
                     suffix : 'edit/' + id + '?_method=PUT',
-                    // enctype : 'multipart/form-data',
+                    enctype : 'multipart/form-data',
                     method : 'POST',
                 }),
             });
@@ -143,7 +146,7 @@ const {
 
 // OK!
 
-const formAttributes = (object, error) => {
+const formAttributes = (req, res, next, object, error) => {
     return {
         btnTitle : 'create',
         ...forAllPages(),
@@ -157,6 +160,7 @@ const formAttributes = (object, error) => {
             suffix : 'create',
         }),
         ...getScriptModule('create'),
+        ...getUserSession(req['session']['user']),
         ...getFormHeader({
             prefix : object['prefix'],
             suffix : 'create',
@@ -171,7 +175,7 @@ const getCreate = (object) => {
     const Action = {
         create : (req, res, next) => {
             return res.render('form', {
-                ...formAttributes(object),
+                ...formAttributes(req, res, next, object),
             });
         },
     }
@@ -187,7 +191,8 @@ const getStore = (object) => {
             if (error.isEmpty()) {
                 const { files } = req;
                 const password = getHash(req['body']['password']);
-                const id = !isEmpty(getJsDatabase(object)) ? getJsDatabase(object)[getJsDatabase(object)['length'] - 1]['id'] + 1 : 1;
+                const id = !isEmpty(getJsDatabase(object))
+                ? getJsDatabase(object)[getJsDatabase(object)['length'] - 1]['id'] + 1 : 1;
                 const newPush = {
                     attachment : {
                         ...req['body'],
@@ -216,7 +221,7 @@ const getStore = (object) => {
                 }));
             } else {
                 return res.render('form', {
-                    ...formAttributes(object, error),
+                    ...formAttributes(req, res, next, object, error),
                 });
             };
         },
@@ -234,10 +239,8 @@ const getUpdate = (object) => {
             let index = database.find((index) => {
                 return index['id'] == id;
             });
-            for (let i = 0; i < Object.getOwnPropertyNames(req['body'])['length']; i++) {
-                let propertyName = Object.getOwnPropertyNames(req['body'])[i];
-                index[propertyName] = Object.getOwnPropertyDescriptors(req['body'])[propertyName]['value'];
-            }
+            for (let i = 0; i < Object.getOwnPropertyNames(req['body'])['length']; i++)
+                index[Object.getOwnPropertyNames(req['body'])[i]] = Object.getOwnPropertyDescriptors(req['body'])[Object.getOwnPropertyNames(req['body'])[i]]['value'];
             saveJsDatabase({
                 content : database,
                 require : [
@@ -305,7 +308,6 @@ const getLogin = (object) => {
                 ...getFormHeader({
                     prefix : object['prefix'],
                     suffix : 'authenticate',
-                    enctype : 'multipart/form-data',
                     method : 'POST',
                 }),
             });
@@ -325,15 +327,21 @@ const getLogout = (object) => {
 const getAuthenticate = (object) => {
     const Action = {
         authenticate : (req, res, next) => {
-            const record = jsonFileReader([ 'database', 'texts', 'client.json' ]);
-            const index = record.find((index) => { return index['accesskey'] === req['body']['accesskey']; });
-            if (!index) return res.send('invalid user!');
-            if (!isEqual({ front : req['body']['password'], back : index['password'] }))
+            const record = jsonFileReader([
+                'database',
+                'texts',
+                'client.json',
+            ]);
+            const index = record.find((index) => {
+                return index['accesskey'] === req['body']['accesskey'];
+            });
+            if (!index) 
+                return res.send('invalid user!');
+            if (!isEqual({ front : req['body']['password'], back : index['password'] })) 
                 return res.send('invalid password!');
             delete index['password'];
             delete index['confirmation'];
-            const user = req['session']['user'] = index;
-            console.log(user);
+            req['session']['user'] = index;
             return res.redirect(getURLPath({
                 prefix : object['prefix'],
                 suffix : 'all',

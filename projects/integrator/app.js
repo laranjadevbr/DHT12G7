@@ -14,13 +14,6 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(cors());
-
-app.use(methodOverride('_method'));
-app.use(methodOverride('X-HTTP-Method'));
-app.use(methodOverride('X-HTTP-Method-Override'));
-app.use(methodOverride('X-Method-Override'));
-
 app.use(session({
   secret : 'laranja',
   resave : true,
@@ -30,11 +23,17 @@ app.use(session({
   // },
 }));
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({
   extended : false,
 }));
+
+app.use(methodOverride('_method'));
+app.use(methodOverride('X-HTTP-Method'));
+app.use(methodOverride('X-HTTP-Method-Override'));
+app.use(methodOverride('X-Method-Override'));
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));

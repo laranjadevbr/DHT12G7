@@ -5,6 +5,7 @@ let {
     getFormHeader,
     getInputType,
     getItem,
+    getMenuSetup,
     getModelPagination,
     getModelParams,
     getModelSearchParams,
@@ -12,8 +13,8 @@ let {
     getPathPrefix,
     getScriptModule,
     getSearchAction,
-    getMenuSetup,
     getURLPath,
+    getUserSession,
 } = require('..');
 
 // OK!
@@ -70,6 +71,7 @@ const getAll = (object) => {
                     prefix : object['prefix'],
                     suffix : 'search',
                 }),
+                ...getUserSession(req['session']['user']),
                 ...getModelPagination({
                     count : count,
                     amount : amount,
@@ -119,6 +121,7 @@ const getIn = (object) => {
                     prefix : object['prefix'],
                     suffix : 'search',
                 }),
+                ...getUserSession(req['session']['user']),
                 ...getModelPagination({
                     count : index['length'],
                     amount : amount,
@@ -158,7 +161,8 @@ const getOn = (object) => {
                     prefix : object['prefix'],
                     suffix : 'on',
                 }),
-                ...getScriptModule('on'),                
+                ...getScriptModule('on'),
+                ...getUserSession(req['session']['user']),            
                 ...getFormHeader({
                     prefix : object['prefix'],
                     suffix : 'on',
@@ -181,10 +185,11 @@ const getCreate = (object) => {
                 ...getInputType(),
                 ...getPageTitle({ prefix : object['prefix'], suffix : 'create' }),
                 ...getScriptModule('create'),
+                ...getUserSession(req['session']['user']),
                 ...getFormHeader({
                     prefix : object['prefix'],
                     suffix : 'create',
-                    // enctype : 'multipart/form-data',
+                    enctype : 'multipart/form-data',
                     method : 'POST',
                 }),
             });
@@ -233,10 +238,11 @@ const getEdit = (object) => {
                     suffix : 'edit',
                 }),
                 ...getScriptModule('edit'),
+                ...getUserSession(req['session']['user']),
                 ...getFormHeader({
                     prefix : object['prefix'],
                     suffix : 'edit' + '/' + id + '?_method=PUT',
-                    // enctype : 'multipart/form-data',
+                    enctype : 'multipart/form-data',
                     method : 'POST',
                 }),
             });
@@ -341,6 +347,7 @@ const getSearch = (object) => {
                     prefix : object['prefix'],
                     suffix : 'search',
                 }),
+                ...getUserSession(req['session']['user']),
                 ...getModelPagination({
                     count : count,
                     amount : amount,

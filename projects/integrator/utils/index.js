@@ -135,6 +135,12 @@ const getRandomEmail = (array, index) => {
     };
 };
 
+const getUserSession = (session) => {
+    return {
+        userSession : session,
+    };
+};
+
 const isThere = (array) => {
     return fs.existsSync(urlJoin(array));
 };
@@ -450,7 +456,7 @@ const getFormElement = (object) => {
 };
 
 const getFirstUpperCase = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+    return String(string).charAt(0).toUpperCase() + String(string).slice(1);
 };
 
 const toClean = (result) => {
@@ -687,4 +693,5 @@ module.exports = {
     objectCreator,
 
     jsonFileReader,
+    getUserSession,
 };
