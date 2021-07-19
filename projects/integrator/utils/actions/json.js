@@ -19,6 +19,7 @@ let {
     isEqual,
     jsonFileReader,
     saveJsDatabase,
+    getbtnTitle,
 } = require('..');
 
 // OK!
@@ -26,10 +27,7 @@ let {
 const getIndex = (object) => {
     const Action = {
         index : (req, res, next) => {
-            return res.redirect(getURLPath({
-                prefix : object['prefix'],
-                suffix : 'all',
-            }));
+            return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'all', }));
         },
     }
     return Action;
@@ -42,27 +40,21 @@ const getAll = (object) => {
         all : (req, res, next) => {
             const amount = 2;
             const { page = 1 } = req['query'];
+            const jsPaginationAttributes = {
+                array : getJsDatabase(object),
+                limit : amount,
+                offset : page,
+            };
             return res.render('menu', {
-                index : getJsPagination({
-                    array : getJsDatabase(object),
-                    limit : amount,
-                    offset : page,
-                })['listPage'],
+                index : getJsPagination({ ...jsPaginationAttributes })['listPage'],
                 ...forAllPages(),
                 ...getItem(object['element']),
+                ...getJsPagination({ ...jsPaginationAttributes }),
                 ...getMenuSetup(object['prefix']),
-                ...getPageTitle({
-                    prefix : object['prefix'],
-                    suffix : 'all',
-                }),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'all' }),
                 ...getPathPrefix(object['prefix']),
                 ...getScriptModule('all'),
                 ...getUserSession(req['session']['user']),
-                ...getJsPagination({
-                    array : getJsDatabase(object),
-                    limit : amount,
-                    offset : page,
-                }),
             });
         },
     }
@@ -76,27 +68,15 @@ const getOn = (object) => {
         on : (req, res, next) => {
             const { id } = req['params'];
             return res.render('form', {
-                index : getJsDatabase(object).find((index) => {
-                    return index['id'] == id;
-                }),
-                btnTitle : 'come back',
+                index : getJsDatabase(object).find((index) => { return index['id'] == id; }),
                 ...forAllPages(),
-                ...getFormElement({
-                    element : object['element'],
-                    type : 'view',
-                }),
+                ...getbtnTitle('come back'),
+                ...getFormElement({ element : object['element'], type : 'view' }),
+                ...getFormHeader({ prefix : object['prefix'], suffix : 'on', method : 'POST' }),
                 ...getInputType(),
-                ...getPageTitle({
-                    prefix : object['prefix'],
-                    suffix : 'on',
-                }),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'on' }),
                 ...getScriptModule('on'),
                 ...getUserSession(req['session']['user']),
-                ...getFormHeader({
-                    prefix : object['prefix'],
-                    suffix : 'on',
-                    method : 'POST',
-                }),
             });
         },
     }
@@ -110,28 +90,15 @@ const getEdit = (object) => {
         edit : (req, res, next) => {
             const { id } = req['params'];
             return res.render('form', {
-                index : getJsDatabase(object).find((index) => {
-                    return index['id'] == id;
-                }),
-                btnTitle : 'edit',
+                index : getJsDatabase(object).find((index) => { return index['id'] == id; }),
                 ...forAllPages(),
-                ...getFormElement({
-                    element : object['element'],
-                    type : 'edit',
-                }),
+                ...getbtnTitle('edit'),
+                ...getFormElement({ element : object['element'], type : 'edit' }),
+                ...getFormHeader({ prefix : object['prefix'], suffix : 'edit/' + id + '?_method=PUT', enctype : 'multipart/form-data', method : 'POST' }),
                 ...getInputType(),
-                ...getPageTitle({
-                    prefix : object['prefix'],
-                    suffix : 'edit',
-                }),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'edit', }),
                 ...getScriptModule('edit'),
                 ...getUserSession(req['session']['user']),
-                ...getFormHeader({
-                    prefix : object['prefix'],
-                    suffix : 'edit/' + id + '?_method=PUT',
-                    enctype : 'multipart/form-data',
-                    method : 'POST',
-                }),
             });
         },
     }
@@ -148,35 +115,22 @@ const {
 
 const formAttributes = (req, res, next, object, error) => {
     return {
-        btnTitle : 'create',
+        error : error ? error['errors'] : undefined,
         ...forAllPages(),
-        ...getFormElement({
-            element : object['element'],
-            type : 'create',
-        }),
+        ...getbtnTitle('create'),
+        ...getFormElement({ element : object['element'], type : 'create', }),
+        ...getFormHeader({ prefix : object['prefix'], suffix : 'create', enctype : 'multipart/form-data', method : 'POST', }),
         ...getInputType(),
-        ...getPageTitle({
-            prefix : object['prefix'],
-            suffix : 'create',
-        }),
+        ...getPageTitle({ prefix : object['prefix'], suffix : 'create' }),
         ...getScriptModule('create'),
         ...getUserSession(req['session']['user']),
-        ...getFormHeader({
-            prefix : object['prefix'],
-            suffix : 'create',
-            enctype : 'multipart/form-data',
-            method : 'POST',
-        }),
-        error : error ? error['errors'] : undefined,
     };
 };
 
 const getCreate = (object) => {
     const Action = {
         create : (req, res, next) => {
-            return res.render('form', {
-                ...formAttributes(req, res, next, object),
-            });
+            return res.render('form', { ...formAttributes(req, res, next, object) });
         },
     }
     return Action;
@@ -191,8 +145,7 @@ const getStore = (object) => {
             if (error.isEmpty()) {
                 const { files } = req;
                 const password = getHash(req['body']['password']);
-                const id = !isEmpty(getJsDatabase(object))
-                ? getJsDatabase(object)[getJsDatabase(object)['length'] - 1]['id'] + 1 : 1;
+                const id = !isEmpty(getJsDatabase(object)) ? getJsDatabase(object)[getJsDatabase(object)['length'] - 1]['id'] + 1 : 1;
                 const newPush = {
                     attachment : {
                         ...req['body'],
@@ -215,13 +168,10 @@ const getStore = (object) => {
                 addJsonDatabase({
                     ...newPush,
                 });
-                return res.redirect(getURLPath({
-                    prefix : object['prefix'],
-                    suffix : 'edit' + '/' + id,
-                }));
+                return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'edit' + '/' + id }));
             } else {
                 return res.render('form', {
-                    ...formAttributes(req, res, next, object, error),
+                    ...formAttributes(req, res, next, object, error)
                 });
             };
         },
@@ -236,9 +186,7 @@ const getUpdate = (object) => {
         update : (req, res, next) => {
             const { id } = req['params'];
             let database = getJsDatabase(object);
-            let index = database.find((index) => {
-                return index['id'] == id;
-            });
+            let index = database.find((index) => { return index['id'] == id; });
             for (let i = 0; i < Object.getOwnPropertyNames(req['body'])['length']; i++)
                 index[Object.getOwnPropertyNames(req['body'])[i]] = Object.getOwnPropertyDescriptors(req['body'])[Object.getOwnPropertyNames(req['body'])[i]]['value'];
             saveJsDatabase({
@@ -248,10 +196,7 @@ const getUpdate = (object) => {
                 ],
                 title : object['title'],
             });
-            return res.redirect(getURLPath({
-                prefix : object['prefix'],
-                suffix : 'edit' + '/' + id,
-            }));
+            return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'edit' + '/' + id }));
         },
     };
     return Action;
@@ -272,10 +217,7 @@ const getDestroy = (object) => {
                 ],
                 title : object['title'],
             });
-            return res.redirect(getURLPath({
-                prefix : object['prefix'],
-                suffix : 'all',
-            }));
+            return res.redirect(getURLPath({ prefix : object['prefix'], suffix : 'all' }));
         },
     };
     return Action;
@@ -293,23 +235,13 @@ const getLogin = (object) => {
     const Action = {
         login : (req, res, next) => {
             return res.render('form', {
-                btnTitle : 'login',
                 ...forAllPages(),
-                ...getFormElement({
-                    element : object['element'],
-                    type : 'login',
-                }),
+                ...getbtnTitle('login'),
+                ...getFormElement({ element : object['element'], type : 'login' }),
+                ...getFormHeader({ prefix : object['prefix'], suffix : 'authenticate', method : 'POST' }),
                 ...getInputType(),
-                ...getPageTitle({
-                    prefix : object['prefix'],
-                    suffix : 'login',
-                }),
+                ...getPageTitle({ prefix : object['prefix'], suffix : 'login' }),
                 ...getScriptModule('login'),
-                ...getFormHeader({
-                    prefix : object['prefix'],
-                    suffix : 'authenticate',
-                    method : 'POST',
-                }),
             });
         },
     }
@@ -319,6 +251,9 @@ const getLogin = (object) => {
 const getLogout = (object) => {
     const Action = {
         logout : (req, res, next) => {
+            req['session'].destroy();
+            res.clearCookie();
+            req.logout();
         },
     }
     return Action;
@@ -328,9 +263,8 @@ const getAuthenticate = (object) => {
     const Action = {
         authenticate : (req, res, next) => {
             const record = jsonFileReader([
-                'database',
-                'texts',
-                'client.json',
+                ...object['require'],
+                object['title'] + '.json',
             ]);
             const index = record.find((index) => {
                 return index['accesskey'] === req['body']['accesskey'];

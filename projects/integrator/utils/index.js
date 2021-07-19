@@ -560,15 +560,17 @@ const getPlural = (result) => {
     return result.trim().toLowerCase();
 };
 
+const getbtnTitle = (result) => {
+    return {
+        btnTitle : result,
+    };
+};
+
 const getURLPath = (object) => {
     let result = '';
     result += object['prefix'] ? '/' + object['prefix'].split('-').join('/') : '';
     result += object['suffix'] ? '/' + object['suffix'] : '';
     return result.trim().toLowerCase();
-};
-
-const session = (req, res, next) => {
-    return req.session.user;
 };
 
 const arrayUnifier = (array, param) => {
@@ -643,16 +645,16 @@ const forAllPages = () => {
         getValidation,
         isEmpty,
         isThis,
-        session,
         toClean,
     };
 };
 
 module.exports = {
-    forAllPages,
-    getJsDatabase,
-    saveJsDatabase,
+    addJsDatabase,
+    addJsonDatabase,
     arrayUnifier,
+    forAllPages,
+    getbtnTitle,
     getCNPJNumber,
     getCPFNumber,
     getDOCNumber,
@@ -663,8 +665,8 @@ module.exports = {
     getHash,
     getInputType,
     getItem,
-    addJsDatabase,
-    addJsonDatabase,
+    getJsDatabase,
+    getJsPagination,
     getLoremIpsum,
     getMenuSetup,
     getModelPagination,
@@ -684,14 +686,13 @@ module.exports = {
     getScriptModule,
     getSearchAction,
     getURLPath,
+    getUserSession,
     isEmpty,
     isEqual,
     isTheLast,
     isThere,
     isThis,
-    getJsPagination,
-    objectCreator,
-
     jsonFileReader,
-    getUserSession,
+    objectCreator,
+    saveJsDatabase,
 };

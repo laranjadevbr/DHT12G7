@@ -1,13 +1,6 @@
-const {
-    isTheLast,
-    isThis,
-} = require('../utils');
-let getTitle = getControl = (index) => {
-    return isTheLast(index, '?') ? index.substr(0, index['length'] - 1) : index;
-};
-let getParam = (index) => {
-    return isTheLast(index, '?') ? '/:id?' : '';
-};
+const { isTheLast, isThis } = require('../utils');
+let getTitle = getControl = (index) => { return isTheLast(index, '?') ? index.substr(0, index['length'] - 1) : index; };
+let getParam = (index) => { return isTheLast(index, '?') ? '/:id?' : ''; };
 let getRoute = (route, method) => {
     const result = [];
     for (let i = 0; i < route['length']; i++)

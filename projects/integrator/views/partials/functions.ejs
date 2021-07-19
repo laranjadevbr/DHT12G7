@@ -145,8 +145,8 @@
                             path : '/json/admin/create',
                         },
                         {
-                            name : userSession ? '' : 'login',
-                            path : userSession ? '' : '/json/admin/login',
+                            name : typeof userSession === 'undefined' ? 'login' : '',
+                            path : typeof userSession === 'undefined' ? '/json/admin/login' : '',
                         },
                     ],
                 },
@@ -162,8 +162,8 @@
                             path : '/json/client/create',
                         },
                         {
-                            name : userSession ? '' : 'login',
-                            path : userSession ? '' : '/json/client/login',
+                            name : typeof userSession === 'undefined' ? 'login' : '',
+                            path : typeof userSession === 'undefined' ? '/json/client/login' : '',
                         },
                     ],
                 },

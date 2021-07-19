@@ -1,12 +1,12 @@
-<%
-  let userData = '';
-  userData += userSession['title'] ? '<p>' + getFirstUpperCase(userSession['title']) + '</p>' : '';
-  userData += userSession['accesskey'] ? '<p>' + getFirstUpperCase(userSession['accesskey']) + '</p>' : '';
-  userData += userSession['phone'] ? '<p>' + getFirstUpperCase(userSession['phone']) + '</p>' : '';
-%>
-<div class="<%- currentClass.trim(); %>">
-  <%- typeof userSession !== 'undefined' ? userData : ''; %>
-</div>
+<% if (typeof userSession === 'undefined') { } else { %>
+  <%
+    let userData = '';
+    userData += userSession['title'] ? '<p>' + getFirstUpperCase(userSession['title']) + '</p>' : '';
+    userData += userSession['accesskey'] ? '<p>' + getFirstUpperCase(userSession['accesskey']) + '</p>' : '';
+    userData += userSession['phone'] ? '<p>' + getFirstUpperCase(userSession['phone']) + '</p>' : ''; 
+  %>
+  <div class="<%- currentClass.trim(); %>"><%- userData; %></div>
+<% } %>
 <div class="<%- currentClass.trim(); %>">
   <%
     let html = '';
