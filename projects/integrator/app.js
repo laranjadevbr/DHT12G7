@@ -22,12 +22,12 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(methodOverride('X-Method-Override'));
 
 app.use(session({
-  secret : 'project-name',
+  secret : 'laranja',
   resave : true,
   saveUninitialized : true,
-  cookie : {
-    secure : true,
-  },
+  // cookie : {
+  //   secure : true,
+  // },
 }));
 
 app.use(logger('dev'));
@@ -48,7 +48,7 @@ const {
 app.use((req, res, next) => {
   return res.status(404).render('404', {
     pageMessage : 'this page is not found!',
-    script : getScriptModule('404'),
+    ...getScriptModule('404'),
     ...forAllPages(),
   });
 });

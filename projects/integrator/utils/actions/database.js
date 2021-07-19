@@ -371,7 +371,6 @@ const getLogin = (object) => {
                 ...getFormHeader({
                     prefix : object['prefix'],
                     suffix : 'authenticate',
-                    // enctype : 'multipart/form-data',
                     method : 'POST',
                 }),
             });
@@ -383,8 +382,6 @@ const getLogin = (object) => {
 const getLogout = (object) => {
     const Action = {
         logout : async (req, res, next) => {
-            // req.session.destroy();
-            // return res.redirect('/');
         },
     }
     return Action;
@@ -393,50 +390,6 @@ const getLogout = (object) => {
 const getAuthenticate = (object) => {
     const Action = {
         authenticate : async (req, res, next) => {
-            // const {
-            //     email,
-            //     password,
-            // } = req['body'];
-            // const user = await object['modelName'].findOne({
-            //     ...getModelParams({
-            //         param : email,
-            //         column : 'email',
-            //     }),
-            // });
-            // let screen = (method, allNames) => {
-            //     return method.render('form', {
-            //         btnTitle : allNames,
-            //         formElement : require(urlJoin([
-            //             ...root,
-            //             'element',
-            //         ]))['form'][object['element']]['login'],
-            //         inputType : require(urlJoin([
-            //             ...root,
-            //             'option',
-            //         ]))['inputType'],
-            //         pageTitle : object['prefix'].split('-').join(' ') + ' ' + allNames,
-            //         script : getScript(allNames),
-            //         ...forAllPages(),
-            //         ...getFormHeader({
-            //             prefix : object['prefix'],
-            //             suffix : allNames,
-            //             method : 'POST',
-            //         }),
-            //     });
-            // };
-            // if (!user) screen(res, 'login');
-            // if (!isEqual({
-            //     client : password,
-            //     dataBase : user['password'],
-            // })) screen(res, 'login');
-            // user['password'] = undefined;
-            // req.session.user = user;
-            // return res.redirect(getURLPath({
-            //     ...object['prefix'] ? {
-            //         prefix : object['prefix'],
-            //         suffix : 'all',
-            //     } : { },
-            // }));
         },
     }
     return Action;

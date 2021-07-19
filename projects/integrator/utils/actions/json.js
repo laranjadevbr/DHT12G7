@@ -16,6 +16,8 @@ let {
     getURLPath,
     isEmpty,
     saveJsDatabase,
+    jsonFileReader,
+    isEqual,
 } = require('..');
 
 // OK!
@@ -183,17 +185,19 @@ const getStore = (object) => {
         store : (req, res, next) => {
             const error = validationResult(req);
             if (error.isEmpty()) {
-                let { files } = req;
-                req['body']['password'] ? getHash(req['body']['password']) : '';
+                const { files } = req;
+                const password = getHash(req['body']['password']);
                 const id = !isEmpty(getJsDatabase(object)) ? getJsDatabase(object)[getJsDatabase(object)['length'] - 1]['id'] + 1 : 1;
                 const newPush = {
                     attachment : {
+                        ...req['body'],
                         id : id,
                         approved : true,
                         deleted : false,
                         disable : false,
                         picture : files['length'] ? files[0]['filename'] : '',
-                        ...req['body'],
+                        password : password,
+                        confirmation : password,
                     },
                     require : [
                         ...object['require'],
@@ -301,7 +305,7 @@ const getLogin = (object) => {
                 ...getFormHeader({
                     prefix : object['prefix'],
                     suffix : 'authenticate',
-                    // enctype : 'multipart/form-data',
+                    enctype : 'multipart/form-data',
                     method : 'POST',
                 }),
             });
@@ -313,8 +317,6 @@ const getLogin = (object) => {
 const getLogout = (object) => {
     const Action = {
         logout : (req, res, next) => {
-            // session.destroy();
-            // return res.redirect(urlPath(prefix, 'login'));
         },
     }
     return Action;
@@ -323,62 +325,19 @@ const getLogout = (object) => {
 const getAuthenticate = (object) => {
     const Action = {
         authenticate : (req, res, next) => {
-            // const {
-            //     email,
-            //     password
-            // } = req['body'];
-            // const index = currentList.find((index) => {
-            //     return index['email'] == email;
-            // });
-            // const allNames = 'save';
-            // if (!validate(index)) {
-            //     return res.render(viewName(prefix, allNames), {
-            //         form : {
-            //             action : urlPath(prefix, 'authenticate'),
-            //             enctype : '',
-            //             method : 'POST',
-            //         },
-            //         formElement : create,
-            //         inputType : inputType,
-            //         notfound : true,
-            //         pageTitle : pageTitle(prefix, allNames),
-            //         capitalize,
-            //         cleaner,
-            //         currency,
-            //         roman,
-            //         validate,
-            //         session,
-            //     });
-            // }
-            // if (!bcrypt.compareSync(password, currentList['password'])) {
-            //     return res.render(viewName(prefix, allNames), {
-            //         form : {
-            //             action : urlPath(prefix, 'authenticate'),
-            //             enctype : '',
-            //             method : 'POST',
-            //         },
-            //         formElement : create,
-            //         inputType : inputType,
-            //         notfound : true,
-            //         pageTitle : pageTitle(prefix, allNames),
-            //         capitalize,
-            //         cleaner,
-            //         currency,
-            //         roman,
-            //         session,
-            //         validate,
-            //     });
-            // }
-            // const {
-            //     password : pass,
-            //     ...without
-            // } = currentList; 
-            // req.session.clients = without;
-            // allNames = 'list';
-            // return res.render(viewName(prefix, allNames), {
-            //     pageTitle : pageTitle(prefix, allNames),
-            //     session,
-            // });
+            const record = jsonFileReader([ 'database', 'texts', 'client.json' ]);
+            const index = record.find((index) => { return index['accesskey'] === req['body']['accesskey']; });
+            if (!index) return res.send('invalid user!');
+            if (!isEqual({ front : req['body']['password'], back : index['password'] }))
+                return res.send('invalid password!');
+            delete index['password'];
+            delete index['confirmation'];
+            const user = req['session']['user'] = index;
+            console.log(user);
+            return res.redirect(getURLPath({
+                prefix : object['prefix'],
+                suffix : 'all',
+            }));
         },
     }
     return Action;

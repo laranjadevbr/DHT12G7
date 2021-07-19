@@ -36,7 +36,7 @@ const getMenuSetup = (string) => {
         setup : {
             delete : true,
             edit : true,
-            in : string.substr(0, 'category'['length']) === 'category' ? true : false,
+            in : string.substr(0, 'category'['length']) === 'category',
             on : true,
         },
     };
@@ -49,7 +49,7 @@ const getValidation = (variable) => {
 };
 
 const isTheLast = (string, character) => {
-    return string.substr(string['length'] - 1, string['length']) === character ? true : false;
+    return string.substr(string['length'] - 1, string['length']) === character;
 };
 
 const getCurrency = (string) => {
@@ -60,7 +60,7 @@ const getCurrency = (string) => {
 };
 
 const isThis = (string, type) => {
-    return typeof string === type ? true : false;
+    return typeof string === type;
 };
 
 const getDOCNumber = (array) => {
@@ -136,7 +136,15 @@ const getRandomEmail = (array, index) => {
 };
 
 const isThere = (array) => {
-    return fs.existsSync(urlJoin(array)) ? true : false;
+    return fs.existsSync(urlJoin(array));
+};
+
+let jsonFileReader = (array) => {
+    return isThere([
+        ...array,
+    ]) ? JSON.parse(fs.readFileSync(urlJoin([
+        ...array,
+    ]), { encoding : 'utf-8' })) : [];
 };
 
 let addJsonDatabase = (object) => {
@@ -296,11 +304,11 @@ const getPhoneNumber = (array) => {
 };
 
 const getHash = (password) => {
-    return bcrypt.hashSync(String(password), bcrypt.genSaltSync(10));
+    return bcrypt.hashSync(String(password), 10);
 };
 
 const isEqual = (object) => {
-    return bcrypt.compareSync(object['client'], object['dataBase']) ? true : false;
+    return bcrypt.compareSync(object['front'], object['back']);
 };
 
 const getJsPagination = (object) => {
@@ -677,4 +685,6 @@ module.exports = {
     isThis,
     getJsPagination,
     objectCreator,
+
+    jsonFileReader,
 };

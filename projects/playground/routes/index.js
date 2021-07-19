@@ -37,10 +37,16 @@ router.post('/create', upload.any(), middlewares.dblog, [
     // }).withMessage('The e-mail already exists!'),
 ], controllers.save);
 
+
+const index = 3;
+
 router.get('/edit/:id', controllers.edit);
 router.put('/edited', controllers.edited);
-router.get('/list', middlewares.author, controllers.list);
+router.get('/list', index === 3 ? middlewares.author : undefined, controllers.list);
 router.delete('/delete/:id', controllers.delete);
 router.get('/log', controllers.log);
 router.post('/log', controllers.login);
 module.exports = router;
+
+
+
